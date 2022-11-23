@@ -1,0 +1,186 @@
+@charset "UTF-8";
+
+*,
+*::before,
+*::after {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+
+@font-face {font-family: 'Noto Sans KR';font-style: normal;font-weight: 100;src: url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.woff2) format('woff2'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.woff) format('woff'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.otf) format('opentype');} @font-face {font-family: 'Noto Sans KR';font-style: normal;font-weight: 300;src: url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff2) format('woff2'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff) format('woff'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.otf) format('opentype');} @font-face {font-family: 'Noto Sans KR';font-style: normal;font-weight: 400;src: url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2) format('woff2'),url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff) format('woff'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.otf) format('opentype');} @font-face {font-family: 'Noto Sans KR';font-style: normal;font-weight: 500;src: url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff2) format('woff2'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff) format('woff'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.otf) format('opentype');} @font-face {font-family: 'Noto Sans KR';font-style: normal;font-weight: 700;src: url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff2) format('woff2'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff) format('woff'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.otf) format('opentype');} @font-face {font-family: 'Noto Sans KR';font-style: normal;font-weight: 900;src: url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff2) format('woff2'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff) format('woff'),url(https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.otf) format('opentype');}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, button {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font-family: 'Noto Sans KR', sans-serif;
+
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+a, button, input {
+    border: 0 none;
+	text-decoration: none;
+	background: transparent;
+	color: #222;
+}
+
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	word-break:keep-all
+}
+
+p{word-break:keep-all}
+
+img{vertical-align:top;width:auto;max-width:100%}
+i,em,address{font-style:normal}
+label,button{cursor:pointer}
+input::-ms-clear{display:none}
+input:focus, textarea:focus, select:focus{outline: none}
+input,button{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;}
+input[type="radio"]{position:relative;}
+pre{white-space:pre-line;background-color:#fff;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;overflow-y:auto}
+select::-ms-expand{display:none}
+textarea{resize:none}
+figure{text-align:center}
+select::-ms-expand {display: none;}
+input:disabled {background: #EDEDED;}
+input::placeholder {color: #9B9B9B}
+
+/* margin custom */
+.mt5 {margin-top: 5px!important;}
+.mt10 {margin-top: 10px!important;}
+.mt15 {margin-top: 15px!important;}
+.mt20 {margin-top: 20px!important;}
+.mt25 {margin-top: 25px!important;}
+.mt30 {margin-top: 30px!important;}
+.mt35 {margin-top: 35px!important;}
+.mt40 {margin-top: 40px!important;}
+.mt45 {margin-top: 45px!important;}
+.mt50 {margin-top: 50px!important;}
+.mt55 {margin-top: 55px!important;}
+.mt60 {margin-top: 60px!important;}
+.mt65 {margin-top: 65px!important;}
+.mt70 {margin-top: 70px!important;}
+.mt75 {margin-top: 75px!important;}
+.mt80 {margin-top: 80px!important;}
+.mt85 {margin-top: 85px!important;}
+.mt90 {margin-top: 90px!important;}
+.mt95 {margin-top: 95px!important;}
+.mt100 {margin-top: 100px!important;}
+.mt110 {margin-top: 110px!important;}
+.mt120 {margin-top: 120px!important;}
+.mt130 {margin-top: 130px!important;}
+.mt140 {margin-top: 140px!important;}
+.mt150 {margin-top: 150px!important;}
+
+.mb5 {margin-bottom: 5px!important;}
+.mb10 {margin-bottom: 10px!important;}
+.mb15 {margin-bottom: 15px!important;}
+.mb20 {margin-bottom: 20px!important;}
+.mb25 {margin-bottom: 25px!important;}
+.mb30 {margin-bottom: 30px!important;}
+.mb35 {margin-bottom: 35px!important;}
+.mb40 {margin-bottom: 40px!important;}
+.mb45 {margin-bottom: 45px!important;}
+.mb50 {margin-bottom: 50px!important;}
+.mb55 {margin-bottom: 55px!important;}
+.mb60 {margin-bottom: 60px!important;}
+.mb65 {margin-bottom: 65px!important;}
+.mb70 {margin-bottom: 70px!important;}
+.mb75 {margin-bottom: 75px!important;}
+.mb80 {margin-bottom: 80px!important;}
+.mb85 {margin-bottom: 85px!important;}
+.mb90 {margin-bottom: 90px!important;}
+.mb95 {margin-bottom: 95px!important;}
+.mb100 {margin-bottom: 100px!important;}
+
+.ml5 {margin-left: 5px!important;}
+.ml10 {margin-left: 10px!important;}
+.ml15 {margin-left: 15px!important;}
+.ml20 {margin-left: 20px!important;}
+.ml25 {margin-left: 25px!important;}
+.ml30 {margin-left: 30px!important;}
+.ml35 {margin-left: 35px!important;}
+.ml40 {margin-left: 40px!important;}
+.ml45 {margin-left: 45px!important;}
+.ml50 {margin-left: 50px!important;}
+.ml55 {margin-left: 55px!important;}
+.ml60 {margin-left: 60px!important;}
+.ml65 {margin-left: 65px!important;}
+.ml70 {margin-left: 70px!important;}
+.ml75 {margin-left: 75px!important;}
+.ml80 {margin-left: 80px!important;}
+.ml85 {margin-left: 85px!important;}
+.ml90 {margin-left: 90px!important;}
+.ml95 {margin-left: 95px!important;}
+.ml100 {margin-left: 100px!important;}
+
+.mr5 {margin-right: 5px!important;}
+.mr10 {margin-right: 10px!important;}
+.mr15 {margin-right: 15px!important;}
+.mr20 {margin-right: 20px!important;}
+.mr25 {margin-right: 25px!important;}
+.mr30 {margin-right: 30px!important;}
+.mr35 {margin-right: 35px!important;}
+.mr40 {margin-right: 40px!important;}
+.mr45 {margin-right: 45px!important;}
+.mr50 {margin-right: 50px!important;}
+.mr55 {margin-right: 55px!important;}
+.mr60 {margin-right: 60px!important;}
+.mr65 {margin-right: 65px!important;}
+.mr70 {margin-right: 70px!important;}
+.mr75 {margin-right: 75px!important;}
+.mr80 {margin-right: 80px!important;}
+.mr85 {margin-right: 85px!important;}
+.mr90 {margin-right: 90px!important;}
+.mr95 {margin-right: 95px!important;}
+.mr100 {margin-right: 100px!important;}
+
+.none-m{margin: 0 !important}
+
+
+/* width custom */
+.w100 {width: 100% !important}
+.h100 {height: 100% !important;}	
+	
+.flex {display: flex; align-items: center;}
+.text-left {text-align: left!important;}
+.text-center {text-align: center!important;}
+.text-right {text-align: right !important;}
+.text-right .btn, .text-center .btn { margin-left: 5px;}
+

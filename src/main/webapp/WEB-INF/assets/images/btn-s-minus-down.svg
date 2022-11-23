@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>btn-s-minus</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="btn-s-minus" transform="translate(5.000000, 5.000000) scale(1, -1) translate(-5.000000, -5.000000) ">
+            <polygon id="Path" points="0 10 10 10 10 0 0 0"></polygon>
+            <polygon id="Path" fill="#00AAD2" fill-rule="nonzero" points="7.523 6.998 5.001 4.401 2.478 7.001 1.701 6.199 5.001 2.799 8.301 6.199"></polygon>
+        </g>
+    </g>
+</svg>

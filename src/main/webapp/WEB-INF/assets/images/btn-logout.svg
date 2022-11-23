@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="btn-logout" width="24" height="24" viewBox="0 0 24 24">
+    <defs>
+        <style>
+            .cls-2{fill:#000000}
+        </style>
+    </defs>
+    <g id="그룹_2">
+        <path id="사각형_19" fill="none" d="M0 0H24V24H0z"/>
+    </g>
+    <g id="그룹_3">
+        <path id="패스_15" d="M20 19h-8v2h8a2.006 2.006 0 0 0 2-2V5a2.006 2.006 0 0 0-2-2h-8v2h8z" class="cls-2"/>
+        <path id="패스_16" d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5z" class="cls-2" transform="rotate(-180 9 12)"/>
+    </g>
+</svg>

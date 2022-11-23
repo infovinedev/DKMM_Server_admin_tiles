@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="33.278" height="33.278">
+    <defs>
+        <clipPath id="clip-path">
+            <circle id="타원_53" data-name="타원 53" class="cls-1" cx="16.5" cy="16.5" r="16.5" transform="translate(-.259 -.006)"/>
+        </clipPath>
+        <clipPath id="clip-path-2">
+            <path id="패스_2619" data-name="패스 2619" d="M.192-20.814v4.28h2.622v12.573h5.042v-12.627h3.518l.374-4.227H7.856v-2.408c0-1 .2-1.391 1.164-1.391h2.729V-29H8.257c-3.752 0-5.443 1.652-5.443 4.815v3.371z" transform="translate(-.192 29)" style="clip-rule:evenodd;fill:#2453b4"/>
+        </clipPath>
+        <clipPath id="clip-path-3">
+            <path id="패스_2618" data-name="패스 2618" class="cls-1" d="M-69 140.587h310.83V-412H-69z" transform="translate(69 412)"/>
+        </clipPath>
+        <style>
+            .cls-1{fill:#2453b4}
+        </style>
+    </defs>
+    <g id="icon_f" transform="translate(-922.741 -851.004)">
+        <path id="패스_2669" data-name="패스 2669" d="M16.51 0A16.51 16.51 0 1 1 0 16.51 16.51 16.51 0 0 1 16.51 0z" transform="translate(923 851.004)" style="fill:#fff"/>
+        <g id="마스크_그룹_7" data-name="마스크 그룹 7" transform="translate(923 851.289)" style="clip-path:url(#clip-path)">
+            <g id="그룹_2372" data-name="그룹 2372" transform="translate(10.964 7.695)">
+                <g id="그룹_2371" data-name="그룹 2371" style="clip-path:url(#clip-path-2)">
+                    <g id="그룹_2370" data-name="그룹 2370" transform="translate(-59.741 -330.689)" style="clip-path:url(#clip-path-3)">
+                        <path id="패스_2617" data-name="패스 2617" class="cls-1" d="M-.808-30h13.283v26.766H-.808z" transform="translate(59.686 359.825)"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

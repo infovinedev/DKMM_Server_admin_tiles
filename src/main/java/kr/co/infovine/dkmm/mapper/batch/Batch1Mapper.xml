@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.infovine.dkmm.mapper.batch.Batch1Mapper">
+  <update id="updateMakeDate">
+  	/* 날짜 기준 데이터 만들기 */
+  	insert into t_define_date
+	(dt, dt_day, dt_hour, dt_week, dt_week_nm)
+	select
+		 t.dt
+		,t.dt_day
+		,t.dt_hour
+		,t.dt_week
+		,(
+			case
+				when t.dt_week =0 then '일'
+				when t.dt_week =1 then '월'
+				when t.dt_week =2 then '화'
+				when t.dt_week =3 then '수'
+				when t.dt_week =4 then '목'
+				when t.dt_week =5 then '금'
+				when t.dt_week =6 then '토'
+		 	end
+		) as dt_week_nm
+	from (
+	SELECT
+		TO_CHAR(generate_series , 'yyyymmddhh24') as dt
+		,TO_CHAR(generate_series , 'YYYYMMDD') as dt_day
+		,TO_CHAR(generate_series , 'hh24') as dt_hour
+		,EXTRACT(DOW FROM generate_series) as dt_week
+	FROM generate_series('2022-08-01'::timestamp, '2030-12-31', '1 hour')
+	) t
+	order by t.dt asc
+  </update>
+
+  <update id="updateWaitAnalysis">
+  	/* 대기 인원 통계 배치 쿼리 */
+	 insert into t_store_wait_analysis
+		( store_seq, wait_dt, wait_time, person_cnt, upt_dt, wait_week )
+		select
+				t.store_seq
+				,t.dt_day
+				,t.dt_hour
+				,max(t.cnt)
+				,now()
+				,(
+					case
+						when t.dt_week =0 then '일'
+						when t.dt_week =1 then '월'
+						when t.dt_week =2 then '화'
+						when t.dt_week =3 then '수'
+						when t.dt_week =4 then '목'
+						when t.dt_week =5 then '금'
+						when t.dt_week =6 then '토'
+				 	end
+				)
+			from (
+				select
+					store_seq
+					,TO_CHAR(ins_dt, 'yyyymmddhh24') as dt
+					,TO_CHAR(ins_dt, 'YYYYMMDD') as dt_day
+					,TO_CHAR(ins_dt, 'hh24') as dt_hour
+					,person_cnt as cnt
+					,EXTRACT(DOW FROM ins_dt) as dt_week
+				from t_store_wait
+				where fn_datediff('day',  now()::timestamp, ins_dt::timestamp ) > -7
+		) t
+		group by t.dt, t.dt_day, t.dt_hour, t.store_seq, t.dt_week
+		order by t.dt asc, t.dt_hour asc
+		ON CONFLICT on constraint t_store_wait_analysis_store_seq_wait_dt_wait_time_key
+		DO update
+		SET upt_dt = now()
+  </update>
+</mapper>

@@ -1,0 +1,15 @@
+/** bab custom-style */
+table {
+    border-collapse: inherit;
+}
+
+/**
+ul {
+    list-style-type: disc;
+}
+*/
+
+.box {
+	background: none;
+	border-radius: 0;
+}

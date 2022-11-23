@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+   <!-- main -->
+   <definition name=".mainLayout" template="/WEB-INF/views/layout/default.jsp">
+       <put-attribute name="header" value="/WEB-INF/views/layout/default/header.jsp" />			<!-- 상단 -->
+       <put-attribute name="head" value="/WEB-INF/views/layout/default/head.jsp" /> 			<!-- js 파일 -->
+     <!--  <put-attribute name="body" value="/WEB-INF/views/layout/default/dashboard.jsp" />		 중앙 body -->
+       <put-attribute name="footer" value="/WEB-INF/views/layout/default/footer.jsp" />			<!-- 하단 -->
+   </definition>
+   
+   <definition name="admin/login" template="/WEB-INF/views/admin/login.jsp">					<!-- 로그인시 tiles 필요없음 -->
+   </definition>
+   
+   <definition name="admin/firstPassword" template="/WEB-INF/views/admin/firstPassword.jsp">					<!-- 첫 로그인시 패스워드 변경 tiles 필요없음 -->
+   </definition>
+   
+   <definition name="*/*" extends=".mainLayout">
+       <put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
+   </definition>
+   <definition name="*/*/*" extends=".mainLayout">
+       <put-attribute name="body" value="/WEB-INF/views/{1}/{2}/{3}.jsp" />
+   </definition>
+   
+   <definition name="error" template="/WEB-INF/views/error/error.jsp">				
+   </definition>
+
+</tiles-definitions>
