@@ -7,5 +7,8 @@ public interface StoreMetaBatchService {
 	int mergeStoreInfo();			
 	int updateStoreOrgStatus01();	
 	int updateCloseStoreInfo();		
-	int updateStoreOrgStatus02();	
+	int updateStoreOrgStatus02();
+	
+	
+	void getCoordinatesToStoreInfo();
 }

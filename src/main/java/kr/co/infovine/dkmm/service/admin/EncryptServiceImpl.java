@@ -16,7 +16,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.json.JSONArray;
+import org.codehaus.jettison.json.JSONArray;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;

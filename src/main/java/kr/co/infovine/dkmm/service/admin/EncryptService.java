@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.crypto.spec.IvParameterSpec;
 
-import org.json.JSONArray;
+import org.codehaus.jettison.json.JSONArray;
 
 public interface EncryptService {
 	public String getAesEncode(String str, String aesSecretKey, byte[] ivBytes);
