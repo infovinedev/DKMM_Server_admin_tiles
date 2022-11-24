@@ -125,8 +125,12 @@ public class EncryptServiceImpl implements EncryptService {
 	@Override
 	public List<Integer> getListIv(JSONArray ivArray) {
 		List<Integer> list = new ArrayList<Integer>();
-		for(int i=0; i<ivArray.length(); i++) {
-			list.add(ivArray.getInt(i));
+		try {
+			for(int i=0; i<ivArray.length(); i++) {
+				list.add(ivArray.getInt(i));
+			}
+		}
+		catch (Exception e) {
 		}
 		return list;
 	}
