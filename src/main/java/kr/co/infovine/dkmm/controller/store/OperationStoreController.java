@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
 import kr.co.infovine.dkmm.controller.map.MapController;
-import kr.co.infovine.dkmm.db.model.store.TStoreInfo;
+import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 import kr.co.infovine.dkmm.service.store.OperationStoreService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,10 +46,10 @@ public class OperationStoreController {
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ResponseModel selectRealestateParcelInfo(HttpServletRequest request, HttpServletResponse response 
-			,@RequestBody TStoreInfo storeInfo) {
+			,@RequestBody TStoreInfoModel storeInfo) {
 		ResponseModel result = new ResponseModel();
 		try {
-			List<TStoreInfo> model = operationStoreService.selectStoreInfo(storeInfo);
+			List<TStoreInfoModel> model = operationStoreService.selectStoreInfo(storeInfo);
 			ObjectMapper mapper = new ObjectMapper();
 			String strParcelInfo = mapper.writeValueAsString(model);
 			result.setCode("0000");
@@ -64,10 +64,10 @@ public class OperationStoreController {
 			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 			@ResponseBody
 			public ResponseModel selectRealestateParcelInfoDetail(HttpServletRequest request, HttpServletResponse response 
-					,@RequestBody TStoreInfo storeInfo) {
+					,@RequestBody TStoreInfoModel storeInfo) {
 				ResponseModel result = new ResponseModel();
 				try {
-					TStoreInfo model = operationStoreService.selectStoreInfoDetail(storeInfo);
+					TStoreInfoModel model = operationStoreService.selectStoreInfoDetail(storeInfo);
 					ObjectMapper mapper = new ObjectMapper();
 					String strParcelInfo = mapper.writeValueAsString(model);
 					result.setCode("0000");
@@ -84,7 +84,7 @@ public class OperationStoreController {
 			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 			@ResponseBody
 			public ResponseModel savaStoreInfo(HttpServletRequest request, HttpServletResponse response 
-					,@RequestBody TStoreInfo storeInfo) {
+					,@RequestBody TStoreInfoModel storeInfo) {
 				ResponseModel result = new ResponseModel();
 				try {
 					operationStoreService.insertStoreInfo(storeInfo);
