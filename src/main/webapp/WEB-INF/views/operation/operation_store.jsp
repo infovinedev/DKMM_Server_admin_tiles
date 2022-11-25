@@ -420,7 +420,7 @@ function fun_get_mapXY (address) {
                             </div>
                             <div class="col-auto">
                             	<!-- <a href="javascript:;" class="btn btn-primary mr-1"  onclick="fun_viewDetail()">매장등록</a> -->
-                            	<!--추후사용 <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">매장등록</button> -->
+                            	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">매장등록</button>
                                 <button type="button" class="btn btn-outline-primary mr-1" onclick="fn_go_list_excel()">엑셀다운로드</button>
                                 <select id="storeListLength" class="custom-select w-auto">
                                 	<option value="10">10</option>

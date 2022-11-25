@@ -43,11 +43,6 @@ public class OperationUserController {
 		ResponseModel result = new ResponseModel();
 		try {
 			List<TUserInfo> model = operationUserService.selectAllUserInfo(userInfo);
-			
-			
-			
-			
-			System.out.println(model);
 			ObjectMapper mapper = new ObjectMapper();
 			String strParcelInfo = mapper.writeValueAsString(model);
 			result.setCode("0000");
