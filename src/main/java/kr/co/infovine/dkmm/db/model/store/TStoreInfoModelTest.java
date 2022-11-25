@@ -59,7 +59,7 @@ public class TStoreInfoModelTest {
      *
      * @mbg.generated Tue Nov 22 16:52:13 KST 2022
      */
-    private String zip;
+    private String roadZip;
 
     /**
      *
@@ -267,4 +267,11 @@ public class TStoreInfoModelTest {
      * @mbg.generated Tue Nov 22 16:52:13 KST 2022
      */
     private String oldZip;
+    
+    private String roadAddrDetail1;
+	private String roadAddrDetail2;
+	private String roadAddrDetail3;
+	private String roadAddrDetail4;
+	private String roadAddrDetail5;
+	private String roadAddrDetail6;
 }

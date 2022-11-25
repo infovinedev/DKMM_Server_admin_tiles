@@ -2,7 +2,7 @@ package kr.co.infovine.dkmm.mapper.define;
 
 import java.util.List;
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
-import kr.co.infovine.dkmm.db.model.store.TStoreInfo;
+import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 import kr.co.infovine.dkmm.db.model.user.TUserInfo;
 
 public interface TDefineWorkMapper {

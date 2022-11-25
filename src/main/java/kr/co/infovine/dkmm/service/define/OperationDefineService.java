@@ -3,7 +3,7 @@ package kr.co.infovine.dkmm.service.define;
 import java.util.List;
 
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
-import kr.co.infovine.dkmm.db.model.store.TStoreInfo;
+import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 
 /**
  * kr.co.infovine.dkmm.service.realestate

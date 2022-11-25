@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
-import kr.co.infovine.dkmm.db.model.store.TStoreInfo;
+import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 import kr.co.infovine.dkmm.db.model.user.TUserInfo;
 import kr.co.infovine.dkmm.mapper.define.TDefineWorkMapper;
 import kr.co.infovine.dkmm.mapper.user.TUserInfoMapper;

@@ -24,15 +24,8 @@ public class Batch1Controller {
 
 	private final Log logger = LogFactory.getLog(getClass());
 
-
 	@Autowired
     private Scheduler scheduler;
-	
-//	@Value("${batch.cron.patteren.storewait}")
-//	private String storeWaitCron;
-//	
-//	@Value("${batch.cron.patteren.storeorgtoinfo}")
-//	private String storeOrgToInfoCron;
 	
 	// -------------------- 스프링 부트 배치 (quartz) [start] -----------------------------
     @PostConstruct
@@ -44,13 +37,17 @@ public class Batch1Controller {
         	//배치작업 class 지정하기
         	//01. 상점 대기등록 통계
         	JobDetail jobDetail = buildJobDetail(Batch1Service.class, "batch1", "t_batch1", map);
-			scheduler.scheduleJob(jobDetail, buildJobTrigger("0 0 1 * * ?"));
-//			scheduler.scheduleJob(jobDetail, buildJobTrigger(storeWaitCron));
+//			scheduler.scheduleJob(jobDetail, buildJobTrigger("0 0 1 * * ?"));
 			
 			//02. 상점 정보 등록
         	JobDetail jobDetailStoreOrg = buildJobDetail(BatchStoreOrgToInfoService.class, "batchStoreOrg", "t_batchStoreOrg", map);
-			scheduler.scheduleJob(jobDetailStoreOrg, buildJobTrigger("0 21 17 * * ?"));
-//			scheduler.scheduleJob(jobDetailStoreOrg, buildJobTrigger(storeOrgToInfoCron));
+//			scheduler.scheduleJob(jobDetailStoreOrg, buildJobTrigger("0 21 17 * * ?"));
+			
+			//03. 상점 위치 정보 갱신
+        	JobDetail jobDetailStoreCoordinates = buildJobDetail(BatchCoordinatesToStoreService.class, "batchStoreCoordinates", "t_batchStoreCoordinates", map);
+//			scheduler.scheduleJob(jobDetailStoreCoordinates, buildJobTrigger("0 25 17 * * ?"));
+        	scheduler.scheduleJob(jobDetailStoreCoordinates, buildJobTrigger("0 0 1 * * ?"));
+			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

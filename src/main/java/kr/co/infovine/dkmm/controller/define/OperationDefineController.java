@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
-import kr.co.infovine.dkmm.db.model.store.TStoreInfo;
+import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 import kr.co.infovine.dkmm.db.model.user.TUserInfo;
 import kr.co.infovine.dkmm.service.define.OperationDefineService;
 import kr.co.infovine.dkmm.service.user.OperationUserService;
