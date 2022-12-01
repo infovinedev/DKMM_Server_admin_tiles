@@ -123,4 +123,27 @@ public class BaseController {
 		}
 		return result;
 	}
+	
+	@RequestMapping(value="/batchStoreOrgBulkInsert.do", method = RequestMethod.POST
+			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
+	@ResponseBody
+	public ResponseModel batchStoreOrgBulkInsert(HttpServletRequest request, HttpServletResponse response
+			, @RequestBody String admin
+		) {
+		
+		ResponseModel result = new ResponseModel();
+		try {
+			JSONObject json = new JSONObject(admin);
+			String str = json.getString("admin");
+			if(str.equals("kdh")) {
+//				storeMetaBatchService.batchStoreOrgPstmtInsert();
+				storeMetaBatchService.batchStoreOrgBulkInsert();
+				result.setCode("0000");
+			}
+		}
+		catch (Exception e) {
+			result.setCode("0001");
+		}
+		return result;
+	}
 }

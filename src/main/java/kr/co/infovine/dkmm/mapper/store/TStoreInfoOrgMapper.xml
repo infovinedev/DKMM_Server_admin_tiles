@@ -134,4 +134,87 @@
 	AND   process_yn = 'N'   
 	]]>   
   </update>
+  
+  <insert id="bulkInsert">
+  	/* TStoreInfoOrg.bulkInsert   STORE_ORG 엑셀 상점 update */
+  	insert into t_store_info_org_excel														
+	(                                                                               
+		 seq				,service_nm			,service_id		,area_code          
+		,manage_no			,approval_dt		,cancel_dt		,status_type        
+		,status_nm			,status_code		,status_nm2		,close_dt           
+		,holiday_start_dt	,holiday_end_dt		,reopen_dt		,tel                
+		,area_size			,zip				,addr			,road_addr          
+		,road_zip			,store_nm			,upt_dt			,sql_type           
+		,data_upt_dt		,ctgry_nm			,position_x		,position_y         
+		,ctgry_nm2			,man_cnt			,woman_cnt		,area_type          
+		,degree_type		,water_type			,person_cnt1	,person_cnt2        
+		,person_cnt3		,person_cnt4		,person_cnt5	,store_buy_type		
+		,store_money		,store_month_money	,many_use_yn	,area_tot           
+		,culture_no			,culture_menu		,hompage		,process_yn         
+	) values
+	<foreach collection="list" item="item" separator=",">
+	(
+		#{item.seq,jdbcType=VARCHAR}, #{item.serviceNm,jdbcType=VARCHAR}, #{item.serviceId,jdbcType=VARCHAR}, #{item.areaCode,jdbcType=VARCHAR},
+   		#{item.manageNo,jdbcType=VARCHAR}, #{item.approvalDt,jdbcType=VARCHAR}, #{item.cancelDt,jdbcType=VARCHAR}, #{item.statusType,jdbcType=VARCHAR}, 
+   		#{item.statusNm,jdbcType=VARCHAR}, #{item.statusCode,jdbcType=VARCHAR}, #{item.statusNm2,jdbcType=VARCHAR}, #{item.closeDt,jdbcType=VARCHAR}, 
+      	#{item.holidayStartDt,jdbcType=VARCHAR}, #{item.holidayEndDt,jdbcType=VARCHAR}, #{item.reopenDt,jdbcType=VARCHAR}, #{item.tel,jdbcType=VARCHAR}, 
+      	#{item.areaSize,jdbcType=VARCHAR}, #{item.zip,jdbcType=VARCHAR}, #{item.addr,jdbcType=VARCHAR}, #{item.roadAddr,jdbcType=VARCHAR}, 
+      	#{item.roadZip,jdbcType=VARCHAR}, #{item.storeNm,jdbcType=VARCHAR}, #{item.uptDt,jdbcType=VARCHAR}, #{item.sqlType,jdbcType=VARCHAR}, 
+      	#{item.dataUptDt,jdbcType=VARCHAR}, #{item.ctgryNm,jdbcType=VARCHAR}, #{item.positionX,jdbcType=VARCHAR}, #{item.positionY,jdbcType=VARCHAR}, 
+      	#{item.ctgryNm2,jdbcType=VARCHAR}, #{item.manCnt,jdbcType=VARCHAR}, #{item.womanCnt,jdbcType=VARCHAR}, #{item.areaType,jdbcType=VARCHAR}, 
+      	#{item.degreeType,jdbcType=VARCHAR}, #{item.waterType,jdbcType=VARCHAR}, #{item.personCnt1,jdbcType=VARCHAR}, #{item.personCnt2,jdbcType=VARCHAR}, 
+      	#{item.personCnt3,jdbcType=VARCHAR}, #{item.personCnt4,jdbcType=VARCHAR}, #{item.personCnt5,jdbcType=VARCHAR}, #{item.storeBuyType,jdbcType=VARCHAR}, 
+      	#{item.storeMoney,jdbcType=VARCHAR}, #{item.storeMonthMoney,jdbcType=VARCHAR}, #{item.manyUseYn,jdbcType=VARCHAR}, #{item.areaTot,jdbcType=VARCHAR}, 
+      	#{item.cultureNo,jdbcType=VARCHAR}, #{item.cultureMenu,jdbcType=VARCHAR}, #{item.hompage,jdbcType=VARCHAR}, 'Y'       
+	)  
+	</foreach>                                                                             
+	ON CONFLICT (manage_no) DO UPDATE                                               
+	SET                                                                             
+		service_nm         = excluded.service_nm                                    
+		,service_id         = excluded.service_id                                   
+		,area_code          = excluded.area_code                                    
+		,approval_dt        = excluded.approval_dt                                  
+		,cancel_dt          = excluded.cancel_dt                                    
+		,status_type        = excluded.status_type                                  
+		,status_nm          = excluded.status_nm                                    
+		,status_code        = excluded.status_code                                  
+		,status_nm2         = excluded.status_nm2                                   
+		,close_dt           = excluded.close_dt                                     
+		,holiday_start_dt   = excluded.holiday_start_dt                             
+		,holiday_end_dt     = excluded.holiday_end_dt                               
+		,reopen_dt          = excluded.reopen_dt                                    
+		,tel                = excluded.tel                                          
+		,area_size          = excluded.area_size                                    
+		,zip                = excluded.zip                                          
+		,addr               = excluded.addr                                         
+		,road_addr          = excluded.road_addr                                    
+		,road_zip           = excluded.road_zip                                     
+		,store_nm           = excluded.store_nm                                     
+		,upt_dt             = excluded.upt_dt                                       
+		,sql_type           = excluded.sql_type                                     
+		,data_upt_dt        = excluded.data_upt_dt                                  
+		,ctgry_nm           = excluded.ctgry_nm                                     
+		,position_x         = excluded.position_x                                   
+		,position_y         = excluded.position_y                                   
+		,ctgry_nm2          = excluded.ctgry_nm2                                    
+		,man_cnt            = excluded.man_cnt                                      
+		,woman_cnt          = excluded.woman_cnt                                    
+		,area_type          = excluded.area_type                                    
+		,degree_type        = excluded.degree_type                                  
+		,water_type         = excluded.water_type                                   
+		,person_cnt1        = excluded.person_cnt1                                  
+		,person_cnt2        = excluded.person_cnt2                                  
+		,person_cnt3        = excluded.person_cnt3                                  
+		,person_cnt4        = excluded.person_cnt4                                  
+		,person_cnt5        = excluded.person_cnt5                                  
+		,store_buy_type     = excluded.store_buy_type                               
+		,store_money        = excluded.store_money                                  
+		,store_month_money  = excluded.store_month_money                            
+		,many_use_yn        = excluded.many_use_yn                                  
+		,area_tot           = excluded.area_tot                                     
+		,culture_no         = excluded.culture_no                                   
+		,culture_menu       = excluded.culture_menu                                 
+		,hompage            = excluded.hompage                                      
+		,process_yn         = 'Y'                                                   
+  </insert>
 </mapper>

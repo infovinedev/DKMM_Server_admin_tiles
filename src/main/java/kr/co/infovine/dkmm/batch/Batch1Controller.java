@@ -45,10 +45,12 @@ public class Batch1Controller {
 			
 			//03. 상점 위치 정보 갱신
         	JobDetail jobDetailStoreCoordinates = buildJobDetail(BatchCoordinatesToStoreService.class, "batchStoreCoordinates", "t_batchStoreCoordinates", map);
-//			scheduler.scheduleJob(jobDetailStoreCoordinates, buildJobTrigger("0 25 17 * * ?"));
-        	scheduler.scheduleJob(jobDetailStoreCoordinates, buildJobTrigger("0 0 1 * * ?"));
+//        	scheduler.scheduleJob(jobDetailStoreCoordinates, buildJobTrigger("0 0 1 * * ?"));
 			
-			
+        	//03. 상점 위치 정보 갱신
+        	JobDetail jobDetailStoreOrgExcelUpload = buildJobDetail(BatchStoreOrgExcelUploadService.class, "BatchStoreOrgExcelUpload", "t_batchStoreOrgExcelUpload", map);
+//        	scheduler.scheduleJob(jobDetailStoreOrgExcelUpload, buildJobTrigger("0 23 17 * * ?"));
+        	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

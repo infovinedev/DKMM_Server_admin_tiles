@@ -28,4 +28,7 @@ public interface TStoreInfoOrgMapper {
 	
 	/* STORE_ORG 폐업 상점 process_yn update  */
 	int updateStoreOrgStatus02();
+	
+	/* STORE_ORG 엑셀 상점 update  */
+	int bulkInsert(List<TStoreInfoOrg> row);
 }

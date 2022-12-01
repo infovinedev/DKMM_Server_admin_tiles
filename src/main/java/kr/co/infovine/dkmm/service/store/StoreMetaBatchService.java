@@ -1,5 +1,7 @@
 package kr.co.infovine.dkmm.service.store;
 
+import java.sql.SQLException;
+
 public interface StoreMetaBatchService {
 	
 	void batchStoreInfo();
@@ -15,4 +17,7 @@ public interface StoreMetaBatchService {
 	
 	void getCoordinatesToStoreInfo(); //store info
 	void getCoordinatesToStoreInfoTest();//store info test
+	
+	void batchStoreOrgBulkInsert(); //store org 엑셀 업로드
+	void batchStoreOrgPstmtInsert() throws SQLException; //store org 엑셀 업로드
 }

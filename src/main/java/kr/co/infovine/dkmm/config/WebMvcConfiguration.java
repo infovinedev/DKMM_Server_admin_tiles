@@ -24,6 +24,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		excludeMapping.add("/error.do");
 		excludeMapping.add("/batchStoreOrg.do");
 		excludeMapping.add("/batchStoreCoordinates.do");
+		excludeMapping.add("/batchStoreOrgBulkInsert.do");
 		
 		registry.addInterceptor(new AuthenticationInterceptor()).excludePathPatterns(excludeMapping);
 		
