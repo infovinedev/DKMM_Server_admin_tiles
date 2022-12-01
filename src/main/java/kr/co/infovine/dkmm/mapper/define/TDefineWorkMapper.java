@@ -46,12 +46,22 @@ public interface TDefineWorkMapper {
      */
     int updateByPrimaryKey(TDefineWork row);
     
-    //회원정보 조회
+    //업적정보 조회
     List<TDefineWork> selectAlldefineWork(TDefineWork defineWork);
-    
+    //업적 상세정보 조회
     TDefineWork selectdefineWorkDetail(TDefineWork defineWork);
-    
+    //업적 칭호 매칭 조회
+    List<TDefineWork> selectDefineWorkGetNicknm(TDefineWork defineWork);
     void upDateDefineWork(TDefineWork defineWork);
     void insertDefineWork(TDefineWork defineWork);
+    
+    
+    /****************************************************************여기서 부터 업적승인 등록*****************************************************************/
+    List<TDefineWork> selectAlldefineWorkApproval(TDefineWork defineWork);
+    TDefineWork selectdefineWorkApprovalDetail(TDefineWork defineWork);
+    void upDateAllDefineWork(TDefineWork defineWork);
+    void upDateApproval(TDefineWork defineWork);
+    void upDateUseYn(TDefineWork defineWork);
+    TDefineWork selectNickComment(TDefineWork defineWork);
     
 }

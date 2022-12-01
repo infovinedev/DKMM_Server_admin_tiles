@@ -125,7 +125,7 @@ function fun_viewDetail(storeSeq) {
 			var insDt = tempResult.insDt == null ? "N/A" : tempResult.insDt;                                      //매장등록일
 			var roadAddr = tempResult.roadAddr == null ? "N/A" : tempResult.roadAddr;                             //도로명주소
 			//var                                                                                                 //지번주소 컬럼없음                                                                                
-			var zip = tempResult.zip == null ? "N/A" : tempResult.zip;                                            //우편번호
+			var zip = tempResult.roadZip == null ? "N/A" : tempResult.roadZip;                                    //우편번호
 			var latitude = tempResult.latitude == null ? "N/A" : tempResult.latitude;                             //위도
 			var longitude = tempResult.longitude == null ? "N/A" : tempResult.longitude;                          //경도
 			var companyNo = tempResult.companyNo == null ? "N/A" : tempResult.companyNo;                          //사업자등록번호
@@ -146,7 +146,7 @@ function fun_viewDetail(storeSeq) {
 			$("#txt_storeHolidayType").val(storeHolidayType);
 			$("#txt_insDt").val(insDt);
 			$("#txt_roadAddr").val(roadAddr);
-			$("#txt_zip").val(zip);
+			$("#txt_zip").val(roadZip);
 			$("#txt_companyNo").val(companyNo);
 			$("#txt_lastWaitPersonCnt").val(lastWaitPersonCnt);
 			$("#txt_lastWaitInsDt").val(lastWaitInsDt);

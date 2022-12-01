@@ -27,7 +27,7 @@ public class OperationNicknmController {
 	OperationNicknmService nicknmService;
 	
 	@RequestMapping(value ="/nicknm.do")
-	public ModelAndView realestateParcelInfo(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView defineNicknmInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("operation/operation_nicknm");
 		model.addObject("leftPageUrl", "nicknm/nicknm");

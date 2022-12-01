@@ -35,7 +35,7 @@ public class OperationStoreController {
 	MapController mapController;
 	
 	@RequestMapping(value ="/store.do")
-	public ModelAndView realestateParcelInfo(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView storeInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("operation/operation_store");
 		model.addObject("leftPageUrl", "store/store");

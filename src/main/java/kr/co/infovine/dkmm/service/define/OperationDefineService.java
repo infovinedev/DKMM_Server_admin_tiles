@@ -13,6 +13,7 @@ import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 public interface OperationDefineService {
     List<TDefineWork> selectAlldefineWork(TDefineWork defineWork);
     TDefineWork selectdefineWorkDetail(TDefineWork defineWork);
+    List<TDefineWork> selectDefineWorkGetNicknm(TDefineWork defineWork);
     
     void upDateDefineWork(TDefineWork defineWork);
     void insertDefineWork(TDefineWork defineWork);

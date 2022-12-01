@@ -36,6 +36,11 @@ public class OperationDefineServiceImpl implements OperationDefineService{
 	}
 	
 	@Override
+	public List<TDefineWork> selectDefineWorkGetNicknm(TDefineWork defineWork) {
+		return defineWorkMapper.selectDefineWorkGetNicknm(defineWork);
+	}
+	
+	@Override
 	public void upDateDefineWork(TDefineWork defineWork) {
 		defineWorkMapper.upDateDefineWork(defineWork);
 	}

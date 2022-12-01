@@ -134,21 +134,9 @@
       SELECT
          ROW_NUMBER() OVER() AS rowNum
         ,a.work_seq
-        ,(CASE
-			 WHEN a.work_condition  = 'REGISTER' THEN '대기등록'
-			 WHEN a.work_condition = 'LIKE' THEN '매장 찜하기'
-			 WHEN a.work_condition  = 'SEARCH' THEN '매장 검색'
-			 WHEN a.work_condition  = 'PHONE' THEN '휴대폰 본인인증'
-			 WHEN a.work_condition  = 'ACT' THEN '업적 달성'
-			 WHEN a.work_condition  = 'CHANGE' THEN '칭호 변경'
-			 WHEN a.work_condition  = 'GET' THEN '칭호 획득'
-			 WHEN a.work_condition  = 'SPGET' THEN '특정 칭호 획득'
-			 WHEN a.work_condition  = 'PMONEY' THEN '포인트금액'
-			 WHEN a.work_condition  = 'SELF' THEN '직접입력'
-				 ELSE '-'
-			END
-			) AS work_condition
+        ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
         ,a.work_nm
+        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
         ,a.work_cnt
         ,a.work_text
         ,a.nick_seq
@@ -176,88 +164,214 @@
     <select id="selectdefineWorkDetail" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
     /* 업적목록상세 조회하기 selectdefineWorkDetail */
      SELECT
-	    a.work_seq
-		,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
-	    ,a.work_nm
-	    ,a.work_cnt
+        a.work_seq
+        ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
+        ,a.work_nm
+        ,a.work_cnt
         ,a.work_text
-	    ,a.nick_seq
-	    ,CONCAT(a.point , 'P') as point
-	    ,a.except_condition
-	    ,TO_DATE(a.start_dt, 'YYYYMMDD') as start_dt
-	    ,TO_DATE(a.end_dt, 'YYYYMMDD') as end_dt
-	    ,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
-	    ,TO_CHAR(a.upt_dt, 'YYYY-MM-DD HH:MI') as upt_dt
-	    ,(CASE
-			WHEN a.work_type = 'NORMAL' THEN '일반'
-			WHEN a.work_type  = 'PROMOTION' THEN '프로모션'
-			ELSE '-'
-			END
-			) AS work_type 
-	    ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nick_nm
-        ,(SELECT nick_comment FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nick_comment
-	    ,a.approval_yn
-	    ,a.use_yn
-	    ,a.work_condition_desc
-	    ,a.work_text
-	    ,a.zombie_yn
-	    ,a.limit_yn
-	    ,a.unit_txt
-	  FROM t_define_work a
-	  WHERE 1=1
-	  AND work_seq = ${workSeq}
-	</select>
-	
-	<update id="upDateDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
-	/* 업적 사용여부 수정 upDateDefineWork */
-	UPDATE t_define_work SET use_yn = 'N' WHERE work_seq = ${upWorkSeq}
-	</update>
+        ,a.nick_seq
+        ,CONCAT(a.point , 'P') as point
+        ,a.except_condition
+        ,TO_DATE(a.start_dt, 'YYYYMMDD') as start_dt
+        ,TO_DATE(a.end_dt, 'YYYYMMDD') as end_dt
+        ,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
+        ,TO_CHAR(a.upt_dt, 'YYYY-MM-DD HH:MI') as upt_dt
+        ,(CASE
+            WHEN a.work_type = 'NORMAL' THEN '일반'
+            WHEN a.work_type  = 'PROMOTION' THEN '프로모션'
+            ELSE '-'
+            END
+            ) AS work_type 
+        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
+        ,(SELECT nick_comment FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickComment
+        ,a.approval_yn
+        ,a.use_yn
+        ,a.work_condition_desc
+        ,a.work_text
+        ,a.zombie_yn
+        ,a.limit_yn
+        ,a.unit_txt
+      FROM t_define_work a
+      WHERE 1=1
+      AND work_seq = ${workSeq}
+    </select>
+    
+    <select id="selectDefineWorkGetNicknm" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
+    SELECT
+             a.nick_seq
+            ,a.nick_nm as nickNm
+            ,a.nick_comment
+            ,b.seqString
+      FROM t_define_nicknm	a
+      left join (
+            select 
+                string_agg(nick_seq::varchar, '|') as seqString
+            from t_define_work
+            where nick_seq is not null
+              AND del_yn = 'N'
+              AND approval_yn = 'Y'
+            AND use_yn = 'Y'
+      ) b
+      on 1=1
+      WHERE a.del_yn = 'N'
+      ORDER BY a.nick_seq desc
+    </select>
+    
+    <update id="upDateDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
+    /* 업적 사용여부 수정 upDateDefineWork */
+    UPDATE t_define_work SET use_yn = 'N' WHERE work_seq = ${upWorkSeq}
+    </update>
     
     <insert id="insertDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
     /* 업적등록 insertDefineWork */
     INSERT INTO t_define_work
-	  (
-	     work_nm
-	    ,work_condition
-	    ,work_cnt
+      (
+         work_nm
+        ,work_condition
+        ,work_cnt
         ,work_text
-	    ,point
-	    ,except_condition
-	    ,start_dt
-	    ,end_dt
-	    ,nick_seq
-	    ,work_type
-	    ,ins_dt
-	    ,ins_seq
-	    ,upt_seq
-	    ,upt_dt
-	    ,work_condition_desc
-	    ,zombie_yn
-	    ,limit_yn
-	    ,unit_txt
-	  )
-	  VALUES
-	  (
-	    #{workNm ,jdbcType=VARCHAR}
-	    ,#{workCondition ,jdbcType=VARCHAR}
-	    ,#{workCnt ,jdbcType=VARCHAR}
+        ,point
+        ,except_condition
+        ,start_dt
+        ,end_dt
+        ,nick_seq
+        ,work_type
+        ,ins_dt
+        ,ins_seq
+        ,upt_seq
+        ,upt_dt
+        ,work_condition_desc
+        ,zombie_yn
+        ,limit_yn
+        ,unit_txt
+      )
+      VALUES
+      (
+        #{workNm ,jdbcType=VARCHAR}
+        ,#{workCondition ,jdbcType=VARCHAR}
+        ,#{workCnt ,jdbcType=VARCHAR}
         ,#{workText ,jdbcType=VARCHAR}
-	    ,#{point ,jdbcType=VARCHAR}
-	    ,#{exceptCondition ,jdbcType=VARCHAR}
-	    ,#{startDt ,jdbcType=VARCHAR}
-	    ,#{endDt ,jdbcType=VARCHAR}
-	    ,#{nickSeq}
-	    ,#{workType ,jdbcType=VARCHAR}
-	    ,NOW()
-	    ,1
-	    ,1
-	    ,NOW()
-	    ,#{workConditionDesc ,jdbcType=VARCHAR}
-	    ,#{zombieYn ,jdbcType=VARCHAR}
-	    ,#{limitYn ,jdbcType=VARCHAR}
-	    ,#{unitTxt ,jdbcType=VARCHAR}
-	  )
-    
-    
+        ,#{point ,jdbcType=VARCHAR}
+        ,#{exceptCondition ,jdbcType=VARCHAR}
+        ,#{startDt ,jdbcType=VARCHAR}
+        ,#{endDt ,jdbcType=VARCHAR}
+        ,#{nickSeq}
+        ,#{workType ,jdbcType=VARCHAR}
+        ,NOW()
+        ,1
+        ,1
+        ,NOW()
+        ,#{workConditionDesc ,jdbcType=VARCHAR}
+        ,#{zombieYn ,jdbcType=VARCHAR}
+        ,#{limitYn ,jdbcType=VARCHAR}
+        ,#{unitTxt ,jdbcType=VARCHAR}
+      )
     </insert>
+    <!--                                                                      업적등록 end                                                                      -->
+    
+    
+    
+    <!--                                                                      업적등록승인 start                                                                      -->
+    <select id="selectAlldefineWorkApproval" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
+    SELECT
+         ROW_NUMBER() OVER() AS rowNum
+        ,a.work_seq
+        ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
+        ,a.work_nm
+        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
+        ,a.work_cnt
+        ,a.work_text
+        ,a.nick_seq
+        ,a.point
+        ,a.except_condition
+        ,a.start_dt
+        ,a.end_dt
+        ,a.work_type
+        ,(CASE WHEN a.approval_yn = 'Y' THEN '승인' 
+               WHEN a.approval_yn = 'N' THEN '승인대기' ELSE '승인취소' END) as approval_yn
+        ,(case when a.use_yn = 'Y' then '사용' else '숨김' end) as use_yn
+        ,a.work_condition_desc
+        ,a.work_text
+        ,a.zombie_yn
+        ,a.limit_yn
+        ,a.unit_txt
+      FROM t_define_work a
+      WHERE 1=1
+        AND a.del_yn = 'N'
+      <include refid="searchCondition_history"></include>
+      ORDER BY work_seq DESC
+    </select>
+    
+    <select id="selectdefineWorkApprovalDetail" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
+    /* 업적등록승인상세 조회하기 selectdefineWorkDetail */
+     SELECT
+      a.work_seq
+      ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
+      ,(select code_value  from t_common_code where code_value = a.work_condition) AS codeValue
+      ,a.work_nm
+      ,a.work_cnt
+      ,a.work_text
+      ,a.nick_seq
+      ,a.point
+      ,a.except_condition
+      ,TO_DATE(a.start_dt, 'YYYYMMDD') as start_dt
+      ,TO_DATE(a.end_dt, 'YYYYMMDD') as end_dt
+      ,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
+      ,TO_CHAR(a.upt_dt, 'YYYY-MM-DD HH:MI') as upt_dt
+      ,(CASE
+        WHEN a.work_type = 'NORMAL' THEN '일반'
+        WHEN a.work_type  = 'PROMOTION' THEN '프로모션'
+        ELSE '-'
+        END
+        ) AS work_type 
+        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
+        ,(SELECT nick_comment FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickComment
+        ,a.approval_yn
+        ,a.use_yn
+        ,a.work_condition_desc
+        ,a.work_text
+        ,a.zombie_yn
+        ,a.limit_yn
+        ,a.unit_txt
+      FROM t_define_work a
+      WHERE 1=1
+      AND work_seq = ${workSeq}
+    </select>
+    
+    <update id="upDateAllDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
+    UPDATE t_define_work
+             SET work_nm 				= #{workNm ,jdbcType=VARCHAR}
+                ,work_condition 		= #{workCondition ,jdbcType=VARCHAR}
+                ,work_cnt 				= #{workCnt ,jdbcType=VARCHAR}
+                ,work_text 				= #{workText ,jdbcType=VARCHAR}
+                ,point 					= #{point ,jdbcType=VARCHAR}
+                ,except_condition 		= #{exceptCondition ,jdbcType=VARCHAR}
+                ,start_dt 				= #{startDt ,jdbcType=VARCHAR}
+                ,end_dt	 				= #{endDt ,jdbcType=VARCHAR}
+                ,nick_seq 				= #{nickSeq ,jdbcType=VARCHAR}
+                ,work_type	 			= #{workType ,jdbcType=VARCHAR}
+                ,upt_dt 				= NOW()
+                ,work_condition_desc 	= #{workConditionDesc ,jdbcType=VARCHAR}
+                ,zombie_yn				= #{zombieYn ,jdbcType=VARCHAR}
+                ,limit_yn				= #{limitYn ,jdbcType=VARCHAR}
+                ,unit_txt				= #{unitTxt ,jdbcType=VARCHAR}
+              WHERE 1=1
+              AND work_seq = ${workSeq}
+    </update>
+    	
+    <update id="upDateApproval" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
+    /* 업적승인여부  upDateApproval */
+    UPDATE t_define_work SET approval_yn  = #{approval,jdbcType=VARCHAR} WHERE work_seq = ${upWorkSeq}
+    </update>
+    
+    <update id="upDateUseYn" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
+    /* 업적등록승인 사용여부 수정 upDateUseYn */
+    UPDATE t_define_work SET use_yn = #{useYn,jdbcType=VARCHAR} WHERE work_seq = ${upWorkSeq}
+    </update>
+    
+    <select id="selectNickComment" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
+    select nick_comment as nickComment from t_define_nicknm  where nick_seq = #{nickSeq}
+    </select>
+    <!--                                                                      업적등록승인 end                                                                      -->
+    
 </mapper>

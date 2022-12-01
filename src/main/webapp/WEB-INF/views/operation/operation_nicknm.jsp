@@ -399,7 +399,7 @@ function fn_admin_file_callback(th, data, pageType){
                     
                     <!-- 상세보기 start-->
                     <section id="section1_detail_view" style="display:none;">
-                        <div class="modal-content" id="modaltest" style="width: 1200px;">
+                        <div class="modal-content" id="detailModal" style="width: 1200px;">
                          <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalScrollableTitle">업적상세</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -479,19 +479,9 @@ function fn_admin_file_callback(th, data, pageType){
                         </div>
                     </section>
                     <!-- 상세보기 모달창 end  -->
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                     <!-- 등록 모달창 -->
                     <section id="section1_inser_view" style="display:none;">
-                        <div class="modal-content" id="modaltest" style="width: 1200px;">
+                        <div class="modal-content" id="insertModal" style="width: 1200px;">
                          <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalScrollableTitle">업적등록</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -513,25 +503,9 @@ function fn_admin_file_callback(th, data, pageType){
                                   </tr>
                                   <tr>
                                     <th>칭호이미지 <span class="text-red">*</span></th>
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
                                     <td colspan="3">
                                     
                                     </td>
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
                                   </tr>
                                   <tr>
                                     <th>칭호코멘트<span class="text-red">*</span></th>

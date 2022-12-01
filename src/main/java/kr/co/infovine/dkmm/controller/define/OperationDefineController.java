@@ -30,7 +30,7 @@ public class OperationDefineController {
 	OperationDefineService operationDefineService;
 	
 	@RequestMapping(value ="/define.do")
-	public ModelAndView realestateParcelInfo(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView defineWorkInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("operation/operation_define");
 		model.addObject("leftPageUrl", "define/define");
@@ -71,6 +71,24 @@ public class OperationDefineController {
 		}
 		return result;
 	}
+	
+	@RequestMapping(value = "/select/defineWorkGetNicknm.do", method = RequestMethod.POST
+			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+			@ResponseBody
+			public ResponseModel selectDefineWorkGetNicknm(HttpServletRequest request, HttpServletResponse response 
+					,@RequestBody TDefineWork defineWork) {
+				ResponseModel result = new ResponseModel();
+				try {
+					List<TDefineWork> model = operationDefineService.selectDefineWorkGetNicknm(defineWork);
+					ObjectMapper mapper = new ObjectMapper();
+					String defineWorkList = mapper.writeValueAsString(model);
+					result.setCode("0000");
+					result.setResult(defineWorkList);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return result;
+			}
 	
 	@RequestMapping(value = "/save/defineWorkUpdate.do", method = RequestMethod.POST
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")

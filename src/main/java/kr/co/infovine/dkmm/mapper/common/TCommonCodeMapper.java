@@ -52,4 +52,6 @@ public interface TCommonCodeMapper {
     int updateByPrimaryKey(TCommonCodeModel row);
     
     int updateByDescriptionAndInsDt(TCommonCodeModel row);
+    
+    List<TCommonCodeModel> selectCommonCode(TCommonCodeModel tCommonCodeModel);
 }
