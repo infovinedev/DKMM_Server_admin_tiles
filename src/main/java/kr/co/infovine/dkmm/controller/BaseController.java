@@ -90,8 +90,8 @@ public class BaseController {
 			JSONObject json = new JSONObject(admin);
 			String str = json.getString("admin");
 			if(str.equals("kdh")) {
-				storeMetaBatchService.batchStoreInfoTest();
-//				storeMetaBatchService.batchStoreInfo();
+//				storeMetaBatchService.batchStoreInfoTest();
+				storeMetaBatchService.batchStoreInfo();
 				result.setCode("0000");
 			}
 		}
@@ -113,8 +113,8 @@ public class BaseController {
 			JSONObject json = new JSONObject(admin);
 			String str = json.getString("admin");
 			if(str.equals("kdh")) {
-				storeMetaBatchService.getCoordinatesToStoreInfoTest();
-//				storeMetaBatchService.getCoordinatesToStoreInfo();
+//				storeMetaBatchService.getCoordinatesToStoreInfoTest();
+				storeMetaBatchService.getCoordinatesToStoreInfo();
 				result.setCode("0000");
 			}
 		}

@@ -170,4 +170,7 @@ public class TStoreInfoModel {
 	private String roadAddrDetail4;
 	private String roadAddrDetail5;
 	private String roadAddrDetail6;
+	
+	private String vworldResponse;
+	private Date vworldProcDt;
 }

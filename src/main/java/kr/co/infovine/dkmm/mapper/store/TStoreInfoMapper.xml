@@ -257,7 +257,8 @@
 		,ins_seq                            
 		,upt_seq                            
 		,store_tel                          
-		,area_tot                           
+		,area_tot     
+		,vworld_response                        
 	)                                       
 	SELECT                                  
 		manage_no as store_mngt_no          
@@ -270,8 +271,9 @@
 		,0 as ins_seq                       
 		,0 as upt_seq                       
 		,tel as store_tel                   
-		,area_tot                           
-	FROM t_store_info_org                   
+		,area_tot        
+		,null                     
+	FROM t_store_info_org_excel                   
 	WHERE status_type = '01'                
 	AND   process_yn = 'N'                  
 	ON CONFLICT (store_mngt_no) DO UPDATE   
@@ -284,6 +286,7 @@
     	,area_tot = excluded.area_tot   
     	,latitude = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.latitude ELSE NULL END)
     	,longitude = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.longitude ELSE NULL END) 
+    	,vworld_response = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.vworld_response ELSE NULL END)
   </insert>
   
   <update id="updateCloseStoreInfo">
@@ -292,7 +295,7 @@
 	UPDATE 	t_store_info	A			
 	SET		use_yn = 'N'					
 			,del_yn = 'Y'					
-	FROM	t_store_info_org B				
+	FROM	t_store_info_org_excel B				
 	WHERE A.store_mngt_no = B.manage_no  
 	AND   B.process_yn = 'N'             
 	AND   B.status_type <> '01'     
@@ -300,16 +303,23 @@
   </update>
   
   <select id="selectNonExistLatitude" resultMap="BaseResultMap">
+  /* TStoreInfo.selectNonExistLatitude   STORE_INFO 좌표없는 상점 조회 */
+  <![CDATA[
     select store_seq, store_mngt_no, store_nm, ctgry_nm, road_addr, road_zip, latitude, longitude, 
     company_no, store_open_time, store_end_time, store_holiday_type, max_cnt, file_uuid, 
     use_yn, del_yn, ins_seq, ins_dt, upt_seq, upt_dt, store_tel, area_tot, priority, 
     like_cnt, last_wait_user_seq, last_wait_person_cnt, last_wait_ins_dt, old_addr, old_zip
-    from t_store_info_test
-    where latitude is null or longitude is null
+    from t_store_info
+    where (latitude is null or longitude is null)
+    and road_addr <> '' 
+    and use_yn = 'Y'
+    and del_yn = 'N'
+    and vworld_response IS null
+    ]]>
   </select>
   
-  <update id="updateRoadAddrByPrimaryKey" parameterType="kr.co.infovine.dkmm.db.model.store.TStoreInfoModelTest" >
-  	/* TStoreInfoTest.updateRoadAddrByPrimaryKey   STORE_INFO 좌표 및 상세 주소 업데이트 */
+  <update id="updateRoadAddrByPrimaryKey" parameterType="kr.co.infovine.dkmm.db.model.store.TStoreInfoModel" >
+  	/* TStoreInfo.updateRoadAddrByPrimaryKey   STORE_INFO 좌표 및 상세 주소 업데이트 */
   	<![CDATA[
 	UPDATE 	t_store_info	
 	SET		latitude = #{latitude,jdbcType=VARCHAR}
@@ -321,7 +331,20 @@
 			,road_addr_detail5 = #{roadAddrDetail5,jdbcType=VARCHAR}
 			,road_addr_detail6 = #{roadAddrDetail6,jdbcType=VARCHAR}
 			,upt_dt = now()
+			,vworld_response = #{vworldResponse,jdbcType=VARCHAR}
+			,vworld_proc_dt = now()
 	WHERE store_seq = #{storeSeq,jdbcType=BIGINT}
 	]]>     
   </update>
+  
+  <update id="updateFailVworldByPrimaryKey" parameterType="kr.co.infovine.dkmm.db.model.store.TStoreInfoModel" >
+  	/* TStoreInfo.updateRoadAddrByPrimaryKey   STORE_INFO 좌표 및 상세 주소 업데이트 */
+  	<![CDATA[
+	UPDATE 	t_store_info	
+	SET		vworld_response = #{vworldResponse,jdbcType=VARCHAR}
+			,vworld_proc_dt = now()
+	WHERE store_seq = #{storeSeq,jdbcType=BIGINT}
+	]]>     
+  </update>
+  
 </mapper>

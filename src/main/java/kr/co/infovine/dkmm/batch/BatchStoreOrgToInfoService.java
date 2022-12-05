@@ -32,7 +32,7 @@ public class BatchStoreOrgToInfoService extends QuartzJobBean implements Interru
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		log.info("========= 상점 정보 갱신 Batch =====");
 		try {
-			storeMetaBatchService.batchStoreInfoTest();
+			storeMetaBatchService.batchStoreInfo();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

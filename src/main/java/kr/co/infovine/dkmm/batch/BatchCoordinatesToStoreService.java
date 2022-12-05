@@ -32,7 +32,7 @@ public class BatchCoordinatesToStoreService extends QuartzJobBean implements Int
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		log.info("========= 상점 위치 정보 Batch =====");
 		try {
-			storeMetaBatchService.getCoordinatesToStoreInfoTest();
+			storeMetaBatchService.getCoordinatesToStoreInfo();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
