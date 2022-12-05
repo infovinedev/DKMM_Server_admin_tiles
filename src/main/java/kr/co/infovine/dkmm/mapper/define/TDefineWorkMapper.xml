@@ -339,6 +339,7 @@
     </select>
     
     <update id="upDateAllDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
+    /* 업적승인여부  수정 upDateAllDefineWork*/
     UPDATE t_define_work
              SET work_nm 				= #{workNm ,jdbcType=VARCHAR}
                 ,work_condition 		= #{workCondition ,jdbcType=VARCHAR}
@@ -358,6 +359,14 @@
               WHERE 1=1
               AND work_seq = ${workSeq}
     </update>
+    
+    <delete id="deleteAllDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
+    /* 업적승인여부  삭제 deleteAllDefineWork*/
+    DELETE 
+      FROM t_define_work
+     WHERE 1=1
+       AND work_seq = ${workSeq}
+    </delete>
     	
     <update id="upDateApproval" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
     /* 업적승인여부  upDateApproval */

@@ -1,4 +1,4 @@
-package kr.co.infovine.dkmm.controller.user;
+package kr.co.infovine.dkmm.controller.userLeave;
 
 import java.util.List;
 
@@ -17,42 +17,44 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
 import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 import kr.co.infovine.dkmm.db.model.user.TUserInfo;
+import kr.co.infovine.dkmm.db.model.userLeave.TUserLeave;
 import kr.co.infovine.dkmm.service.user.OperationUserService;
+import kr.co.infovine.dkmm.service.userLeave.OperationUserLeaveService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-@RequestMapping(value = "/user")
-public class OperationUserController {
+@RequestMapping(value = "/userLeave")
+public class OperationUserLeaveController {
 	@Autowired
-	OperationUserService operationUserService;
+	OperationUserLeaveService operationUserLeaveService;
 	
-	@RequestMapping(value ="/user.do")
+	@RequestMapping(value ="/userLeave.do")
 	public ModelAndView realestateParcelInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_user");
-		model.addObject("leftPageUrl", "user/user");
+		model.setViewName("operation/operation_userLeave");
+		model.addObject("leftPageUrl", "userLeave/userLeave");
 		return model;
 	}
 
-	@RequestMapping(value = "/select/userInfo.do", method = RequestMethod.POST
+	@RequestMapping(value = "/select/userLeaveList.do", method = RequestMethod.POST
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ResponseModel selectRealestateParcelInfo(HttpServletRequest request, HttpServletResponse response 
-			,@RequestBody TUserInfo userInfo) {
+			,@RequestBody TUserLeave userLeave) {
 		ResponseModel result = new ResponseModel();
 		try {
-			List<TUserInfo> model = operationUserService.selectAllUserInfo(userInfo);
+			List<TUserLeave> model = operationUserLeaveService.selectAllUserLeave(userLeave);
 			ObjectMapper mapper = new ObjectMapper();
-			String userInfoList = mapper.writeValueAsString(model);
+			String userLeaveInfoList = mapper.writeValueAsString(model);
 			result.setCode("0000");
-			result.setResult(userInfoList);
+			result.setResult(userLeaveInfoList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
+/*	
 	@RequestMapping(value = "/select/userInfoDetail.do", method = RequestMethod.POST
 		, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 		@ResponseBody
@@ -70,4 +72,6 @@ public class OperationUserController {
 			}
 			return result;
 		}
+		
+*/
 }

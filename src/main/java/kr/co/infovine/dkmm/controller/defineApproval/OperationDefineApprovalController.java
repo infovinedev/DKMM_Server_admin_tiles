@@ -74,6 +74,7 @@ public class OperationDefineApprovalController {
 		return result; 
 	}
 	
+	//수정
 	@RequestMapping(value = "/save/defineWorkUpdate.do", method = RequestMethod.POST 
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody 
@@ -82,6 +83,21 @@ public class OperationDefineApprovalController {
 	ResponseModel result = new ResponseModel();
 		try {
 			operationDefineApprovalService.upDateAllDefineWork(defineWork);
+			result.setErrorMessage("success"); 
+		} catch (Exception e) {
+			result.setErrorMessage("error"); e.printStackTrace(); 
+		} 
+		return result;
+	}
+	
+	@RequestMapping(value = "/save/defineWorkDelete.do", method = RequestMethod.POST 
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody 
+	public ResponseModel deleteDefineWorkAll(HttpServletRequest request, HttpServletResponse response 
+			,@RequestBody TDefineWork defineWork) {
+	ResponseModel result = new ResponseModel();
+		try {
+			operationDefineApprovalService.deleteAllDefineWork(defineWork);
 			result.setErrorMessage("success"); 
 		} catch (Exception e) {
 			result.setErrorMessage("error"); e.printStackTrace(); 

@@ -334,14 +334,27 @@ function fun_btnDefineinsert() {
 	var inputData = {"workSeq": workSeq, "workNm": workNm, "workCondition": workCondition,"workCnt": workCnt, "point": point, "workType": workType
 					 ,"nickSeq": nickSeq, "startDt": startDt, "endDt": endDt,"workConditionDesc": workConditionDesc, "exceptCondition": exceptCondition
 					 ,"zombieYn": zombieYn, "limitYn": limitYn, "unitTxt": unitTxt
-					};
-	if(result){	
+					}; 
+	if(result){
+		if($("#sel_add_workCondition").val() == ''){
+			alert("달성조건을 선택해주세요 ");
+			$("#sel_add_workCondition").focus();
+			return ;
+		}else if($("#txt_add_workCnt").val() == ''){
+			alert("달성 상세요건을 입력해주세요 ");
+			$("#txt_add_workCnt").focus();
+			return ;
+		}else if($("#sel_add_workType").val() == ''){
+			alert("업적구분을 선택해주세요 ");
+			$("#sel_add_workType").focus();
+			return ;
+		}
 		fun_ajaxPostSend("/define/save/defineWorkinsert.do", inputData, true, function(msg){
 			if(msg.errorMessage !=null){
 				var message = msg.errorMessage;
 				if(message == "success"){
 					alert("정상적으로 처리되었습니다.");
-					$("#section1_detail_view").css("display", "none");
+					$("#section1_inser_view").css("display", "none");
 					fun_search();
 				}else if(message == "error"){
 					alert("정상적으로 처리되지 않았습니다.");

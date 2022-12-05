@@ -136,6 +136,9 @@ function fun_reset(type){
 	
 	$("#hidden_workCondition").val(); //달성조건 value
 	$("#hidden_nickSeq").val(); //칭호 value
+	$("#txt_hiddenWorkCnt").val()
+	$("#txt_hiddenPoint").val()
+
 
 }
 //상세보기
@@ -153,7 +156,10 @@ function fun_viewDetail(workSeq) {
 			var codeValue          = tempResult.codeValue == null ? "" : tempResult.codeValue;                   //달성조건 value
 			
 			var workCnt            = tempResult.workCnt == null ? "" : tempResult.workCnt;                       //달성 상세 요건
-			var point              = tempResult.point == null ? "" : tempResult.point;                           //포인트
+			var hiddenWorkCnt      = tempResult.workCnt == null ? "" : tempResult.workCnt;                       //실세데이터 달성 상세 요건
+			var point              = tempResult.point == null ? "" : tempResult.point + "P";                           //포인트
+			var hiddenPoint        = tempResult.point == null ? "" : tempResult.point;                           //실세데이터 포인트
+			
 			var workType           = tempResult.workType == null ? "" : tempResult.workType;                     //업적구분
 			var nickNm             = tempResult.nickNm == null ? "" : tempResult.nickNm;                         //칭호
 			var nickSeq            = tempResult.nickSeq == null ? "" : tempResult.nickSeq;                       //칭호 value
@@ -183,11 +189,9 @@ function fun_viewDetail(workSeq) {
 			$("#txt_workCondition").val(workCondition);
 			$("#hidden_workCondition").val(codeValue);
 			$("#txt_workCnt").val(workCnt);
-			//hidden값 넣어야함
-			
-			
-			
+			$("#txt_hiddenWorkCnt").val(hiddenWorkCnt); //실세 적용 달성상세요건
 			$("#txt_point").val(point);
+			$("#txt_hiddenPoint").val(hiddenPoint); //실세 적용 포인트
 			$("#txt_workType").val(workType);
 			$("#txt_nickNm").val(nickNm);
 			$("#hidden_nickSeq").val(nickSeq);
@@ -268,6 +272,11 @@ function fun_setdefineApprovalListInfo() {
 			, {
 				"targets": [5]
 				, "class": "text-center"
+					, "render": function (data, type, row) {
+					   var point = row.point+"P";
+					   return point;
+		                }
+				
 			}
 			, {
 				"targets": [6]
@@ -324,7 +333,7 @@ function fun_defineHiding(type,value){
 					var message = msg.errorMessage;
 					if(message == "success"){
 						alert("정상적으로 처리되었습니다.");
-						$("#section1_detail_view").css("display", "none");
+						$("#section1_detail_view").css("display", "none"); //모달 종료
 						fun_search();
 					}else if(message == "error"){
 						alert("정상적으로 처리되지 않았습니다.");
@@ -352,7 +361,7 @@ function fun_defineHiding(type,value){
 					var message = msg.errorMessage;
 					if(message == "success"){
 						alert("정상적으로 처리되었습니다.");
-						$("#section1_detail_view").css("display", "none");
+						$("#section1_detail_view").css("display", "none"); //모달 종료
 						fun_search();
 					}else if(message == "error"){
 						alert("정상적으로 처리되지 않았습니다.");
@@ -377,34 +386,34 @@ function fun_updateDisplay() {
 	var inputData = {};
 	fun_ajaxPostSend("/define/select/defineWorkGetNicknm.do", inputData, true, function(msg){
 		if(msg!=null){
+			
 			var tempResult = JSON.parse(msg.result);
-			var seqString = tempResult[0].seqString;
-			
-			var usuallySeq = $("#hidden_nickSeq").val();
-			var usuallyNm = $("#txt_nickNm").val();
-			
-			$("select#sel_up_nickSeq option").remove();
-			$('#sel_up_nickSeq').append($('<option></option>').val("").html("선택"));
-			$('#sel_up_nickSeq').append($('<option></option>').val(usuallySeq).html(usuallyNm));
-			for(var i=0; i<tempResult.length; i++){
-				var nickSeq = tempResult[i].nickSeq;
-				if(!seqString.includes(nickSeq)){
-						var nickNm = tempResult[i].nickNm;
-						$('#sel_up_nickSeq').append($('<option></option>').val(nickSeq).html(nickNm));
+			if(tempResult.length > 0){
+				var seqString = tempResult[0].seqString;
+				var usuallySeq = $("#hidden_nickSeq").val();
+				var usuallyNm = $("#txt_nickNm").val();
+				
+				$("select#sel_up_nickSeq option").remove();
+				$('#sel_up_nickSeq').append($('<option></option>').val("").html("선택"));
+				$('#sel_up_nickSeq').append($('<option></option>').val(usuallySeq).html(usuallyNm));
+				for(var i=0; i<tempResult.length; i++){
+					var nickSeq = tempResult[i].nickSeq;
+					if(!seqString.includes(nickSeq)){
+							var nickNm = tempResult[i].nickNm;
+							$('#sel_up_nickSeq').append($('<option></option>').val(nickSeq).html(nickNm));
+					}
 				}
 			}
 		}
 		$("#sel_up_nickSeq").val(setNickSeq);
 	});
-	
 	var workSeq = $("#txt_workSeq").val();
 	var workNm = $("#txt_workNm").val();
 	var workCondition = $("#hidden_workCondition").val();
-	var workCnt = $("#txt_workCnt").val();
-	//hidden 값 넣어야함
 	
+	var workCnt = $("#txt_hiddenWorkCnt").val();
+	var point = $("#txt_hiddenPoint").val();
 	
-	var point = $("#txt_point").val();
 	var workType = $("#txt_workType").val();
 	var nickNm = $("#txt_nickNm").val();
 	var setNickSeq = $("#hidden_nickSeq").val();
@@ -455,22 +464,42 @@ function fun_svae(type) {
 	var nickSeq           =	$("#sel_up_nickSeq").val();
 	var limitYn           =	$("#sel_up_limitYn").val();
 	var unitTxt           =	$("#txt_up_unitTxt").val();
-	var result = confirm('업적 수정하시겠습니까?');
+	
 	var inputData = {"workSeq": workSeq,"workNm": workNm,"workCondition": workCondition, "workCnt": workCnt, "point": point,"workType": workType,"startDt": startDt,"endDt": endDt
 					,"workConditionDesc": workConditionDesc,"exceptCondition": exceptCondition,"zombieYn": zombieYn,"nickSeq": nickSeq,"limitYn": limitYn,"unitTxt": unitTxt};
-	if(result){
-		fun_ajaxPostSend("/approval/save/defineWorkUpdate.do", inputData, true, function(msg){
-			if(msg.errorMessage !=null){
-				var message = msg.errorMessage;
-				if(message == "success"){
-					alert("정상적으로 처리되었습니다.");
-					$("#section1_detail_view").css("display", "none");
-					fun_search();
-				}else if(message == "error"){
-					alert("정상적으로 처리되지 않았습니다.");
+	if(type == "U"){
+		var result = confirm('업적 수정하시겠습니까?');
+		if(result){
+			fun_ajaxPostSend("/approval/save/defineWorkUpdate.do", inputData, true, function(msg){
+				if(msg.errorMessage !=null){
+					var message = msg.errorMessage;
+					if(message == "success"){
+						alert("정상적으로 처리되었습니다.");
+						$("#section1_update_view").css("display", "none");
+						fun_search();
+					}else if(message == "error"){
+						alert("정상적으로 처리되지 않았습니다.");
+					}
 				}
-			}
-		});
+			});
+		}
+	}else{
+		var result = confirm('업적을 삭제하시겠습니까?');
+		if(result){
+			fun_ajaxPostSend("/approval/save/defineWorkDelete.do", inputData, true, function(msg){
+				if(msg.errorMessage !=null){
+					var message = msg.errorMessage;
+					if(message == "success"){
+						alert("정상적으로 처리되었습니다.");
+						$("#section1_update_view").css("display", "none");
+						fun_search();
+					}else if(message == "error"){
+						alert("정상적으로 처리되지 않았습니다.");
+					}
+				}
+			});
+		}
+		
 	}
 }
 
@@ -650,11 +679,15 @@ function changeNickNm(value) {
                                             <i class="icon-exclamation"></i>
                                         </button> -->
                                      </th>
-                                     <td><input class="form-control" type="text" id="txt_workCnt" readOnly/></td>
+                                     <td><input class="form-control" type="text" id="txt_workCnt" readOnly/>
+                                         <input class="form-control" type="hidden" id="txt_hiddenWorkCnt"/>
+                                     </td>
                                   </tr>
                                   <tr>
                                      <th>포인트</th>
-                                     <td><input class="form-control" type="text" id="txt_point" readOnly/></td>
+                                     <td><input class="form-control" type="text" id="txt_point" readOnly/>
+                                         <input class="form-control" type="hidden" id="txt_hiddenPoint" readOnly/>
+                                     </td>
                                      <th>업적구분</th>
                                      <td><input class="form-control" type="text" id="txt_workType" readOnly/></td>
                                   </tr>

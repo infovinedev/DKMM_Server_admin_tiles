@@ -58,10 +58,17 @@ public interface TDefineWorkMapper {
     
     /****************************************************************여기서 부터 업적승인 등록*****************************************************************/
     List<TDefineWork> selectAlldefineWorkApproval(TDefineWork defineWork);
+    
     TDefineWork selectdefineWorkApprovalDetail(TDefineWork defineWork);
+    
     void upDateAllDefineWork(TDefineWork defineWork);
+    
+    void deleteAllDefineWork(TDefineWork defineWork);
+    
     void upDateApproval(TDefineWork defineWork);
+    
     void upDateUseYn(TDefineWork defineWork);
+    
     TDefineWork selectNickComment(TDefineWork defineWork);
     
 }

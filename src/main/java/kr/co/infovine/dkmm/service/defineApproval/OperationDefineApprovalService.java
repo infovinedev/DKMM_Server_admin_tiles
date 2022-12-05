@@ -15,7 +15,10 @@ public interface OperationDefineApprovalService {
 	
 	TDefineWork selectdefineWorkApprovalDetail(TDefineWork defineWork); 
 	
+	//수정
 	void upDateAllDefineWork(TDefineWork defineWork);
+	//삭제
+	void deleteAllDefineWork(TDefineWork defineWork);
 	
 	void upDateApproval(TDefineWork defineWork);
 	

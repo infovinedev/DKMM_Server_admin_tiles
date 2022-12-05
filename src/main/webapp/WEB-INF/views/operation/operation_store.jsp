@@ -116,7 +116,7 @@ function fun_viewDetail(storeSeq) {
 			var storeTel = tempResult.storeTel == null ? "N/A" : tempResult.storeTel;                             //매장 전화번호
 			var likeCnt  = tempResult.likeCnt == null ? "N/A" : tempResult.likeCnt;                               //매장 찜 받은 수
 			var areaTot  = tempResult.areaTot == null ? "N/A" : tempResult.areaTot;                               //매장면적
-			var maxCnt   = tempResult.maxCnt == null ? "N/A" : tempResult.maxCnt;                                  //최대수용인원
+			var maxCnt   = tempResult.maxCnt == null ? "N/A" : tempResult.maxCnt;                                 //최대수용인원
 			var storeOpenTime = tempResult.storeOpenTime == null ? "-" : tempResult.storeOpenTime;                //매장영업시간
 			var storeEndTime = tempResult.storeEndTime == null ? "-" : tempResult.storeEndTime;                   //매장종료시간
 			var opening = storeOpenTime + "~" + storeEndTime;                                                     //영업시간 

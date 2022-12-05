@@ -50,7 +50,7 @@ public class TDefineWork {
      *
      * @mbg.generated Wed Nov 23 17:41:12 KST 2022
      */
-    private int nickSeq;
+    private Long nickSeq;
 
     /**
      *
@@ -207,20 +207,16 @@ public class TDefineWork {
     
     //추가
     private String rowNum;
-    private String seqString;
-    private String codeValue;
     
     //조건
   	private String searchText;
   	private String searchStartDt;
   	private String searchEndDt;
   	
-  	//숨김여부 , 승인 처리
+  	//숨김여부 처리
   	private String upWorkSeq;
   	private String upWorkNm;
   	private String upWorkCondition;
-  	private String approval;
-  	
   	
     // t_define_nicknm
     private String nickNm;

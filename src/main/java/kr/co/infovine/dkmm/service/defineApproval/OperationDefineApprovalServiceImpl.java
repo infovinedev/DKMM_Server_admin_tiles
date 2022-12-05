@@ -40,6 +40,11 @@ public class OperationDefineApprovalServiceImpl implements OperationDefineApprov
 	}
 	
 	@Override 
+	public void deleteAllDefineWork(TDefineWork defineWork) {
+		defineWorkMapper.deleteAllDefineWork(defineWork); 
+	}
+	
+	@Override 
 	public void upDateApproval(TDefineWork defineWork) {
 		defineWorkMapper.upDateApproval(defineWork); 
 	}
