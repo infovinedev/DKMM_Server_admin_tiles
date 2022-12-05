@@ -110,13 +110,13 @@
 			var temp_side = 		'<nav>';
 				temp_side += 			'<ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">';
 				temp_side += 				'<li class="nav-item has-treeview menu-open">';
-				temp_side += 					'<a href="/admin/dashboard/index" class="nav-link">';
+				temp_side += 					'<a href="/main/page.do" class="nav-link">';
 				temp_side += 						'<i class="nav-icon fas fa-chalkboard-teacher"></i>';
 				temp_side += 						'<p>홈으로 <i class="right fas fa-angle-right"></i></p>';
 				temp_side += 					'</a>';
 				temp_side += 				'</li>';
 			$.each(leftMenuLevel1, function (key1, value1) {
-				if(value1.programId >= 30000000){
+// 				if(value1.programId != 30000000){
 					temp_Value1 = mid(value1.programId, 0, 2);
 					temp_side += '<li class="nav-item has-treeview" id="parent_' + value1.programId + '" onclick=fun_leftMenuActive("' +value1.programId +'")>';
 					temp_side += '<a class="nav-link" id="' + value1.programId + '" name="' + value1.programId + '"><i class="nav-icon fas fa-chalkboard-teacher"></i><p>' + value1.programName + '<i class="right fas fa-angle-right"></i></p></a>';
@@ -129,7 +129,7 @@
 							}
 					});  //each2
 					temp_side += '</ul>';
-				}
+// 				}
 			});//each1 
 				temp_side += 			'</ul>';
 				temp_side += 		'</nav>';
@@ -164,20 +164,26 @@
 			        	location.href="/admin/loginView.do";
 		        		break;
 	        	}
+	        	
 				var tempResult = JSON.parse(msg.result);
 				for(var i=0; i<tempResult.length;i++){
+					
+					console.log(tempResult[i]);
+					
 					var adminProgram = tempResult[i].adminProgram;
-					var level = adminProgram.level;
-					switch(level){
-						case "1":
-							leftMenuLevel1.push(adminProgram);
-							break;
-						case "2":
-							leftMenuLevel2.push(adminProgram);
-							break;
-						case "3":
-							leftMenuLevel3.push(adminProgram);
-							break;
+					if ( adminProgram != null && adminProgram != undefined ){
+						var level = adminProgram.level;
+						switch(level){
+							case "1":
+								leftMenuLevel1.push(adminProgram);
+								break;
+							case "2":
+								leftMenuLevel2.push(adminProgram);
+								break;
+							case "3":
+								leftMenuLevel3.push(adminProgram);
+								break;
+						}
 					}
 				}
 	        	callback();
