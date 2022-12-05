@@ -108,5 +108,19 @@
      <include refid="searchCondition_leave"></include>
      ORDER BY leave_seq DESC
   </select>
+  <select id="selectUserLeaveDetail" parameterType="kr.co.infovine.dkmm.db.model.userLeave.TUserLeave" resultMap="BaseResultMap">
+       SELECT
+      a.leave_seq
+      ,(SELECT user_id FROM t_user_info WHERE user_seq = a.user_seq) as user_id
+      ,a.reason
+      ,(SELECT nick_name FROM t_user_info WHERE user_seq = a.user_seq) as nick_name
+      ,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
+      ,TO_CHAR(a.upt_dt, 'YYYY-MM-DD HH:MI') as upt_dt
+      ,a.approval_yn
+      ,(SELECT del_yn FROM t_user_info WHERE user_seq = a.user_seq) as del_yn
+      FROM t_user_leave a
+    WHERE 1=1
+    AND a.leave_seq = ${leaveSeq}
+  </select>
   
 </mapper>

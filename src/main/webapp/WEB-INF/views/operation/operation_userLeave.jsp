@@ -56,57 +56,34 @@ function fun_search(){
 
 //text값 공백처리
 function fun_reset(type){
-	$("#txt_userSeq").val("");
-	$("#txt_osType").val("");
-	$("#txt_ci").val("");
+	$("#txt_leaveSeq").val("");
 	$("#txt_nickName").val("");
-	$("#txt_gender").val("");
-	$("#txt_age").val("");
-	$("#txt_phone").val("");
-	$("#txt_waitCnt").val("");
+	$("#txt_reason").val("");
+	$("#txt_delYn").val("");
 	$("#txt_insDt").val("");
-	$("#txt_point").val("");
-	$("#txt_coupon").val("");
-	$("#txt_likeCnt").val("");
-	$("#txt_email").val("");
-	
 }
 
 //상세보기
-function fun_viewDetail(userSeq) {
+function fun_viewDetail(leaveSeq) {
 	fun_reset();
 	$("#section1_detail_view").removeAttr("style");
-	var inputData = {"userSeq": userSeq};
-	fun_ajaxPostSend("/user/select/userInfoDetail.do", inputData, true, function(msg){
+	var inputData = {"leaveSeq": leaveSeq};
+	fun_ajaxPostSend("/userLeave/select/userInfoDetail.do", inputData, true, function(msg){
 		if(msg!=null){
 			var tempResult = JSON.parse(msg.result);
-			var userSeq    = tempResult.userSeq == null ? "" : tempResult.userSeq;                     //사용자ID
-			var osType     = tempResult.osType == null ? "" : tempResult.osType;                       //OS Type
-			var ci         = tempResult.ci == null ? "준회원" : "회원";                                   //로그인  -> null값이면 준회원 X-> 회원???? 
-			var nickName   = tempResult.nickName == null ? "" : tempResult.nickName;                   //닉네임
-			var gender     = tempResult.gender == null ? "" : tempResult.gender;                       //성별
-			var age        = tempResult.age == null ? "" : tempResult.age;                             //나이
-			var phone      = tempResult.phone == null ? "" : tempResult.phone;                         //휴대전화번호
-			var waitCnt    = tempResult.waitCnt == null ? "" : tempResult.waitCnt;                     //대기등록횟수
-			var insDt      = tempResult.insDt == null ? "" : tempResult.insDt;                         //가입일
-			var point      = tempResult.point == null ? "" : tempResult.point;                         //보유포인트
-			var coupon     = tempResult.coupon == null ? "" : tempResult.coupon;                       //보유쿠폰
-			var likeCnt    = tempResult.likeCnt == null ? "" : tempResult.likeCnt;                     //찜한매장
-			var email      = tempResult.email == null ? "" : tempResult.email;                         //메일
+			var userId   = tempResult.userId == null ? "" : tempResult.userId;                   //ID
+			var leaveSeq   = tempResult.leaveSeq == null ? "" : tempResult.leaveSeq;             //탈퇴번호
+			var nickName   = tempResult.nickName == null ? "" : tempResult.nickName;             //닉네임
+			var reason     = tempResult.reason == null ? "" : tempResult.reason;                 //내용 
+			var delYn      = tempResult.delYn == null ? "" : tempResult.delYn;                   //탈퇴완료여부
+			var insDt      = tempResult.insDt == null ? "" : tempResult.insDt;                   //탈퇴일
 			
-			$("#txt_userSeq").val(userSeq);
-			$("#txt_osType").val(osType);
-			$("#txt_ci").val(ci);
+			$("#txt_leaveSeq").val(leaveSeq);
 			$("#txt_nickName").val(nickName);
-			$("#txt_gender").val(gender);
-			$("#txt_age").val(age);
-			$("#txt_phone").val(phone);
-			$("#txt_waitCnt").val(waitCnt);
+			$("#span_nickName").text("#"+userId);
+			$("#txt_reason").val(reason);
+			$("#txt_delYn").val(delYn);
 			$("#txt_insDt").val(insDt);
-			$("#txt_point").val(point);
-			$("#txt_coupon").val(coupon);
-			$("#txt_likeCnt").val(likeCnt);
-			$("#txt_email").val(email);
 		}
 	});
 }
@@ -178,7 +155,7 @@ function fun_setStoreListInfo() {
 				"targets": [7]
 				, "class": "text-center"
 				, "render": function (data, type, row) {
-					var msg = row.userSeq;
+					var msg = row.leaveSeq;
 					var insertTr = "";
 					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(' + msg + ')">상세보기</button>'; 
 					return insertTr;
@@ -327,44 +304,22 @@ function fun_setStoreListInfo() {
                                </colgroup>
                                <tbody>
                                   <tr>
-                                     <th>사용자ID</th>
-                                     <td><input class="form-control" type="text" id="txt_userSeq" readOnly/></td>
-                                     <th>OS</th>
-                                     <td><input class="form-control" type="text" id="txt_osType" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>로그인</th>
-                                     <td><input class="form-control" type="text" id="txt_ci" readOnly/></td><!-- null값이면 준회원 X-> 회원???? -->
+                                     <th>탈퇴번호</th>
+                                     <td><input class="form-control" type="text" id="txt_leaveSeq" readOnly/></td>
                                      <th>닉네임</th>
-                                     <td><input class="form-control" type="text" id="txt_nickName" readOnly/></td>
+                                     <td><input class="form-control-finance" type="text" id="txt_nickName" readOnly/>
+                                         <span id="span_nickName" style="color:blue"></span>
+                                     </td>
                                   </tr>
                                   <tr>
-                                     <th>성별</th>
-                                     <td><input class="form-control" type="text" id="txt_gender" readOnly/></td>
-                                     <th>나이</th>
-                                     <td><input class="form-control" type="text" id="txt_age" readOnly/></td>
+                                     <th>내용</th>
+                                     <td colspan="3"><input class="form-control" type="text" id="txt_reason" readOnly/></td>
                                   </tr>
                                   <tr>
-                                     <th>휴대전화번호</th>
-                                     <td><input class="form-control" type="text" id="txt_phone" readOnly/></td>
-                                     <th>대기등록횟수</th>
-                                     <td><input class="form-control" type="text" id="txt_waitCnt" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>가입일</th>
+                                     <th>탈퇴완료여부</th>
+                                     <td><input class="form-control" type="text" id="txt_delYn" readOnly/></td>
+                                     <th>탈퇴일</th>
                                      <td><input class="form-control" type="text" id="txt_insDt" readOnly/></td>
-                                     <th>보유포인트</th>
-                                     <td><input class="form-control" type="text" id="txt_point" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>찜한매장</th>
-                                     <td><input class="form-control" type="text" id="txt_likeCnt" readOnly/></td>
-                                     <th>메일</th>
-                                     <td><input class="form-control" type="text" id="txt_email" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>보유쿠폰</th>
-                                     <td colspan="3"><input class="form-control" type="text" id="txt_coupon" readOnly/></td>
                                   </tr>
                                </tbody>
                             </table>

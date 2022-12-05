@@ -70,6 +70,11 @@ function fun_reset(type){
 	$("#txt_likeCnt").val("");
 	$("#txt_email").val("");
 	
+	//본인인증 YN 버튼 초기화
+	$("#btn_useYn").removeClass();
+	$("#btn_useYn").text(" ");
+
+	
 }
 
 //상세보기
@@ -81,7 +86,9 @@ function fun_viewDetail(userSeq) {
 		if(msg!=null){
 			var tempResult = JSON.parse(msg.result);
 			var userSeq    = tempResult.userSeq == null ? "" : tempResult.userSeq;                     //사용자ID
+			var userId     = tempResult.userId == null ? "" : tempResult.userId;                       //ID
 			var osType     = tempResult.osType == null ? "" : tempResult.osType;                       //OS Type
+			var useYn      = tempResult.useYn == null ? "" : tempResult.useYn;                         //본인인증여부
 			var ci         = tempResult.ci == null ? "준회원" : "회원";                                   //로그인  -> null값이면 준회원 X-> 회원???? 
 			var nickName   = tempResult.nickName == null ? "" : tempResult.nickName;                   //닉네임
 			var gender     = tempResult.gender == null ? "" : tempResult.gender;                       //성별
@@ -98,9 +105,21 @@ function fun_viewDetail(userSeq) {
 			$("#txt_osType").val(osType);
 			$("#txt_ci").val(ci);
 			$("#txt_nickName").val(nickName);
+			$("#span_nickName").text("#"+userId);
 			$("#txt_gender").val(gender);
 			$("#txt_age").val(age);
 			$("#txt_phone").val(phone);
+			if(useYn == "Y"){
+				$("#btn_useYn").text("본인인증 완료");
+				$("#btn_useYn").addClass("btn btn btn-outline-success ml-2");
+			}else{
+				$("#btn_useYn").text("본인인증 미완료");
+				$("#btn_useYn").addClass("btn btn btn-outline-danger ml-2");
+			}
+			
+			
+			
+			
 			$("#txt_waitCnt").val(waitCnt);
 			$("#txt_insDt").val(insDt);
 			$("#txt_point").val(point);
@@ -342,7 +361,9 @@ function fun_setStoreListInfo() {
                                      <th>로그인</th>
                                      <td><input class="form-control" type="text" id="txt_ci" readOnly/></td><!-- null값이면 준회원 X-> 회원???? -->
                                      <th>닉네임</th>
-                                     <td><input class="form-control" type="text" id="txt_nickName" readOnly/></td>
+                                     <td><input class="form-control-finance" type="text" id="txt_nickName" readOnly/>
+                                         <span id="span_nickName" style="color:blue"></span>
+                                     </td>
                                   </tr>
                                   <tr>
                                      <th>성별</th>
@@ -352,7 +373,9 @@ function fun_setStoreListInfo() {
                                   </tr>
                                   <tr>
                                      <th>휴대전화번호</th>
-                                     <td><input class="form-control" type="text" id="txt_phone" readOnly/></td>
+                                     <td><input class="form-control-finance" style="width:245px;" type="text" id="txt_phone" readOnly/>
+                                         <button id="btn_useYn" class=""></button>
+                                     </td>
                                      <th>대기등록횟수</th>
                                      <td><input class="form-control" type="text" id="txt_waitCnt" readOnly/></td>
                                   </tr>

@@ -27,9 +27,9 @@ public class OperationUserLeaveServiceImpl implements OperationUserLeaveService{
 	public List<TUserLeave> selectAllUserLeave(TUserLeave userLeave) {
 		return userLeaveMapper.selectAllUserLeave(userLeave);
 	}
-/*	
+	
 	@Override
-	public TUserInfo selectUserInfoDetail(TUserInfo userInfo) {
-		return userInfoMapper.selectDetail(userInfo);
-	}*/
+	public TUserLeave selectUserLeaveDetail(TUserLeave userLeave) {
+		return userLeaveMapper.selectUserLeaveDetail(userLeave);
+	}
 }

@@ -54,24 +54,22 @@ public class OperationUserLeaveController {
 		}
 		return result;
 	}
-/*	
+	
 	@RequestMapping(value = "/select/userInfoDetail.do", method = RequestMethod.POST
 		, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 		@ResponseBody
 		public ResponseModel selectRealestateParcelInfoDetail(HttpServletRequest request, HttpServletResponse response 
-				,@RequestBody TUserInfo userInfo) {
+				,@RequestBody TUserLeave userLeave) {
 			ResponseModel result = new ResponseModel();
 			try {
-				TUserInfo model = operationUserService.selectUserInfoDetail(userInfo);
+				TUserLeave model = operationUserLeaveService.selectUserLeaveDetail(userLeave);
 				ObjectMapper mapper = new ObjectMapper();
-				String userDetailListInfo = mapper.writeValueAsString(model);
+				String userLeaveDetailList = mapper.writeValueAsString(model);
 				result.setCode("0000");
-				result.setResult(userDetailListInfo);
+				result.setResult(userLeaveDetailList);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return result;
 		}
-		
-*/
 }

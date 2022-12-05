@@ -13,5 +13,5 @@ import kr.co.infovine.dkmm.db.model.userLeave.TUserLeave;
  */
 public interface OperationUserLeaveService {
     List<TUserLeave> selectAllUserLeave(TUserLeave userLeave);
-    //TUserInfo selectUserInfoDetail(TUserInfo userInfo);
+    TUserLeave selectUserLeaveDetail(TUserLeave userLeave);
 }
