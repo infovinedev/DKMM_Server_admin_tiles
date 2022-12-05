@@ -2,7 +2,6 @@ package kr.co.infovine.dkmm.mapper.store;
 
 import java.util.List;
 import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
-import kr.co.infovine.dkmm.db.model.store.TStoreInfoModelTest;
 
 public interface TStoreInfoMapper {
 	
@@ -65,5 +64,7 @@ public interface TStoreInfoMapper {
 	/* STORE_INFO - 좌표값 없는 Data 조회  */
 	List<TStoreInfoModel> selectNonExistLatitude();
 	
-	int updateRoadAddrByPrimaryKey(TStoreInfoModel storeInfo);;
+	int updateRoadAddrByPrimaryKey(TStoreInfoModel storeInfo);
+	
+	int updateFailVworldByPrimaryKey(TStoreInfoModel storeInfo);
 }

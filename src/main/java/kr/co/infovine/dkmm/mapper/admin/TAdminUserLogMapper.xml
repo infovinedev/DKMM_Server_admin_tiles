@@ -17,7 +17,7 @@
   <resultMap id="JoinResultMap" type="kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel" extends="BaseResultMap">
     <id column="admin_user_seq" jdbcType="INTEGER" property="adminUserSeq" />
     <association property="tbAdminScaleDownUserModel" column="admin_user_seq"
-			select="kr.co.infovine.dkmm.mapper.admin.TbAdminUserMapper.selectByScaleDownPrimaryKey"/>
+			select="kr.co.infovine.dkmm.mapper.admin.TAdminUserMapper.selectByScaleDownPrimaryKey"/>
   </resultMap>
   
   <insert id="insert" parameterType="kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel">
