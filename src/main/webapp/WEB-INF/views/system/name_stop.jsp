@@ -19,14 +19,14 @@ $(document).ready(function () {
 	
 	fun_setNameStopListInfo();
 	
-	$("#userListLength").change(function(){
-		var length = $("#userListLength").val();
-		$("#userListInfo").DataTable().page.len(length).draw();
+	$("#nameStopLength").change(function(){
+		var length = $("#nameStopLength").val();
+		$("#nameStopInfo").DataTable().page.len(length).draw();
 	});
 	
    $("#txt_searchText").on('keyup click', function () {
 	   if($('#chk_searchTable').is(':checked')){
-	      $("#userListInfo").DataTable().search(
+	      $("#nameStopInfo").DataTable().search(
 	         $("#txt_searchText").val()
 	      ).draw();
 	   }
@@ -34,14 +34,13 @@ $(document).ready(function () {
 });
 
 function fun_search(){
-	var osType = $("#sel_osType").val();
 	var searchText = $("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	
 	
-	var inputData = {"osType": osType, "searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
-	fun_ajaxPostSend("/user/select/userInfo.do", inputData, true, function(msg){
+	var inputData = {"searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
+	fun_ajaxPostSend("/system/select/nameStop.do", inputData, true, function(msg){
 		if(msg!=null){
 			switch(msg.code){
 				case "0000":
@@ -49,79 +48,40 @@ function fun_search(){
 				case "0001":
 			}
 			var tempResult = JSON.parse(msg.result);
-			fun_dataTableAddData("#userListInfo", tempResult);
+			fun_dataTableAddData("#nameStopInfo", tempResult);
 		}
 	});
 }
 
 //text값 공백처리
 function fun_reset(type){
-	$("#txt_userSeq").val("");
-	$("#txt_osType").val("");
-	$("#txt_ci").val("");
+	$("#txt_stopSeq").val("");
+	$("#txt_rowNum").val("");
+	$("#txt_useYn").val("");
 	$("#txt_nickName").val("");
-	$("#txt_gender").val("");
-	$("#txt_age").val("");
-	$("#txt_phone").val("");
-	$("#txt_waitCnt").val("");
 	$("#txt_insDt").val("");
-	$("#txt_point").val("");
-	$("#txt_coupon").val("");
-	$("#txt_likeCnt").val("");
-	$("#txt_email").val("");
-	
 }
 
 //상세보기
-function fun_viewDetail(userSeq) {
+function fun_viewDetail(rowNum, stopSeq, nickName, useYn, insDt) {
 	fun_reset();
 	$("#section1_detail_view").removeAttr("style");
-	var inputData = {"userSeq": userSeq};
-	fun_ajaxPostSend("/user/select/userInfoDetail.do", inputData, true, function(msg){
-		if(msg!=null){
-			var tempResult = JSON.parse(msg.result);
-			var userSeq    = tempResult.userSeq == null ? "" : tempResult.userSeq;                     //사용자ID
-			var osType     = tempResult.osType == null ? "" : tempResult.osType;                       //OS Type
-			var ci         = tempResult.ci == null ? "준회원" : "회원";                                   //로그인  -> null값이면 준회원 X-> 회원???? 
-			var nickName   = tempResult.nickName == null ? "" : tempResult.nickName;                   //닉네임
-			var gender     = tempResult.gender == null ? "" : tempResult.gender;                       //성별
-			var age        = tempResult.age == null ? "" : tempResult.age;                             //나이
-			var phone      = tempResult.phone == null ? "" : tempResult.phone;                         //휴대전화번호
-			var waitCnt    = tempResult.waitCnt == null ? "" : tempResult.waitCnt;                     //대기등록횟수
-			var insDt      = tempResult.insDt == null ? "" : tempResult.insDt;                         //가입일
-			var point      = tempResult.point == null ? "" : tempResult.point;                         //보유포인트
-			var coupon     = tempResult.coupon == null ? "" : tempResult.coupon;                       //보유쿠폰
-			var likeCnt    = tempResult.likeCnt == null ? "" : tempResult.likeCnt;                     //찜한매장
-			var email      = tempResult.email == null ? "" : tempResult.email;                         //메일
-			
-			$("#txt_userSeq").val(userSeq);
-			$("#txt_osType").val(osType);
-			$("#txt_ci").val(ci);
-			$("#txt_nickName").val(nickName);
-			$("#txt_gender").val(gender);
-			$("#txt_age").val(age);
-			$("#txt_phone").val(phone);
-			$("#txt_waitCnt").val(waitCnt);
-			$("#txt_insDt").val(insDt);
-			$("#txt_point").val(point);
-			$("#txt_coupon").val(coupon);
-			$("#txt_likeCnt").val(likeCnt);
-			$("#txt_email").val(email);
-		}
-	});
+	
+	$("#txt_stopSeq").val(stopSeq);
+	$("#txt_rowNum").val(rowNum);
+	$("#txt_useYn").val(useYn);
+	$("#txt_nickName").val(nickName);
+	$("#txt_insDt").val(insDt);
+	
 }
 
 function fun_setNameStopListInfo() {
-	nameStopListInfo = $("#userListInfo").DataTable({
+	nameStopListInfo = $("#nameStopInfo").DataTable({
 		"columns": [
 			  {"data":  "rowNum"}
-			, {"data":  "userSeq"}
-			, {"data": "osType"}
 			, {"data": "nickName"}
-			, {"data": "gender"}
-			, {"data": "waitCnt"}
-			, {"data": "insDt" }
-			, {"data": "point" }
+			, {"data": "useYn"}
+			, {"data": "insDt"}
 			, {"data": "add" }
 		]
 		, "paging": true            // Table Paging
@@ -153,7 +113,7 @@ function fun_setNameStopListInfo() {
 			 ,
 			{
 				"targets": [1]
-				, "class": "text-center"
+				, "class": "text-left"
 			}
 			 , {
 				"targets": [2]
@@ -166,26 +126,9 @@ function fun_setNameStopListInfo() {
 			, {
 				"targets": [4]
 				, "class": "text-center"
-			}
-			, {
-				"targets": [5]
-				, "class": "text-center"
-			}
-			, {
-				"targets": [6]
-				, "class": "text-center"
-			}
-			, {
-				"targets": [7]
-				, "class": "text-center"
-			}
-			, {
-				"targets": [8]
-				, "class": "text-center"
 				, "render": function (data, type, row) {
-					var msg = row.userSeq;
 					var insertTr = "";
-					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(' + msg + ')">상세보기</button>'; 
+					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(\'' + row.rowNum + '\',\'' + row.stopSeq + '\',\'' + row.nickName + '\',\'' + row.useYn + '\',\'' + row.insDt + '\')">상세보기</button>'; 
 					return insertTr;
                 }
 			}
@@ -254,19 +197,10 @@ function fun_setNameStopListInfo() {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>접속기기유형</th>
-                                        <td>
-                                            <select class="form-control" id="sel_osType" name="search_osType">
-                                                <option value="">선택</option>
-                                                <option value="AOS">AOS</option>
-                                                <option value="IOS">IOS</option>
-                                                <option></option>
-                                            </select>
-                                        </td>
                                         <th>검색어</th>
-                                        <td>
+                                        <td colspan="3">
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:94%;" class="form-control" placeholder="닉네임" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <input type="text" style="width:94%;" class="form-control" placeholder="금지어명" id="txt_searchText" name="searchText" onKeypress="" />
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>
@@ -282,7 +216,7 @@ function fun_setNameStopListInfo() {
                     <section id="section1">
                         <div class="row justify-content-between align-items-end mb-3">
                                 <div class="col-auto">
-                                    <select id="userListLength" class="custom-select w-auto">
+                                    <select id="nameStopLength" class="custom-select w-auto">
                                     	<option value="10">10</option>
                                     	<option value="20">20</option>
                                     	<option value="50">50</option>
@@ -290,18 +224,14 @@ function fun_setNameStopListInfo() {
                                 </div>
                          </div>
                          <div class="main_search_result_list">
-                                <table id="userListInfo" class="table table-bordered">
+                                <table id="nameStopInfo" class="table table-bordered">
                                     <thead>
                                     	<tr>
-	                                        <th class="text-center">번호</th>
-	                                        <th class="text-center">사용자ID</th>
-	                                       	<th class="text-center">OS</th>
-	                                        <th class="text-center">닉네임</th>
-	                                        <th class="text-center">성별</th>
-	                                        <th class="text-center">대기등록횟수</th>
-	                                        <th class="text-center">가입일</th>
-	                                        <th class="text-center">보유포인트</th>
-	                                        <th class="text-center">관리</th>
+	                                        <th class="text-center" width="15%">번호</th>
+	                                        <th class="text-center">금지어명</th>
+	                                       	<th class="text-center" width="15%">사용여부</th>
+	                                        <th class="text-center" width="15%">등록일</th>
+	                                        <th class="text-center" width="15%">관리</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -333,44 +263,17 @@ function fun_setNameStopListInfo() {
                                </colgroup>
                                <tbody>
                                   <tr>
-                                     <th>사용자ID</th>
-                                     <td><input class="form-control" type="text" id="txt_userSeq" readOnly/></td>
-                                     <th>OS</th>
-                                     <td><input class="form-control" type="text" id="txt_osType" readOnly/></td>
+                                     <th>번호</th>
+                                     <td><input type="hidden" id="txt_stopSeq" readOnly/>
+                                     	<input class="form-control" type="text" id="txt_rowNum" readOnly/></td>
+                                     <th>사용여부</th>
+                                     <td><input class="form-control" type="text" id="txt_useYn"/></td>
                                   </tr>
                                   <tr>
-                                     <th>로그인</th>
-                                     <td><input class="form-control" type="text" id="txt_ci" readOnly/></td><!-- null값이면 준회원 X-> 회원???? -->
-                                     <th>닉네임</th>
-                                     <td><input class="form-control" type="text" id="txt_nickName" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>성별</th>
-                                     <td><input class="form-control" type="text" id="txt_gender" readOnly/></td>
-                                     <th>나이</th>
-                                     <td><input class="form-control" type="text" id="txt_age" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>휴대전화번호</th>
-                                     <td><input class="form-control" type="text" id="txt_phone" readOnly/></td>
-                                     <th>대기등록횟수</th>
-                                     <td><input class="form-control" type="text" id="txt_waitCnt" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>가입일</th>
+                                     <th>금지닉네임</th>
+                                     <td><input class="form-control" type="text" id="txt_nickName"/></td>
+                                     <th>등록일</th>
                                      <td><input class="form-control" type="text" id="txt_insDt" readOnly/></td>
-                                     <th>보유포인트</th>
-                                     <td><input class="form-control" type="text" id="txt_point" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>찜한매장</th>
-                                     <td><input class="form-control" type="text" id="txt_likeCnt" readOnly/></td>
-                                     <th>메일</th>
-                                     <td><input class="form-control" type="text" id="txt_email" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>보유쿠폰</th>
-                                     <td colspan="3"><input class="form-control" type="text" id="txt_coupon" readOnly/></td>
                                   </tr>
                                </tbody>
                             </table>

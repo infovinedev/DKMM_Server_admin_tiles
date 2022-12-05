@@ -15,8 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
+import kr.co.infovine.dkmm.db.model.define.TDefineNameStop;
 import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 import kr.co.infovine.dkmm.db.model.user.TUserInfo;
+import kr.co.infovine.dkmm.service.system.SystemService;
 import kr.co.infovine.dkmm.service.user.OperationUserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping(value = "/system")
 public class SystemController {
+	
+	@Autowired
+	SystemService systemService;
 	
 	@RequestMapping(value ="/nameStop.do")
 	public ModelAndView realestateParcelInfo(HttpServletRequest request, HttpServletResponse response) {
@@ -33,24 +38,24 @@ public class SystemController {
 		return model;
 	}
 
-//	@RequestMapping(value = "/select/userInfo.do", method = RequestMethod.POST
-//	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
-//	@ResponseBody
-//	public ResponseModel selectRealestateParcelInfo(HttpServletRequest request, HttpServletResponse response 
-//			,@RequestBody TUserInfo userInfo) {
-//		ResponseModel result = new ResponseModel();
-//		try {
-//			List<TUserInfo> model = operationUserService.selectAllUserInfo(userInfo);
-//			ObjectMapper mapper = new ObjectMapper();
-//			String userInfoList = mapper.writeValueAsString(model);
-//			result.setCode("0000");
-//			result.setResult(userInfoList);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return result;
-//	}
-//	
+	@RequestMapping(value = "/select/nameStop.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel selectRealestateParcelInfo(HttpServletRequest request, HttpServletResponse response 
+			,@RequestBody TDefineNameStop row) {
+		ResponseModel result = new ResponseModel();
+		try {
+			List<TDefineNameStop> model = systemService.selectAll(row);
+			ObjectMapper mapper = new ObjectMapper();
+			String list = mapper.writeValueAsString(model);
+			result.setCode("0000");
+			result.setResult(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 //	@RequestMapping(value = "/select/userInfoDetail.do", method = RequestMethod.POST
 //	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 //	@ResponseBody
