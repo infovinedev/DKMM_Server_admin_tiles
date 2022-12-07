@@ -160,6 +160,8 @@ public class TStoreInfoModel {
 	//조건
 	private String searchText;
 	private String searchStartDt;
+	private String searchEndDt;
+
 	//등록,수정 Type
 	private String sqlType;
 

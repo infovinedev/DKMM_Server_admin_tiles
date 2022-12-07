@@ -27,6 +27,7 @@ import kr.co.infovine.dkmm.db.model.admin.TbAdminPermissionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminProgramModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserModel;
+import kr.co.infovine.dkmm.db.model.common.TCommonCodeModel;
 import kr.co.infovine.dkmm.service.admin.EncryptService;
 import kr.co.infovine.dkmm.service.admin.TbAdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -869,5 +870,110 @@ public class AdminController{
 		}
 		return result;
 	}
+	
+	
+	
+	
+	//공통코드 추가
+	@RequestMapping(value = "/insert/tbCommon.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel insertTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session
+			, @RequestBody TCommonCodeModel commonCodeModel) {
+		ResponseModel result = new ResponseModel();
+		try {
+			SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+			String userId = sessionModel.getUserId();
+			TbAdminUserModel tbAdminUser = new TbAdminUserModel();
+			tbAdminUser.setUserId(userId);
+			String password = commonCodeModel.getPassword();
+			tbAdminUser.setPassword(password);
+			TbAdminUserModel resultSet = tbAdminService.selectByAdminUserIdAndPassword(tbAdminUser);
+			
+			if(resultSet!=null) {
+				tbAdminService.insertTCommonCode(commonCodeModel);
+				result.setCode("0000");
+			}else {
+				result.setCode("0001");
+			}
+		} catch (Exception e) {
+			result.setCode("0002");
+		}
+		return result;
+	}
+	//공통코드 수정
+	@RequestMapping(value = "/update/tbCommon.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel updateTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session
+			, @RequestBody TCommonCodeModel commonCodeModel) {
+		ResponseModel result = new ResponseModel();
+		try {
+			SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+			String userId = sessionModel.getUserId();
+			TbAdminUserModel tbAdminUser = new TbAdminUserModel();
+			tbAdminUser.setUserId(userId);
+			String password = commonCodeModel.getPassword();
+			tbAdminUser.setPassword(password);
+			TbAdminUserModel resultSet = tbAdminService.selectByAdminUserIdAndPassword(tbAdminUser);
+			
+			if(resultSet!=null) {
+//				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+//				Calendar calendar = Calendar.getInstance(Locale.KOREA);
+//				String strRegDate = sdf.format(calendar);
+//				Date regDate = sdf.parse(strRegDate);
+//				commonCodeModel.setRegDate(regDate);
+				String codeGroup = commonCodeModel.getCodeGroup();
+				String codeValue = commonCodeModel.getCodeValue();
+				if(!codeGroup.equals("")&&!codeValue.equals("")) {
+					tbAdminService.updateByTbCommonCodePrimaryKey(commonCodeModel);
+					result.setCode("0000");
+				}
+				else {
+					result.setCode("0001");
+				}
+			}else {
+				result.setCode("0001");
+			}
+		} catch (Exception e) {
+			result.setCode("0002");
+		}
+		return result;
+	}
+	
+	//공통코드 삭제
+	@RequestMapping(value = "/delete/tbCommon.do", method = RequestMethod.POST
+		, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+		@ResponseBody
+		public ResponseModel deleteTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session
+				, @RequestBody TCommonCodeModel commonCodeModel) {
+			ResponseModel result = new ResponseModel();
+			try {
+				SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+				String userId = sessionModel.getUserId();
+				TbAdminUserModel tbAdminUser = new TbAdminUserModel();
+				tbAdminUser.setUserId(userId);
+				String password = commonCodeModel.getPassword();
+				tbAdminUser.setPassword(password);
+				TbAdminUserModel resultSet = tbAdminService.selectByAdminUserIdAndPassword(tbAdminUser);
+				
+				if(resultSet!=null) {
+					String codeGroup = commonCodeModel.getCodeGroup();
+					String codeValue = commonCodeModel.getCodeValue();
+					if(!codeGroup.equals("")) {
+						tbAdminService.deleteByTCommonCodePrimaryKey(codeGroup, codeValue);
+						result.setCode("0000");
+					}
+					else {
+						result.setCode("0001");
+					}
+				}else {
+					result.setCode("0001");
+				}
+			} catch (Exception e) {
+				result.setCode("0001");
+			}
+			return result;
+		}
 	// end region
 }

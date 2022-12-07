@@ -9,10 +9,12 @@ import kr.co.infovine.dkmm.db.model.admin.TbAdminPermissionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminProgramModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserModel;
+import kr.co.infovine.dkmm.db.model.common.TCommonCodeModel;
 import kr.co.infovine.dkmm.mapper.admin.TAdminPermissionMapper;
 import kr.co.infovine.dkmm.mapper.admin.TAdminProgramMapper;
 import kr.co.infovine.dkmm.mapper.admin.TAdminUserLogMapper;
 import kr.co.infovine.dkmm.mapper.admin.TAdminUserMapper;
+import kr.co.infovine.dkmm.mapper.common.TCommonCodeMapper;
 
 @Service("tbAdminService")
 public class TbAdminServiceImpl implements TbAdminService {
@@ -27,7 +29,10 @@ public class TbAdminServiceImpl implements TbAdminService {
 	
 	@Autowired
 	TAdminUserLogMapper tbAdminUserLogMapper;
-
+	
+	@Autowired
+	TCommonCodeMapper tcommonCodeMapper;
+	
 	@Override
 	public TbAdminUserModel selectByAdminUserIdAndPassword(TbAdminUserModel tbAdminUser) {
 		return tbAdminUserMapper.selectByUserIdAndPassword(tbAdminUser);
@@ -123,6 +128,21 @@ public class TbAdminServiceImpl implements TbAdminService {
 	public List<TbAdminUserLogModel> selectByPrimaryKey(String startDate, String closeDate) {
 		return tbAdminUserLogMapper.selectByPrimaryKey(startDate, closeDate);
 	}
-
+	
+	
+	@Override
+	public int insertTCommonCode(TCommonCodeModel row) {
+		return tcommonCodeMapper.insert(row);
+	}
+	
+	@Override
+	public int updateByTbCommonCodePrimaryKey(TCommonCodeModel record) {
+		return tcommonCodeMapper.updateByPrimaryKey(record);
+	}
+	
+	@Override
+	public int deleteByTCommonCodePrimaryKey(String codeGroup, String codeValue) {
+		return tcommonCodeMapper.deleteByPrimaryKey(codeGroup, codeValue);
+	}
 
 }

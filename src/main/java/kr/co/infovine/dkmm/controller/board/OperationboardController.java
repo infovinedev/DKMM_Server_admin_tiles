@@ -1,4 +1,4 @@
-package kr.co.infovine.dkmm.controller.store;
+package kr.co.infovine.dkmm.controller.board;
 
 import java.util.List;
 import java.util.Map;
@@ -19,59 +19,59 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
 import kr.co.infovine.dkmm.controller.map.MapController;
-import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
-import kr.co.infovine.dkmm.service.store.OperationStoreService;
+import kr.co.infovine.dkmm.db.model.board.TBoard;
+import kr.co.infovine.dkmm.service.board.OperationBoardService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-@RequestMapping(value = "/store")
-public class OperationStoreController {
+@RequestMapping(value = "/board")
+public class OperationboardController {
 	
 	@Autowired
-	OperationStoreService operationStoreService;
+	OperationBoardService operationboardService;
 	
 	@Autowired
 	MapController mapController;
 	
-	@RequestMapping(value ="/store.do")
-	public ModelAndView storeInfo(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value ="/board.do")
+	public ModelAndView boardInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_store");
-		model.addObject("leftPageUrl", "store/store");
+		model.setViewName("operation/operation_board");
+		model.addObject("leftPageUrl", "board/board");
 		return model;
 	}
 
-	@RequestMapping(value = "/select/storeInfo.do", method = RequestMethod.POST
+	@RequestMapping(value = "/select/boardAllList.do", method = RequestMethod.POST
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ResponseModel selectRealestateParcelInfo(HttpServletRequest request, HttpServletResponse response 
-			,@RequestBody TStoreInfoModel storeInfo) {
+			,@RequestBody TBoard board) {
 		ResponseModel result = new ResponseModel();
 		try {
-			List<TStoreInfoModel> model = operationStoreService.selectStoreInfo(storeInfo);
+			List<TBoard> model = operationboardService.selectboardAllList(board);
 			ObjectMapper mapper = new ObjectMapper();
-			String storeInfoList = mapper.writeValueAsString(model);
+			String boardAllList = mapper.writeValueAsString(model);
 			result.setCode("0000");
-			result.setResult(storeInfoList);
+			result.setResult(boardAllList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
-	@RequestMapping(value = "/select/storeInfoDetail.do", method = RequestMethod.POST
+	/*
+	@RequestMapping(value = "/select/boardInfoDetail.do", method = RequestMethod.POST
 			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 			@ResponseBody
 			public ResponseModel selectRealestateParcelInfoDetail(HttpServletRequest request, HttpServletResponse response 
-					,@RequestBody TStoreInfoModel storeInfo) {
+					,@RequestBody TboardInfoModel boardInfo) {
 				ResponseModel result = new ResponseModel();
 				try {
-					TStoreInfoModel model = operationStoreService.selectStoreInfoDetail(storeInfo);
+					TboardInfoModel model = operationboardService.selectboardInfoDetail(boardInfo);
 					ObjectMapper mapper = new ObjectMapper();
-					String storeInfoDetail = mapper.writeValueAsString(model);
+					String boardlInfoDetail = mapper.writeValueAsString(model);
 					result.setCode("0000");
-					result.setResult(storeInfoDetail);
+					result.setResult(boardlInfoDetail);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -80,32 +80,18 @@ public class OperationStoreController {
 	// end region
 	
 	//저장 수정 삭제.
-	@RequestMapping(value = "/save/storeInfo.do", method = RequestMethod.POST
+	@RequestMapping(value = "/save/boardInfo.do", method = RequestMethod.POST
 			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 			@ResponseBody
-			public ResponseModel savaStoreInfo(HttpServletRequest request, HttpServletResponse response 
-					,@RequestBody TStoreInfoModel storeInfo) {
+			public ResponseModel savaboardInfo(HttpServletRequest request, HttpServletResponse response 
+					,@RequestBody TboardInfoModel boardInfo) {
 				ResponseModel result = new ResponseModel();
 				try {
-					operationStoreService.insertStoreInfo(storeInfo);
+					operationboardService.insertboardInfo(boardInfo);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				return result;
 			}
-	
-	
-	
-	@PostMapping(value = { "/map/placeApi" })
-	@ResponseBody 
-	public String main_map(
-							  HttpServletRequest request
-						    , HttpServletResponse response
-						    , @RequestBody Map<String, Object> param
-						  ) {
-		String addr = (String) param.get("addr");
-		String result = mapController.getMapXY(addr);
-		return result;
-	}
-	
+	*/
 }

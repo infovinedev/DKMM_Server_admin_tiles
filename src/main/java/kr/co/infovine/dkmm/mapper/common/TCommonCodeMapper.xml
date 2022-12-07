@@ -115,6 +115,4 @@
                  when code_value ='CUSTOM001' then 5
                  end
   </select>
-  
-  
 </mapper>

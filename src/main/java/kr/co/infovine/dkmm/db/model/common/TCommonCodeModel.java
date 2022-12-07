@@ -70,4 +70,6 @@ public class TCommonCodeModel {
      * @mbg.generated Tue Sep 13 15:42:13 KST 2022
      */
     private Date insDt;
+    
+    private String password;
 }
