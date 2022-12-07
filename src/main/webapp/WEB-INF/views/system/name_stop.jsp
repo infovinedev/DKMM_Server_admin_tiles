@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
- -->
+
 <script>
 var nameStopListInfo;
 
@@ -55,6 +55,7 @@ function fun_search(){
 
 //text값 공백처리
 function fun_reset(type){
+	
 	$("#txt_stopSeq").val("");
 	$("#txt_rowNum").val("");
 	$("#txt_useYn").val("");
@@ -62,9 +63,13 @@ function fun_reset(type){
 	$("#txt_insDt").val("");
 }
 
+var gfFlag = "I";
 //상세보기
 function fun_viewDetail(rowNum, stopSeq, nickName, useYn, insDt) {
 	fun_reset();
+	$("#btnCancel").show();
+	$("#txt_rowNum").show();
+	$("#txt_rowNum").attr("disabled",true); 
 	$("#section1_detail_view").removeAttr("style");
 	
 	$("#txt_stopSeq").val(stopSeq);
@@ -72,8 +77,84 @@ function fun_viewDetail(rowNum, stopSeq, nickName, useYn, insDt) {
 	$("#txt_useYn").val(useYn);
 	$("#txt_nickName").val(nickName);
 	$("#txt_insDt").val(insDt);
+	gfFlag = "U";
+}
+
+//상세보기
+function fun_update(argFlag) {
+	fun_reset();
+	$("#btnCancel").hide();
+	$("#txt_rowNum").hide();
+	$("#txt_useYn").val("Y");
+	$("#section1_detail_view").removeAttr("style");
+	
+	gfFlag = "I";
+}
+
+function fun_save(){
+	
+	if (!confirm("등록 하시겠습니까?")) return;
+	
+	var stopSeq = $("#txt_stopSeq").val();
+	var nickName = $("#txt_nickName").val();
+	var useYn = $("#txt_useYn").val();
+	
+	if ( nickName.trim() == "" ){
+		alert("금지어를 입력해 주세요.");
+		return;
+	}
+	
+	var url = "";
+	
+	if ( gfFlag == "I" ){
+		url = "/system/save/insertNameStop.do";
+	}
+	else{
+		url = "/system/save/updateNameStop.do";
+	}
+		
+	var inputData = {"stopSeq": stopSeq, "nickName": nickName,"useYn": useYn};
+	fun_ajaxPostSend(url, inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					alert("등록되었습니다.");
+					fun_search();
+					$('#exampleModalScrollable').modal('hide');
+					break;
+				case "0001":
+					alert("등록을 실패 하였습니다." + msg.errorMessage);
+					break;
+			}
+		}
+	});
 	
 }
+
+function fun_delete(){
+	
+	if (!confirm("삭제 하시겠습니까?")) return;
+	
+	var stopSeq = $("#txt_stopSeq").val();
+	var url = "/system/save/deleteNameStop.do";
+		
+	var inputData = {"stopSeq": stopSeq};
+	fun_ajaxPostSend(url, inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					alert("삭제되었습니다.");
+					fun_search();
+					$('#exampleModalScrollable').modal('hide'); 
+					break;
+				case "0001":
+					alert("삭제를 실패 하였습니다." + msg.errorMessage);
+			}
+		}
+	});
+	
+}
+
 
 function fun_setNameStopListInfo() {
 	nameStopListInfo = $("#nameStopInfo").DataTable({
@@ -88,7 +169,7 @@ function fun_setNameStopListInfo() {
 		, "info": false             // 'thisPage of allPage'
 		, "autoWidth": true
  		, "scrollXInner": "100%"
-		, "order": [[ 1, "desc" ]]
+		, "order": [[ 0, "desc" ]]
 		, "deferRender": true                // defer
 		, "lengthMenu": [10,20,50]           // Row Setting [-1], ["All"]
 		, "lengthChange": true
@@ -126,7 +207,7 @@ function fun_setNameStopListInfo() {
 			, {
 				"targets": [4]
 				, "class": "text-center"
-				, "render": function (data, type, row) {
+				, "render": function (data, type, row, meta) {
 					var insertTr = "";
 					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(\'' + row.rowNum + '\',\'' + row.stopSeq + '\',\'' + row.nickName + '\',\'' + row.useYn + '\',\'' + row.insDt + '\')">상세보기</button>'; 
 					return insertTr;
@@ -134,12 +215,11 @@ function fun_setNameStopListInfo() {
 			}
 		]
 	});
+	
+	fun_search();
 };
 </script>
-<head>
-	<title>관리자 운영 - 금지어 관리</title>
-</head>
-<body class="hold-transition sidebar-mini">
+
     <div class="wrapper">
           <div class="content-wrapper">
             <!-- 상단 title -->
@@ -214,15 +294,22 @@ function fun_setNameStopListInfo() {
                     </section>
 
                     <section id="section1">
-                        <div class="row justify-content-between align-items-end mb-3">
-                                <div class="col-auto">
-                                    <select id="nameStopLength" class="custom-select w-auto">
-                                    	<option value="10">10</option>
-                                    	<option value="20">20</option>
-                                    	<option value="50">50</option>
-                                    </select>
-                                </div>
-                         </div>
+                         <div class="row justify-content-between align-items-end mb-3">
+                        	<input  type="hidden" id="totalCnt" name="totalCnt" />
+                            <div class="col-auto">
+                            </div>
+                            <div class="col-auto">
+                            	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">금지어등록</button>
+                                <button type="button" class="btn btn-outline-success mr-1" onclick="fn_go_list_excel()">엑셀업로드</button>
+                                <a href="/upload/doc/nick_sample.xlsx" class="btn btn-outline-primary mr-1" download="금지어샘플.xlsx">엑셀샘플</a>
+                                <button type="button" class="btn btn-outline-primary mr-1" onclick="fn_go_list_excel()">엑셀다운로드</button>
+                                <select id="nameStopLength" class="custom-select w-auto">
+                                	<option value="10">10</option> 
+                                	<option value="20">20</option>
+                                	<option value="50">50</option>
+                                </select>
+                            </div>
+                        </div>
                          <div class="main_search_result_list">
                                 <table id="nameStopInfo" class="table table-bordered">
                                     <thead>
@@ -248,7 +335,7 @@ function fun_setNameStopListInfo() {
                     <section id="section1_detail_view" style="display:none;">
                         <div class="modal-content" style="width: 1200px;">
                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalScrollableTitle">회원정보 상세</h5>
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">금지어 등록</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
@@ -262,16 +349,21 @@ function fun_setNameStopListInfo() {
                                   <col style="width:35%">
                                </colgroup>
                                <tbody>
-                                  <tr>
+                                  <tr> 
                                      <th>번호</th>
                                      <td><input type="hidden" id="txt_stopSeq" readOnly/>
                                      	<input class="form-control" type="text" id="txt_rowNum" readOnly/></td>
                                      <th>사용여부</th>
-                                     <td><input class="form-control" type="text" id="txt_useYn"/></td>
+                                     <td>
+                                     		<select id="txt_useYn" class="custom-select w-auto">
+			                                	<option value="Y">사용</option> 
+			                                	<option value="N">미사용</option>
+			                                </select>
+                                     </td>
                                   </tr>
                                   <tr>
                                      <th>금지닉네임</th>
-                                     <td><input class="form-control" type="text" id="txt_nickName"/></td>
+                                     <td><input class="form-control" type="text" id="txt_nickName" maxlength="18" /></td>
                                      <th>등록일</th>
                                      <td><input class="form-control" type="text" id="txt_insDt" readOnly/></td>
                                   </tr>
@@ -279,6 +371,8 @@ function fun_setNameStopListInfo() {
                             </table>
                           </div>
                           <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="fun_save();">저장</button>
+                            <button type="button" id="btnCancel" class="btn btn-danger" onclick="fun_delete();" >삭제</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                           </div>
                         </div>
@@ -289,4 +383,3 @@ function fun_setNameStopListInfo() {
             </div>
         </div>
     </div>
-    </body>

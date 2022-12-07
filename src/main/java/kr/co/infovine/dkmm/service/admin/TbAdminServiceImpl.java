@@ -60,8 +60,8 @@ public class TbAdminServiceImpl implements TbAdminService {
 	}
 
 	@Override
-	public List<TbAdminProgramModel> selectAllProgramMenu() {
-		return tbAdminProgramMapper.selectAll();
+	public List<TbAdminProgramModel> selectAllProgramMenu(TbAdminProgramModel programMenu) {
+		return tbAdminProgramMapper.selectAll(programMenu);
 	}
 
 	@Override

@@ -96,36 +96,6 @@ function fun_initializeClickEvent(){
 		}
 	});
 
-	// $("#jdtListCommonCode").click(function(event) {
-	// //$("#kdBoardList_paginate").on("click", function(event) {
-	// 	var chklength = $("input[name=chk-admin]").length;
-	// 	var i;
-		
-	// 	for(i=0; i<chklength; i++) {
-	// 		$("input[name=chk-admin]")[i].checked = false;
-	// 		$("#jdtListCommonCode tbody tr").removeClass('selected');
-			
-	// 	}
-	// 	jdtListCommonCode.rows('.selected').nodes().to$().removeClass('selected');
-
-	// 	if(jdtListLastPagenate!=-1){
-	// 		if(jdtListCommonCode.page() == jdtListLastPagenate){
-	// 			if(jdtListLastSelectRowIndex != -1){
-	// 				var index = jdtListLastSelectRowIndex - 1;
-					
-	// 				for(var i=0; i<$("#jdtListCommonCode tbody tr").length; i++){
-	// 					var intId = parseInt($("#jdtListCommonCode tbody tr")[i].children[1].innerText);
-	// 					if(intId==jdtListLastSelectRowIndex){
-	// 						$("input[name=chk-main]")[i].checked = true;
-	// 						$("#jdtListCommonCode tbody tr:eq(" + i + ")").addClass('selected');
-	// 						break;
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }); // end $("#kdBoardList_paginate").on("click", function() {
-
 	$("#txt_userId").on("keyup", function(e){
 		if(e.keyCode==13){
 			$("#txt_newPassword").focus();
@@ -489,124 +459,183 @@ function fun_clickButtonInsertCommonCode(){
 
 
 <form id="membership" method="post" enctype="multipart/form-data" action="">
-   	<div class="row">
-	    <div class="col-lg-12">
-	        <h1 class="page-header" style="font-size:24px">TB 공통코드 수정</h1>
-	    </div>
-	    <!-- /.col-lg-12 -->
-    </div>
-	
-	<div class="row" id="div_row2">
-		<div class="col-lg-12">
-			
-		</div>
-	</div>
 
-	<div class="row" id="div_row2">
-        <div class="col-lg-12">
-            <div id="accordion1" class="accordion-style1 panel-group accordion-style2">
-                <div class="panel panel-default" id="tog_Head">
-                    <div class="panel-heading clearfix" style="font-size:16px">
-                        <span class="toggle_accordion">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
-				    <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-				    &nbsp;사용자 조회
-                            
-			    </a>
-                        </span>
-                        <span class="toggle_accordionSearch">
-                            <input type="text" id="txt_searchParcelInfo" class="form-control" placeholder="테이블 내 검색" />
-                        </span>
-                    </div>
-                    <div id="collapse1" class="panel-collapse collapse in">
-                        <div class="panel-body">
-                            <div class="dataTable_wrapper">
-                                <table id="jdtListCommonCode" class="table table-striped table-bordered table-hover">
-                                    <thead>
-
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
+	<div class="wrapper">
+          <div class="content-wrapper">
+            <!-- 상단 title -->
+            <div class="content-header">
+               <div class="container-fluid">
+                  <div class="row">
+                     <div class="col">
+                        <h1 class="title">TB 공통코드 수정</h1>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- Main content -->
+            <div class="content" data-menu="notice">
+                <div class="container-fluid">
+                    <section id="section1_search">
+                        <div class="inquery-area">
+                            <table class="table table-bordered">
+                                <colgroup>
+                                    <col style="width: 150px">
+                                    <col>
+                                    <col style="width: 150px">
+                                    <col>
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th>등록 기간</th>
+                                        <td colspan="3">
+                                           <div class="row">
+                                              <div class="col-auto">
+                                                  <div class="row row-10 align-items-center">
+                                                        <div class="col-auto">
+                                                            <input type="text" readonly="" class="form-control form-datepicker" placeholder="0000-00-00" id="search_startDt">
+                                                        </div>
+                                                        <div class="col-auto">~</div>
+                                                        <div class="col-auto">
+                                                            <input type="text" readonly="" class="form-control form-datepicker endDt" placeholder="0000-00-00" id="search_endDt">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="btn-group" role="group">
+                                                    	<button type="button" class="btn btn-outline-secondary active" day="all">전체</button>
+                                                        <button type="button" class="btn btn-outline-secondary" day="0">오늘</button>
+                                                        <button type="button" class="btn btn-outline-secondary" day="1">어제</button>
+                                                        <button type="button" class="btn btn-outline-secondary" day="3">3일</button>
+                                                        <button type="button" class="btn btn-outline-secondary" day="7">7일</button>
+                                                        <button type="button" class="btn btn-outline-secondary" day="15">15일</button>
+                                                        <button type="button" class="btn btn-outline-secondary" day="31">1개월</button>
+                                                        <button type="button" class="btn btn-outline-secondary" day="33">3개월</button>
+                                                        <button type="button" class="btn btn-outline-secondary" day="36">6개월</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>검색어</th>
+                                        <td colspan="3">
+                                           <div class="row row-10 align-items-center">
+                                                  <input type="text" style="width:94%;" class="form-control" placeholder="프로그램이름" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
+                                           </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="btns">
+                                <button type="button" class="btn btn-dark min-width-90px" onclick="fun_selectjdtListCommonCode(function(){});">검색</button>
                             </div>
                         </div>
-                    </div>
+                    </section>
+
+                    <section id="section1">
+                         <div class="row justify-content-between align-items-end mb-3">
+                        	<input  type="hidden" id="totalCnt" name="totalCnt" />
+                            <div class="col-auto">
+                            </div>
+                            <div class="col-auto">
+                            	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_insert();">코드등록</button>
+                                <select id="nameStopLength" class="custom-select w-auto">
+                                	<option value="10">10</option> 
+                                	<option value="20">20</option>
+                                	<option value="50">50</option>
+                                </select>
+                            </div>
+                        </div>
+                         <div class="main_search_result_list">
+                                <table id="jdtListMain" class="table table-bordered">
+	                                <thead>
+	                                	<th class="text-center" width="5%">Seq</th> 
+                                        <th class="text-center" width="10%" >코드그룹</th>
+                                       	<th class="text-center" width="10%">값</th>
+                                        <th class="text-center" width="10%">이름</th>
+                                        <th class="text-center" >내용</th>   
+                                        <th class="text-center" width="10%">등록일자</th>   
+                                        <th class="text-center" width="8%">수정</th>
+	                                </thead>
+	                                <tbody>
+	                                                    
+	                                </tbody>
+	                            </table>
+                        </div>
+                	</section>
                 </div>
+                <!-- 상세보기 모달창 start -->
+                <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    
+                    <!-- 상세보기 start-->
+                    <section id="section1_detail_view" style="display:none;">
+                        <div class="modal-content" style="width: 1200px;">
+                         <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">상세정보</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <table class="table table-bordered" >
+                               <colgroup>
+                                  <col style="width:15%">
+                                  <col style="width:35%">
+                                  <col style="width:15%">
+                                  <col style="width:35%">
+                               </colgroup>
+                               <tbody>
+                                  <tr> 
+                                     <th>코드그룹</th>
+                                     <td>
+                                     	<input type="text" id="txt_codeGroup" class="form-control" placeholder="object_code" />
+                                     </td>
+                                     <th>값</th>
+                                     <td>
+                                     	<input type="text" ID="txt_codeValue" class="form-control" placeholder="Ex) 10000001" />
+                                     </td>
+                                  </tr>
+                                  
+                                  <tr> 
+                                     <th>이름</th>
+                                     <td colspan="3">
+                                     	<input type="text" ID="txt_codeName" class="form-control" placeholder="Ex) 프로그램메뉴관리" />
+                                     </td>
+                                  </tr>
+                                  <tr> 
+                                     <th>내용</th>
+                                     <td colspan="3">
+                                     	<input type="text" ID="txt_codeDescription" class="form-control" placeholder="Ex) ../admin/modifyProgram.do">
+                                     </td>
+                                  </tr>
+                                  
+                                  <tr> 
+                                     <th>로그인<br>비밀번호</th>
+                                     <td colspan="3">
+                                     	<input type="password" id="txt_adminPassword" class="form-control">
+                                     </td>
+                                  </tr>
+                                  
+                               </tbody>
+                            </table>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="return fun_clickButtonOfInsertProgramMenu();">저장</button>
+                            <button type="button" id="btnCancel" class="btn btn-danger" onclick="return fun_clickButtonOfDeleteProgramMenu();" >삭제</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                          </div>
+                        </div>
+                    </section>
+                  </div>
+                </div>
+                <!-- 상세보기 모달창 end -->
             </div>
         </div>
     </div>
-
-
-	<div class="space-16"></div>
-
-	<div class="row">
-            <div class="col-lg-12">
-                <div id="accordion2" class="accordion-style1 panel-group accordion-style2">
-                    <div class="panel panel-default" id="tog_Detail">
-                        <div class="panel-heading clearfix" style="font-size:16px">
-                            <span class="toggle_accordion">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse2" >
-								    <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-								    &nbsp;상세정보
-                                
-							    </a>
-                            </span>
-                            <span class="toggle_accordionSearch">
-                                
-                            </span>
-                        </div>
-                        <div id="collapse2" class="panel-collapse collapse in">
-                            <div class="panel-body" >
-                                <div class="row form-group form-group-sm">
-                                    <div class="col-lg-1 col-sm-2" style="padding-top:4px;">코드그룹</div>
-                                    <div class="col-lg-2 col-sm-4">
-                                        <input type="text" id="txt_codeGroup" class="form-control" placeholder="object_code" autocomplete="no"/>
-                                    </div>
-                                    <div class="col-lg-1 col-sm-2" style="padding-top:4px;">값</div>
-                                    <div class="col-lg-2 col-sm-4">
-                                        <input type="text" id="txt_codeValue" class="form-control" placeholder="card_recom_ur" autocomplete="no"/>
-									</div>
-									<div class="col-lg-1 col-sm-2" style="padding-top:4px;">이름</div>
-                                    <div class="col-lg-2 col-sm-4">
-                                        <input type="text" id="txt_codeName" class="form-control" placeholder="액션코드" autocomplete="no"/>
-                                    </div>
-                                </div>
-                                <div class="row form-group form-group-sm">
-                                	<div class="col-lg-1 col-sm-2" style="padding-top:4px;">내용</div>
-                                    <div class="col-lg-11 col-sm-10">
-										<textarea id="txt_codeDescription" class="form-control" placeholder="내용" style="width:100%; height:150px;resize: none;"></textarea>
-                                    </div>
-								</div>
-								<div class="row form-group form-group-sm">    
-                                    <div class="col-lg-1 col-sm-2">로그인<br>비밀번호</div>
-				                	<div class="col-lg-2 col-sm-4">
-				                		<input type="password" id="txt_adminPassword" class="form-control">
-				                	</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-     <div class="row" id="div_row4">
-         <div class="col-lg-12">
-             <div class="col-lg-5 col-md-s5">
-             	<!-- <input type="button" value="회원수체크" class="btn btn-primary btn-sm" onclick="return fun_Click_btn_totalCount();" /> -->
-                
-             </div>
-             <div class="hidden-lg hidden-md col-sm-12"><p></p></div>
-             <div class="col-lg-7 col-md-7">
-                 <div class="pull-right" style="padding-right:20px">
-                     <input type="button" ID="btn_delete" value="삭제" class="btn btn-danger btn-sm" onclick="return fun_clickButtonDeleteCommonCode();" />
-                     &nbsp;
-                     <input type="button" ID="btn_update" value="수정" class="btn btn-primary btn-sm" onclick="return fun_clickButtonUpdateCommonCode();" />
-                     &nbsp;
-                     <input type="button" ID="btn_Save" value="추가" class="btn btn-primary btn-sm" onclick="return fun_clickButtonInsertCommonCode();" />
-                 </div> 
-             </div>
-         </div>
-     </div>
-	 <input type="hidden" id="hdf_adminUserSeq" value="" />
+    
+    
+    
+    
 </form>

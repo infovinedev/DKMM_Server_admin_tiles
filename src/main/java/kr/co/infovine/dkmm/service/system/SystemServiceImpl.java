@@ -20,4 +20,19 @@ public class SystemServiceImpl implements SystemService{
 	public List<TDefineNameStop> selectAll(TDefineNameStop row) {
 		return tDefineNameStopMapper.selectAll(row);
 	}
+	
+	@Override
+	public int insert(TDefineNameStop row) {
+		return tDefineNameStopMapper.insert(row);
+	}
+	
+	@Override
+	public int updateByPrimaryKey(TDefineNameStop row) {
+		return tDefineNameStopMapper.updateByPrimaryKey(row);
+	}
+	
+	@Override
+	public int deleteByPrimaryKey(int stopSeq) {
+		return tDefineNameStopMapper.deleteByPrimaryKey(stopSeq);
+	}
 }

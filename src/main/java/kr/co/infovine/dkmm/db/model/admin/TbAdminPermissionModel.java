@@ -58,6 +58,7 @@ public class TbAdminPermissionModel {
      *
      * @mbg.generated Mon May 10 14:15:37 KST 2021
      */
+    
     private String regDate;
 
     /**

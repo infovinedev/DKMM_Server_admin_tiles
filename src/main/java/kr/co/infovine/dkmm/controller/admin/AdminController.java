@@ -380,10 +380,11 @@ public class AdminController{
 			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
 	@ResponseBody
 	public ResponseModel selectProgramMenu(HttpServletRequest request, HttpServletResponse response, HttpSession session
+			, @RequestBody TbAdminProgramModel programMenu
 		) {
 		ResponseModel result = new ResponseModel();
 		
-		List<TbAdminProgramModel> resultSet = tbAdminService.selectAllProgramMenu();
+		List<TbAdminProgramModel> resultSet = tbAdminService.selectAllProgramMenu(programMenu);
 		
 		if(resultSet!=null) {
 			try {
@@ -420,7 +421,7 @@ public class AdminController{
 		
 		List<TbAdminProgramModel> resultModel = new ArrayList<TbAdminProgramModel>();
 		try {
-			List<TbAdminProgramModel> resultAllMenu = tbAdminService.selectAllProgramMenu();
+			List<TbAdminProgramModel> resultAllMenu = tbAdminService.selectAllProgramMenu(null);
 			for(TbAdminProgramModel model : resultAllMenu) {
 				
 				

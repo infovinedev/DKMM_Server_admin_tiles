@@ -105,4 +105,11 @@ public class TbAdminProgramModel {
      * 저장시 password를 체크하기 위함
      */
     private String password;
+    
+    private String rowNum;
+	
+	//조건
+	private String searchText;
+	private String searchStartDt;
+	private String searchEndDt;
 }

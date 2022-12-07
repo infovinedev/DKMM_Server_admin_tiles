@@ -34,7 +34,7 @@ public interface TbAdminService {
     
 	public List<TbAdminPermissionModel> selectByUserLeftMenu(int adminUserSeq);
 	
-	public List<TbAdminProgramModel> selectAllProgramMenu();
+	public List<TbAdminProgramModel> selectAllProgramMenu(TbAdminProgramModel programMenu);
 	
 	public int insertByProgramMenu(TbAdminProgramModel record);
 	
