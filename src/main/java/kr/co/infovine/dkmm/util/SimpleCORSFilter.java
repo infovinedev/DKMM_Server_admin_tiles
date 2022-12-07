@@ -25,14 +25,14 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import kr.co.infovine.dkmm.api.model.base.SessionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel;
 import kr.co.infovine.dkmm.service.admin.EncryptService;
-import kr.co.infovine.dkmm.service.admin.TbAdminService;
+import kr.co.infovine.dkmm.service.admin.TAdminService;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
 public class SimpleCORSFilter implements Filter {
 	@Autowired
-	TbAdminService tbAdminService;
+	TAdminService tbAdminService;
 	
 	@Autowired
 	EncryptService encryptService;

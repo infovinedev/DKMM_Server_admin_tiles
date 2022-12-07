@@ -29,7 +29,7 @@ import kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserModel;
 import kr.co.infovine.dkmm.db.model.common.TCommonCodeModel;
 import kr.co.infovine.dkmm.service.admin.EncryptService;
-import kr.co.infovine.dkmm.service.admin.TbAdminService;
+import kr.co.infovine.dkmm.service.admin.TAdminService;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AdminController{
 	@Autowired
-	TbAdminService tbAdminService;
+	TAdminService tbAdminService;
 	
 	@Autowired
 	EncryptService encryptService;
@@ -871,11 +871,37 @@ public class AdminController{
 		return result;
 	}
 	
-	
-	
+	//공통코드 조회
+	@RequestMapping(value="/select/tCommon.do", method = RequestMethod.POST
+			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
+	@ResponseBody
+	public ResponseModel selectTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session
+		) {
+		ResponseModel result = new ResponseModel();
+		List<TCommonCodeModel> resultSet = tbAdminService.selectAllTbCommonCode();
+		if(resultSet!=null) {
+			try {
+				int i = 0;
+				for(TCommonCodeModel code : resultSet) {
+					code.setSeq(i);
+					i++;
+				}
+				ObjectMapper mapper = new ObjectMapper();
+				String strLeftMenu = mapper.writeValueAsString(resultSet);
+				result.setResult(strLeftMenu);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+		}
+		else {
+			
+			result.setCode("0001");
+		}
+		return result;
+	}
 	
 	//공통코드 추가
-	@RequestMapping(value = "/insert/tbCommon.do", method = RequestMethod.POST
+	@RequestMapping(value = "/insert/tCommon.do", method = RequestMethod.POST
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ResponseModel insertTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session
@@ -902,7 +928,7 @@ public class AdminController{
 		return result;
 	}
 	//공통코드 수정
-	@RequestMapping(value = "/update/tbCommon.do", method = RequestMethod.POST
+	@RequestMapping(value = "/update/tCommon.do", method = RequestMethod.POST
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ResponseModel updateTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session
@@ -918,11 +944,6 @@ public class AdminController{
 			TbAdminUserModel resultSet = tbAdminService.selectByAdminUserIdAndPassword(tbAdminUser);
 			
 			if(resultSet!=null) {
-//				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-//				Calendar calendar = Calendar.getInstance(Locale.KOREA);
-//				String strRegDate = sdf.format(calendar);
-//				Date regDate = sdf.parse(strRegDate);
-//				commonCodeModel.setRegDate(regDate);
 				String codeGroup = commonCodeModel.getCodeGroup();
 				String codeValue = commonCodeModel.getCodeValue();
 				if(!codeGroup.equals("")&&!codeValue.equals("")) {
@@ -942,7 +963,7 @@ public class AdminController{
 	}
 	
 	//공통코드 삭제
-	@RequestMapping(value = "/delete/tbCommon.do", method = RequestMethod.POST
+	@RequestMapping(value = "/delete/tCommon.do", method = RequestMethod.POST
 		, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 		@ResponseBody
 		public ResponseModel deleteTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session

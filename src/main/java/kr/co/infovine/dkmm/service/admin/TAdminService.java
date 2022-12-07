@@ -3,14 +3,13 @@ package kr.co.infovine.dkmm.service.admin;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-
 import kr.co.infovine.dkmm.db.model.admin.TbAdminPermissionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminProgramModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserModel;
 import kr.co.infovine.dkmm.db.model.common.TCommonCodeModel;
 
-public interface TbAdminService {
+public interface TAdminService {
 	public TbAdminUserModel selectByAdminUserIdAndPassword(TbAdminUserModel tbAdminUser);
 	
 	public TbAdminUserModel selectByAdminUserId(TbAdminUserModel tbAdminUser);
@@ -49,7 +48,8 @@ public interface TbAdminService {
 	
 	public List<TbAdminUserLogModel> selectByPrimaryKey(String startDate, String closeDate);
 	
-	
+	//공통코드 조회
+	List<TCommonCodeModel> selectAllTbCommonCode();
 	//공통코드 추가
 	int insertTCommonCode(TCommonCodeModel row);
 	//공통코드 수정

@@ -72,4 +72,6 @@ public class TCommonCodeModel {
     private Date insDt;
     
     private String password;
+    
+    private int seq;
 }

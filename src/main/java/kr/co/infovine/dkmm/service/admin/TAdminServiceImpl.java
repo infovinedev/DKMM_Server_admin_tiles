@@ -17,7 +17,7 @@ import kr.co.infovine.dkmm.mapper.admin.TAdminUserMapper;
 import kr.co.infovine.dkmm.mapper.common.TCommonCodeMapper;
 
 @Service("tbAdminService")
-public class TbAdminServiceImpl implements TbAdminService {
+public class TAdminServiceImpl implements TAdminService {
 	@Autowired
 	TAdminUserMapper tbAdminUserMapper;
 	
@@ -129,6 +129,10 @@ public class TbAdminServiceImpl implements TbAdminService {
 		return tbAdminUserLogMapper.selectByPrimaryKey(startDate, closeDate);
 	}
 	
+	@Override
+	public List<TCommonCodeModel> selectAllTbCommonCode() {
+		return tcommonCodeMapper.selectAll();
+	}
 	
 	@Override
 	public int insertTCommonCode(TCommonCodeModel row) {

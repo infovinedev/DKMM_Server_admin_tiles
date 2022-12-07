@@ -25,7 +25,7 @@ import kr.co.infovine.dkmm.api.model.base.SessionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserModel;
 import kr.co.infovine.dkmm.service.admin.CommonService;
 import kr.co.infovine.dkmm.service.admin.EncryptService;
-import kr.co.infovine.dkmm.service.admin.TbAdminService;
+import kr.co.infovine.dkmm.service.admin.TAdminService;
 
 /**
  * LoginSuccessHandler Class 입니다.
@@ -54,8 +54,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 				= (CommonService)ApplicationContextProvider.getApplicationContext().getBean("commonService");
 			EncryptService encryptService 
 			= (EncryptService)ApplicationContextProvider.getApplicationContext().getBean("encryptService");
-			TbAdminService tbAdminService 
-			= (TbAdminService)ApplicationContextProvider.getApplicationContext().getBean("tbAdminService");
+			TAdminService tbAdminService 
+			= (TAdminService)ApplicationContextProvider.getApplicationContext().getBean("tbAdminService");
 			
 			commonService.setLoggedInUser(userId);
 			TbAdminUserModel tbAdminUser = new TbAdminUserModel();
