@@ -20,35 +20,35 @@ $(document).ready(function () {
 	//=== jdt_List 사이즈 변환시 테이블 리사이징
 	$(window).bind('resize', function () {
 		if (checker.android == null || checker.android == "" || checker.android == "null") {
-			//$('#jdt_List').dataTable().fnAdjustColumnSizing();
 		}
-		$('#jdtListCommonCode').dataTable().fnAdjustColumnSizing();              //페이지 Resize시 dataTable 재설정
+// 		$('#jdtListCommonCode').dataTable().fnAdjustColumnSizing();              //페이지 Resize시 dataTable 재설정
 	});
 
-	$('.panel').on('shown.bs.collapse', function (e) {
-		$('#jdtListCommonCode').dataTable().fnAdjustColumnSizing();
-	});
+// 	$('.panel').on('shown.bs.collapse', function (e) {
+// 		$('#jdtListCommonCode').dataTable().fnAdjustColumnSizing();
+// 	});
 
-	fun_initializeClickEvent();
 	fun_setjdtListCommonCode(function(){
 		fun_selectjdtListCommonCode(function(){
 
 		});
 	});
-	$("#hdf_adminUserSeq").val('-1');
 
+	$("#txt_searchText").on('keyup click', function () {
+		   if($('#chk_searchTable').is(':checked')){
+		      $("#jdtListCommonCode").DataTable().search(
+		         $("#txt_searchText").val()
+		      ).draw();
+		   }
+	   });
 	
-	//$("#txt_codeGroup").val("test");
-	//$("#txt_codeValue").val("b");
-	//$("#txt_codeName").val("00");
-	//$("#txt_codeDescription").val("1");
 });
 
 
 function fun_selectjdtListCommonCode(callback){
 	var inputData = { };
 	
-	fun_ajaxPostSend("/admin/select/tbCommon.do", inputData, true, function(msg){
+	fun_ajaxPostSend("/admin/select/tCommon.do", inputData, true, function(msg){
 		if(msg!=null){
 			switch(msg.code){
 				case "0000":
@@ -65,188 +65,78 @@ function fun_selectjdtListCommonCode(callback){
 	});
 }
 
-function fun_initializeClickEvent(){
-	$('#jdtListCommonCode').delegate('tr', 'click', function () {
-		// 빈테이블이 아닐때
-		if(typeof(jdtListCommonCode.row(this).data()) !== "undefined") {
-			var chk = $(this).hasClass('selected');
-			if (chk) {
-				$(this).removeClass('selected');
-				
-				this.children[0].lastChild.checked = false;
-				//$(this)[0].children(0).lastChild.checked = false;
-				jdtListLastSelectRowIndex = -1;
-				jdtListLastPagenate = -1;
-				
-				$("#txt_codeGroup").prop("disabled", false);
-				$("#txt_codeValue").prop("disabled", false);
 
-				fun_changeAfterinit();
-			} else {
-				$("#jdtListCommonCode tbody tr").removeClass('selected');
-				$("#cbx_SelectAll").attr('checked', false);         // 전체선택 체크 해제
-				$("input[name='chk-admin']").prop('checked', false);  // 선택 줄 외 체크 해제
-				$(this).toggleClass('selected');
-				this.children[0].lastChild.checked = true;
-				//$(this)[0].children(0).lastChild.checked = true;
-				jdtListLastPagenate = jdtListCommonCode.page();
-				
-				fun_clickjdtListCommonCode();   // 선택한 줄 값 라인에 입력
-			}
-		}
-	});
-
-	$("#txt_userId").on("keyup", function(e){
-		if(e.keyCode==13){
-			$("#txt_newPassword").focus();
-		}
-	});
-
-	$("#txt_newPassword").on("keyup", function(e){
-		if(e.keyCode==13){
-			$("#txt_userName").focus();
-		}
-	});
-
-	$("#txt_userName").on("keyup", function(e){
-		if(e.keyCode==13){
-			$("#sel_userTypeCode").focus();
-		}
-	});
-
-	$("#sel_userTypeCode").change(function(e){
-		$("#txt_adminPassword").focus();
-	});
-
-	$("#txt_adminPassword").on("keyup", function(e){
-		if(e.keyCode==13){
-			$("#btn_Save").trigger("click");
-		}
-	});
-
-
-	//테이블 검색시
-	$("#txt_searchParcelInfo").on('keyup click', function () {
-		$("#jdtListCommonCode").DataTable().search(
-			$("#txt_searchParcelInfo").val()
-		).draw();
-	});
-
-	//추가
-	$("#btn_itemCode").on("click", function(){
-		if($("#hdf_memberId").val()==""){
-			if (confirm('고객정보가 없습니다\n추가하시겠습니까?')) {
-				setTimeout(function () {
-					$("#btn_memberCode").trigger('click');
-				}, 800);
-			}
-			
-			return false;
-		}
-	});
-
-	$('#btn_DeleteSelect').click(function () {
-		var oTable = $("#jdtListCommonCodeDetail").DataTable();
-		var t = $("#jdtListCommonCodeDetail").dataTable();
-		
-		var chk = $("#cbx_SelectAll").is(':checked');
-		if (chk) {
-			t.fnClearTable();                               // 전체 선택 시 테이블 클리어
-		} else {
-			oTable.row('.selected').remove().draw(false);   // 해당 클래스의 줄 삭제
-		}
-		
-		chk_HasSel = true;
-		$("#cbx_SelectAll").attr('checked', false);             // 전체선택 체크 해제
-		fun_changeAfterinit();                          // 라인 입력값 삭제
-	});
-}
-
-
-var jdtListRow = 0;
 function fun_setjdtListCommonCode(callback) {
 	jdtListCommonCode = $("#jdtListCommonCode").DataTable({
 		"columns": [
-			{ 
-				//"title": "<input type='checkbox' id='cbx_SelectAll' onclick='fun_SelectAll_jdt_ListMain();' class='ace' />"
-				"data": null
-				, "width": "20px"
-				, "defaultContent": "<input type='checkbox' name='chk-admin'></input>"
-				, "sortable": false
-			}
-			, { "title": "seq", "data": "seq"}
-			, { "title": "코드그룹", "data": "codeGroup"}      
+			  { "title": "코드그룹", "data": "codeGroup"}      
 			, { "title": "값", "data": "codeValue"}
 			, { "title": "이름", "data": "codeName"}
 			, { "title": "내용", "data": "codeDescription"}
-			, { "title": "등록일자", "data": "regDate" }
+			, { "title": "순서", "data": "dispOrder" }
+			, { "title": "등록일자", "data": "insDt" }
+			, { "title": "수정", "data": "add" }
 		]
-		// , "rowCallback": function (row, data, index) {  // 로우 데이터 바인딩후 화면에 보여주기 전 실행 함수
-		// 	if($('td', row)[1].outerText!=undefined){
-		// 		$('td', row)[1].outerText = parseInt(jdtListRow);
-		// 		jdtListRow++;
-		// 	}
-		// }
+		, "sort": false                     // 소팅 여부
 		, "paging": false            // Table Paging
 		, "info": false             // 'thisPage of allPage'
-		, "autoWidth": false
-		, "scrollY": "350px"
-		, "scrollCollapse": true
-		, "scrollX": true
-		, "scrollXInner": "100%"
-		//, "orderClasses": false
-		, "order": [[ 1, "asc" ]]
-		, "deferRender": true           // defer
-		, "lengthMenu": [[20], [20]]           // Row Setting [-1], ["All"]
-		, "lengthChange": false
+		, "filter": false               // 검색 부분 사용 여부
+		, "autoWidth": true
+// 		, "search": true
+// 		, "scrollXInner": "100%"
+	//			, "scrollX": "100%"             // X축 스크롤 사이즈 처리
+	//			, "scrollY": "235"              // 테이블 높이 설정 ( 테이블의 스크롤 Y축 설정 )
+		, "order": [[ 0, "desc" ]]
+		, "deferRender": true                // defer
+		, "lengthMenu": [10,20,50]           // Row Setting [-1], ["All"]
+		, "lengthChange": true
 		, "dom": 't<"bottom"p><"clear">'
 		, "language": {
 			"search": "검색",
-			"lengthMenu": " _MENU_ 줄 표시",
-			"zeroRecords": "데이터가 없습니다.",
-			"info": "page _PAGE_ of _PAGES_",
-			"infoEmpty": "",
-			"infoFiltered": "(filtered from _MAX_ total records)",
-			"paginate": {
-				"next": "다음",
-				"previous": "이전"
-			}
+			"zeroRecords": "데이터가 없습니다."
 		}
 		, "columnDefs": [
-			{
+			 {
+				"targets": [0]
+				, "class": "text-left"
+			}
+			, {
 				"targets": [1]
-				, "class": "hideColumn"
-				// , "render": function (data, type, row) {
-				// 	jdtListRow++;
-				// 	return parseInt(jdtListRow);
-                // }
+				, "class": "text-left"
 			}
 			, {
 				"targets": [2]
-				, "class": "dt-head-center dt-body-left dtPercent5"
+				, "class": "text-left"
 			}
 			, {
 				"targets": [3]
-				, "class": "dt-head-center dt-body-left dtPercent10"
+				, "class": "text-left"
+				, "render": function (data, type, row, meta) {
+					var insertTr = "";
+					if ( row.codeDescription.length > 50 ){
+						insertTr = row.codeDescription.substring(0, 50) + "..";
+					}
+					else{
+						insertTr = row.codeDescription
+					}
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [4]
-				, "class": "dt-head-center dt-body-left dtPercent20"
+				, "class": "text-center"
 			}
 			, {
 				"targets": [5]
-				, "class": "dt-head-center dt-body-left dtPercent50"
+				, "class": "text-center"
 			}
 			, {
 				"targets": [6]
-				, "class": "dt-head-center dt-body-left dtPercent10"
-				, "render": function (data, type, row) {
-					var timestamp = parseInt(row.regDate);
-					var timezoneOffset = new Date().getTimezoneOffset() * 60000;
-					var isoString = new Date(timestamp - timezoneOffset).toISOString()
-					.replace(/T/, ' ')      // replace T with a space
-					.replace(/\..+/, '');     // delete the dot and everything after
-                   return isoString;
+				, "class": "text-center"
+				, "render": function (data, type, row, meta) {
+					var insertTr = "";
+					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_clickjdtListCommonCode(' + meta.row + ')">상세보기</button>'; 
+					return insertTr;
                 }
 			}
 		]
@@ -254,10 +144,24 @@ function fun_setjdtListCommonCode(callback) {
 	callback();
 };
 
-function fun_clickjdtListCommonCode() {
+var gfFlag = "";
+function fun_insert(){
+	fun_changeAfterinit();
+	$("#section1_detail_view").removeAttr("style");
+	gfFlag = "I";
+	$("#btnCancel").hide();
+}
+
+function fun_clickjdtListCommonCode(rowIdx) {
+	
+	fun_changeAfterinit();
+	
 	var table = $("#jdtListCommonCode").DataTable();
-	var row = table.rows('.selected').data()[0];
-	var checkData = row.seq;
+	var row = table.rows(rowIdx).data()[0];
+	
+	console.log(row);
+	
+	var checkData = row.codeGroup;
 
 	if (checkData != undefined) {
 		jdtListLastSelectRowIndex = row.seq;
@@ -267,6 +171,10 @@ function fun_clickjdtListCommonCode() {
 		$("#txt_codeValue").prop("disabled", true);
 		$("#txt_codeName").val(row.codeName);
 		$("#txt_codeDescription").val(row.codeDescription);
+		
+		$("#section1_detail_view").removeAttr("style");
+		gfFlag = "U";
+		$("#btnCancel").show();
 	}
 };
 
@@ -283,7 +191,6 @@ function fun_changeAfterinit() {
 	$("#txt_codeGroup").prop("disabled", false);
 	$("#txt_codeValue").prop("disabled", false);
 };	
-
 
 
 function fun_clickButtonDeleteCommonCode(){
@@ -312,7 +219,7 @@ function fun_clickButtonDeleteCommonCode(){
 		
 		$.ajax({
 			type: 'POST'
-			, url: '/admin/delete/tbCommon.do'
+			, url: '/admin/delete/tCommon.do'
 			, async: false
 			, data: JSON.stringify(inputData)
 			, contentType: 'application/json; charset=utf-8'
@@ -372,7 +279,7 @@ function fun_clickButtonUpdateCommonCode(){
 		
 		$.ajax({
 			type: 'POST'
-			, url: '/admin/update/tbCommon.do'
+			, url: '/admin/update/tCommon.do'
 			, async: false
 			, data: JSON.stringify(inputData)
 			, contentType: 'application/json; charset=utf-8'
@@ -422,7 +329,7 @@ function fun_clickButtonInsertCommonCode(){
 	
 		$.ajax({
 			type: 'POST'
-			, url: '/admin/insert/tbCommon.do'
+			, url: '/admin/insert/tCommon.do'
 			, async: false
 			, data: JSON.stringify(inputData)
 			, contentType: 'application/json; charset=utf-8'
@@ -458,7 +365,7 @@ function fun_clickButtonInsertCommonCode(){
 
 
 
-<form id="membership" method="post" enctype="multipart/form-data" action="">
+<!-- <form id="membership" method="post" enctype="multipart/form-data" action=""> -->
 
 	<div class="wrapper">
           <div class="content-wrapper">
@@ -548,14 +455,14 @@ function fun_clickButtonInsertCommonCode(){
                             </div>
                         </div>
                          <div class="main_search_result_list">
-                                <table id="jdtListMain" class="table table-bordered">
+                                <table id="jdtListCommonCode" class="table table-bordered">
 	                                <thead>
-	                                	<th class="text-center" width="5%">Seq</th> 
-                                        <th class="text-center" width="10%" >코드그룹</th>
+                                        <th class="text-center" width="10%">코드그룹</th>
                                        	<th class="text-center" width="10%">값</th>
-                                        <th class="text-center" width="10%">이름</th>
+                                        <th class="text-center" width="23%">이름</th>
                                         <th class="text-center" >내용</th>   
-                                        <th class="text-center" width="10%">등록일자</th>   
+                                        <th class="text-center" width="8%">순서</th>
+                                        <th class="text-center" width="12%">등록일자</th>   
                                         <th class="text-center" width="8%">수정</th>
 	                                </thead>
 	                                <tbody>
@@ -638,4 +545,4 @@ function fun_clickButtonInsertCommonCode(){
     
     
     
-</form>
+<!-- </form> -->

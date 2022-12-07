@@ -2,6 +2,8 @@ package kr.co.infovine.dkmm.db.model.common;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -60,7 +62,7 @@ public class TCommonCodeModel {
      *
      * @mbg.generated Tue Sep 13 15:42:13 KST 2022
      */
-    private Long insSeq;
+    private int insSeq;
 
     /**
      *
@@ -69,6 +71,7 @@ public class TCommonCodeModel {
      *
      * @mbg.generated Tue Sep 13 15:42:13 KST 2022
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Date insDt;
     
     private String password;

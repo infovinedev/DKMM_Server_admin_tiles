@@ -102,6 +102,7 @@
     select code_group, code_value, code_name, code_description, disp_order, ins_seq, 
     ins_dt
     from t_common_code
+    order by  code_group, disp_order, code_value
   </select>
   
   <select id="selectCommonCode" parameterType="kr.co.infovine.dkmm.db.model.common.TCommonCodeModel" resultMap="BaseResultMap">
