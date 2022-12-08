@@ -49,7 +49,10 @@ public interface TAdminService {
 	public List<TbAdminUserLogModel> selectByPrimaryKey(String startDate, String closeDate);
 	
 	//공통코드 조회
-	List<TCommonCodeModel> selectAllTbCommonCode();
+	List<TCommonCodeModel> selectAllTbCommonCode(TCommonCodeModel record);
+	
+	List<TCommonCodeModel> selectCodeGroup();
+	
 	//공통코드 추가
 	int insertTCommonCode(TCommonCodeModel row);
 	//공통코드 수정

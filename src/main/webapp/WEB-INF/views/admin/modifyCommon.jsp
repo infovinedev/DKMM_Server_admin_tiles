@@ -27,26 +27,88 @@ $(document).ready(function () {
 // 	$('.panel').on('shown.bs.collapse', function (e) {
 // 		$('#jdtListCommonCode').dataTable().fnAdjustColumnSizing();
 // 	});
-
+	
+	fun_codeGroupSelect();
+	
 	fun_setjdtListCommonCode(function(){
 		fun_selectjdtListCommonCode(function(){
 
 		});
 	});
-
-	$("#txt_searchText").on('keyup click', function () {
-		   if($('#chk_searchTable').is(':checked')){
-		      $("#jdtListCommonCode").DataTable().search(
-		         $("#txt_searchText").val()
-		      ).draw();
-		   }
+	
+	$("input:text[numberOnly]").on("keyup", function() {
+	      $(this).val($(this).val().replace(/[^0-9]/g,""));
 	   });
+	
+	$("#txt_searchText").on('keyup click', function () {
+		searchDataTable();	   
+	});
+	
+	$("#chk_searchTable").on('keyup click', function () {
+		searchDataTable();
+	});
+	
+	$("#searchCodeGroup").on('change', function () {
+		fun_selectjdtListCommonCode(function(){});
+    });
 	
 });
 
+function searchDataTable(){
+	if($('#chk_searchTable').is(':checked')){
+	      $("#jdtListCommonCode").DataTable().search(
+	         $("#txt_searchText").val()
+	      ).draw();
+	   }
+	   else{
+		   $("#jdtListCommonCode").DataTable().search("").draw();
+	   }
+}
+
+function fun_getGroupSelect(argResult){
+	console.log("========================");
+	console.log(argResult);
+	
+	$('#searchCodeGroup').empty();
+	
+	var appendStr = '<option value="">--전체--</option>';
+	 
+	for(var i=0; i<argResult.length; i++){
+		appendStr = appendStr + '<option value="'+argResult[i].codeGroup+'">'+argResult[i].codeGroup+'</option>';
+	}
+	$('#searchCodeGroup').append(appendStr);
+	
+}
+
+function fun_codeGroupSelect(){
+	var inputData = {};
+	
+	fun_ajaxPostSend("/admin/select/tCommonCodeGroup.do", inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					break;
+				case "0001":
+			}
+			var tempResult = JSON.parse(msg.result);
+			fun_getGroupSelect(tempResult);
+		}
+		else{
+			//alert('서비스가 일시적으로 원활하지 않습니다.');
+		}
+	});
+}
+
 
 function fun_selectjdtListCommonCode(callback){
-	var inputData = { };
+	
+	var searchText = $("#txt_searchText").val();
+	var searchStartDt = $("#search_startDt").val();
+	var searchEndDt = $("#search_endDt").val();
+	var searchCodeGroup = $("#searchCodeGroup").val();
+	var inputData = {"searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt, "searchCodeGroup": searchCodeGroup};
+	
+	console.log(inputData);
 	
 	fun_ajaxPostSend("/admin/select/tCommon.do", inputData, true, function(msg){
 		if(msg!=null){
@@ -80,7 +142,7 @@ function fun_setjdtListCommonCode(callback) {
 		, "sort": false                     // 소팅 여부
 		, "paging": false            // Table Paging
 		, "info": false             // 'thisPage of allPage'
-		, "filter": false               // 검색 부분 사용 여부
+		, "filter": true               // 검색 부분 사용 여부
 		, "autoWidth": true
 // 		, "search": true
 // 		, "scrollXInner": "100%"
@@ -171,6 +233,7 @@ function fun_clickjdtListCommonCode(rowIdx) {
 		$("#txt_codeValue").prop("disabled", true);
 		$("#txt_codeName").val(row.codeName);
 		$("#txt_codeDescription").val(row.codeDescription);
+		$("#txt_dispOrder").val(row.dispOrder);
 		
 		$("#section1_detail_view").removeAttr("style");
 		gfFlag = "U";
@@ -190,6 +253,7 @@ function fun_changeAfterinit() {
 	$("#txt_adminPassword").val('');
 	$("#txt_codeGroup").prop("disabled", false);
 	$("#txt_codeValue").prop("disabled", false);
+	$("#txt_dispOrder").val('');
 };	
 
 
@@ -214,6 +278,7 @@ function fun_clickButtonDeleteCommonCode(){
 				, "codeValue" : $("#txt_codeValue").val()
 				, "codeName" : $("#txt_codeName").val()
 				, "codeDescription" : $("#txt_codeDescription").val()
+				, "dispOrder" : $("#txt_dispOrder").val()
 				, 'password': shaPassword
 		};
 		
@@ -231,6 +296,7 @@ function fun_clickButtonDeleteCommonCode(){
 					
 					fun_selectjdtListCommonCode(function(){
 					});
+					$('#exampleModalScrollable').modal('hide');
 				}
 				else if(msg.code == "0001"){
 					$("#txt_adminPassword").val('');
@@ -251,6 +317,17 @@ function fun_clickButtonDeleteCommonCode(){
 	return false;
 }
 
+
+function fun_clickButtonOfInsert(){
+	
+	if (gfFlag == "I"){
+		fun_clickButtonInsertCommonCode();
+	}
+	else{
+		fun_clickButtonUpdateCommonCode();
+	}
+	
+}
 
 function fun_clickButtonUpdateCommonCode(){
 	
@@ -274,6 +351,7 @@ function fun_clickButtonUpdateCommonCode(){
 				, "codeValue" : $("#txt_codeValue").val()
 				, "codeName" : $("#txt_codeName").val()
 				, "codeDescription" : $("#txt_codeDescription").val()
+				, "dispOrder" : $("#txt_dispOrder").val()
 				, 'password': shaPassword
 		};
 		
@@ -289,6 +367,7 @@ function fun_clickButtonUpdateCommonCode(){
 					fun_changeAfterinit();
 					alert("수정이 완료되었습니다");
 					fun_selectjdtListCommonCode(function(){});
+					$('#exampleModalScrollable').modal('hide');
 				}
 				else if(msg.code == "0002"){
 					alert("코드 그룹 혹은 값이 중복되었습니다.");
@@ -324,6 +403,7 @@ function fun_clickButtonInsertCommonCode(){
 				, "codeValue" : $("#txt_codeValue").val()
 				, "codeName" : $("#txt_codeName").val()
 				, "codeDescription" : $("#txt_codeDescription").val()
+				, "dispOrder" : $("#txt_dispOrder").val()
 				, 'password': shaPassword
 		};
 	
@@ -340,7 +420,7 @@ function fun_clickButtonInsertCommonCode(){
 					fun_changeAfterinit();
 					alert("저장이 완료되었습니다");
 					fun_selectjdtListCommonCode(function(){});
-					
+					$('#exampleModalScrollable').modal('hide');
 				}
 				else if(msg.code == "0002"){
 					alert("코드 그룹 혹은 값이 중복되었습니다.");
@@ -424,10 +504,19 @@ function fun_clickButtonInsertCommonCode(){
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>검색어</th>
-                                        <td colspan="3">
+                                    	<th>코드그룹</th>
+                                        <td>
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:94%;" class="form-control" placeholder="프로그램이름" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <select id="searchCodeGroup" class="form-control" style="width:50%;">
+		                                            <option value="">--전체--</option>
+		                                        </select>
+                                           </div>
+                                        </td>
+                                    
+                                        <th>검색어</th>
+                                        <td>
+                                           <div class="row row-10 align-items-center">
+                                                  <input type="text" style="width:84%;" class="form-control" placeholder="프로그램이름" id="txt_searchText" name="searchText" onKeypress="" />
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>
@@ -447,7 +536,7 @@ function fun_clickButtonInsertCommonCode(){
                             </div>
                             <div class="col-auto">
                             	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_insert();">코드등록</button>
-                                <select id="nameStopLength" class="custom-select w-auto">
+                                <select id="nameStopLength" class="custom-select w-auto" style="display:none;">
                                 	<option value="10">10</option> 
                                 	<option value="20">20</option>
                                 	<option value="50">50</option>
@@ -457,13 +546,15 @@ function fun_clickButtonInsertCommonCode(){
                          <div class="main_search_result_list">
                                 <table id="jdtListCommonCode" class="table table-bordered">
 	                                <thead>
-                                        <th class="text-center" width="10%">코드그룹</th>
-                                       	<th class="text-center" width="10%">값</th>
-                                        <th class="text-center" width="23%">이름</th>
-                                        <th class="text-center" >내용</th>   
-                                        <th class="text-center" width="8%">순서</th>
-                                        <th class="text-center" width="12%">등록일자</th>   
-                                        <th class="text-center" width="8%">수정</th>
+	                                	<tr>
+	                                        <th class="text-center" width="10%">코드그룹</th>
+	                                       	<th class="text-center" width="10%">값</th>
+	                                        <th class="text-center" width="23%">이름</th>
+	                                        <th class="text-center" >내용</th>   
+	                                        <th class="text-center" width="8%">순서</th>
+	                                        <th class="text-center" width="12%">등록일자</th>   
+	                                        <th class="text-center" width="8%">수정</th>
+                                        </tr>
 	                                </thead>
 	                                <tbody>
 	                                                    
@@ -497,24 +588,30 @@ function fun_clickButtonInsertCommonCode(){
                                   <tr> 
                                      <th>코드그룹</th>
                                      <td>
-                                     	<input type="text" id="txt_codeGroup" class="form-control" placeholder="object_code" />
+                                     	<input type="text" id="txt_codeGroup" class="form-control" placeholder="object_code" maxlength="30"/>
                                      </td>
                                      <th>값</th>
                                      <td>
-                                     	<input type="text" ID="txt_codeValue" class="form-control" placeholder="Ex) 10000001" />
+                                     	<input type="text" ID="txt_codeValue" class="form-control" placeholder="Ex) Value" maxlength="30" />
                                      </td>
                                   </tr>
                                   
                                   <tr> 
                                      <th>이름</th>
-                                     <td colspan="3">
-                                     	<input type="text" ID="txt_codeName" class="form-control" placeholder="Ex) 프로그램메뉴관리" />
+                                     <td>
+                                     	<input type="text" ID="txt_codeName" class="form-control" placeholder="Ex) 코드 이름" maxlength="60" />
+                                     </td>
+                                     <th>순서</th>
+                                     <td>
+                                     	<input type="text" ID="txt_dispOrder" class="form-control" placeholder="Ex) 0,1,2,3..." numberOnly />
                                      </td>
                                   </tr>
                                   <tr> 
                                      <th>내용</th>
                                      <td colspan="3">
-                                     	<input type="text" ID="txt_codeDescription" class="form-control" placeholder="Ex) ../admin/modifyProgram.do">
+                                     	<textarea id="txt_codeDescription" name="txt_codeDescription" class="form-control"
+									          rows="5" cols="33" maxlength="1000" >
+									</textarea>
                                      </td>
                                   </tr>
                                   
@@ -529,8 +626,8 @@ function fun_clickButtonInsertCommonCode(){
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="return fun_clickButtonOfInsertProgramMenu();">저장</button>
-                            <button type="button" id="btnCancel" class="btn btn-danger" onclick="return fun_clickButtonOfDeleteProgramMenu();" >삭제</button>
+                            <button type="button" class="btn btn-primary" onclick="return fun_clickButtonOfInsert();">저장</button>
+                            <button type="button" id="btnCancel" class="btn btn-danger" onclick="return fun_clickButtonDeleteCommonCode();" >삭제</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                           </div>
                         </div>

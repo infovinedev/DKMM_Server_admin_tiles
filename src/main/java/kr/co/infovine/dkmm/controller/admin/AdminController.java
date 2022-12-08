@@ -876,9 +876,10 @@ public class AdminController{
 			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
 	@ResponseBody
 	public ResponseModel selectTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session
-		) {
+			,@RequestBody TCommonCodeModel record
+			) {
 		ResponseModel result = new ResponseModel();
-		List<TCommonCodeModel> resultSet = tbAdminService.selectAllTbCommonCode();
+		List<TCommonCodeModel> resultSet = tbAdminService.selectAllTbCommonCode(record);
 		if(resultSet!=null) {
 			try {
 				int i = 0;
@@ -900,6 +901,33 @@ public class AdminController{
 		return result;
 	}
 	
+	//공통코드그룹 조회
+	@RequestMapping(value="/select/tCommonCodeGroup.do", method = RequestMethod.POST
+			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
+	@ResponseBody
+	public ResponseModel selectCodeGroup(HttpServletRequest request, HttpServletResponse response, HttpSession session
+			,@RequestBody TCommonCodeModel record
+			) {
+		ResponseModel result = new ResponseModel();
+		List<TCommonCodeModel> resultSet = tbAdminService.selectCodeGroup();
+		if(resultSet!=null) {
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				String data = mapper.writeValueAsString(resultSet);
+				result.setResult(data);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+		}
+		else {
+			
+			result.setCode("0001");
+		}
+		return result;
+	}
+
+	
+	
 	//공통코드 추가
 	@RequestMapping(value = "/insert/tCommon.do", method = RequestMethod.POST
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
@@ -917,6 +945,7 @@ public class AdminController{
 			TbAdminUserModel resultSet = tbAdminService.selectByAdminUserIdAndPassword(tbAdminUser);
 			
 			if(resultSet!=null) {
+				commonCodeModel.setInsSeq(sessionModel.getAdminUserSeq());
 				tbAdminService.insertTCommonCode(commonCodeModel);
 				result.setCode("0000");
 			}else {
@@ -947,6 +976,7 @@ public class AdminController{
 				String codeGroup = commonCodeModel.getCodeGroup();
 				String codeValue = commonCodeModel.getCodeValue();
 				if(!codeGroup.equals("")&&!codeValue.equals("")) {
+					commonCodeModel.setInsSeq(sessionModel.getAdminUserSeq());
 					tbAdminService.updateByTbCommonCodePrimaryKey(commonCodeModel);
 					result.setCode("0000");
 				}

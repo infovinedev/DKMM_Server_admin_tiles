@@ -130,8 +130,13 @@ public class TAdminServiceImpl implements TAdminService {
 	}
 	
 	@Override
-	public List<TCommonCodeModel> selectAllTbCommonCode() {
-		return tcommonCodeMapper.selectAll();
+	public List<TCommonCodeModel> selectAllTbCommonCode(TCommonCodeModel record) {
+		return tcommonCodeMapper.selectAll(record);
+	}
+	
+	@Override
+	public List<TCommonCodeModel> selectCodeGroup() {
+		return tcommonCodeMapper.selectCodeGroup();
 	}
 	
 	@Override

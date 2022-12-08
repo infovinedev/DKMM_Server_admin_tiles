@@ -77,4 +77,10 @@ public class TCommonCodeModel {
     private String password;
     
     private int seq;
+    
+	//조건
+	private String searchText;
+	private String searchStartDt;
+	private String searchEndDt;
+	private String searchCodeGroup;
 }
