@@ -46,4 +46,6 @@ public interface TBoardMapper {
     
 	//공지사항 전체 조회
 	List<TBoard> selectboardAllList(TBoard board);
+	//공지사항 상세보기
+	TBoard selectBoardDetail(TBoard board);
 }

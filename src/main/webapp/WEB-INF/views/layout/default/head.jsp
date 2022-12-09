@@ -168,8 +168,6 @@
 				var tempResult = JSON.parse(msg.result);
 				for(var i=0; i<tempResult.length;i++){
 					
-					console.log(tempResult[i]);
-					
 					var adminProgram = tempResult[i].adminProgram;
 					if ( adminProgram != null && adminProgram != undefined ){
 						var level = adminProgram.level;

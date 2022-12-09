@@ -14,7 +14,7 @@ public class TDefineWork {
      *
      * @mbg.generated Wed Nov 23 17:41:12 KST 2022
      */
-    private Integer workSeq;
+    private int workSeq;
 
     /**
      *
@@ -50,7 +50,7 @@ public class TDefineWork {
      *
      * @mbg.generated Wed Nov 23 17:41:12 KST 2022
      */
-    private Long nickSeq;
+    private int nickSeq;
 
     /**
      *
@@ -113,7 +113,7 @@ public class TDefineWork {
      *
      * @mbg.generated Wed Nov 23 17:41:12 KST 2022
      */
-    private Long insSeq;
+    private int insSeq;
 
     /**
      *
@@ -131,7 +131,7 @@ public class TDefineWork {
      *
      * @mbg.generated Wed Nov 23 17:41:12 KST 2022
      */
-    private Long uptSeq;
+    private int uptSeq;
 
     /**
      *
@@ -207,6 +207,8 @@ public class TDefineWork {
     
     //추가
     private String rowNum;
+    private String workConditionCode;
+    private String codeValue;
     
     //조건
   	private String searchText;

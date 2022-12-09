@@ -247,7 +247,6 @@ function fun_setStoreListInfo() {
 				, "render": function (data, type, row) {
 					var msg = row.storeSeq;
 					var insertTr = "";
-					//insertTr += '<button type="button" class="btn btn-secondary btn-sm" onclick="fun_viewDetail(' + msg + ')">상세보기</button>';
 					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(' + msg + ')">상세보기</button>'; 
 					return insertTr;
                 }

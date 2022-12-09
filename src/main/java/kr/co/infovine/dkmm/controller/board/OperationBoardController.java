@@ -20,13 +20,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
 import kr.co.infovine.dkmm.controller.map.MapController;
 import kr.co.infovine.dkmm.db.model.board.TBoard;
+import kr.co.infovine.dkmm.db.model.define.TDefineWork;
 import kr.co.infovine.dkmm.service.board.OperationBoardService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
 @RequestMapping(value = "/board")
-public class OperationboardController {
+public class OperationBoardController {
 	
 	@Autowired
 	OperationBoardService operationboardService;
@@ -46,7 +47,7 @@ public class OperationboardController {
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ResponseModel selectRealestateParcelInfo(HttpServletRequest request, HttpServletResponse response 
-			,@RequestBody TBoard board) {
+	,@RequestBody TBoard board) {
 		ResponseModel result = new ResponseModel();
 		try {
 			List<TBoard> model = operationboardService.selectboardAllList(board);
@@ -59,39 +60,47 @@ public class OperationboardController {
 		}
 		return result;
 	}
-	/*
-	@RequestMapping(value = "/select/boardInfoDetail.do", method = RequestMethod.POST
-			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
-			@ResponseBody
-			public ResponseModel selectRealestateParcelInfoDetail(HttpServletRequest request, HttpServletResponse response 
-					,@RequestBody TboardInfoModel boardInfo) {
-				ResponseModel result = new ResponseModel();
-				try {
-					TboardInfoModel model = operationboardService.selectboardInfoDetail(boardInfo);
-					ObjectMapper mapper = new ObjectMapper();
-					String boardlInfoDetail = mapper.writeValueAsString(model);
-					result.setCode("0000");
-					result.setResult(boardlInfoDetail);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return result;
-			}
-	// end region
+	
+	@RequestMapping(value = "/select/boardListDetail.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel selectRealestateParcelInfoDetail(HttpServletRequest request, HttpServletResponse response 
+	,@RequestBody TBoard board) {
+	ResponseModel result = new ResponseModel();
+		try {
+			TBoard model = operationboardService.selectboardListDetail(board);
+			ObjectMapper mapper = new ObjectMapper();
+			String boardlInfoDetail = mapper.writeValueAsString(model);
+			result.setCode("0000");
+			result.setResult(boardlInfoDetail);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	
 	//저장 수정 삭제.
-	@RequestMapping(value = "/save/boardInfo.do", method = RequestMethod.POST
-			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
-			@ResponseBody
-			public ResponseModel savaboardInfo(HttpServletRequest request, HttpServletResponse response 
-					,@RequestBody TboardInfoModel boardInfo) {
-				ResponseModel result = new ResponseModel();
-				try {
-					operationboardService.insertboardInfo(boardInfo);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return result;
+	@RequestMapping(value = "/save/boardSave.do", method = RequestMethod.POST 
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody 
+	public ResponseModel insertSavaBoard(HttpServletRequest request, HttpServletResponse response 
+	,@RequestBody TBoard board) {
+	ResponseModel result = new ResponseModel();
+		try {
+			if(board.getType().equals("I")) {
+				operationboardService.insertBoard(board);
+			}else if(board.getType().equals("U")) {
+				operationboardService.updateBoard(board);
+			}else {
+				int boardSeq = board.getBoardSeq();
+				operationboardService.deleteBoard(boardSeq);
 			}
-	*/
+			result.setErrorMessage("success"); 
+		} catch (Exception e) {
+			result.setErrorMessage("error"); 
+			e.printStackTrace(); 
+		} 
+		return result;
+	}
 }

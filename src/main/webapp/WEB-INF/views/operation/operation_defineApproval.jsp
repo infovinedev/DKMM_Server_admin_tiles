@@ -153,6 +153,7 @@ function fun_viewDetail(workSeq) {
 			var workSeq            = tempResult.workSeq == null ? "" : tempResult.workSeq;                       //업적번호
 			var workNm             = tempResult.workNm == null ? "" : tempResult.workNm;                         //업적명
 			var workCondition      = tempResult.workCondition == null ? "" : tempResult.workCondition;           //달성조건
+			var workConditionCode  = tempResult.workConditionCode == null ? "" : tempResult.workConditionCode;   //달성조건 codeValue
 			var codeValue          = tempResult.codeValue == null ? "" : tempResult.codeValue;                   //달성조건 value
 			
 			var workCnt            = tempResult.workCnt == null ? "" : tempResult.workCnt;                       //달성 상세 요건
@@ -326,14 +327,14 @@ function fun_defineHiding(type,value){
 			mes = "승인취소 하시겠습니까?";
 		}
 		var result = confirm(mes);
-		var inputData = {"upWorkSeq": upWorkSeq, "approval": approval};
+		var inputData = {"upWorkSeq": upWorkSeq, "approvalYn": approval};
 		if(result){
 			fun_ajaxPostSend("/approval/save/defineWorkapproval.do", inputData, true, function(msg){
 				if(msg.errorMessage !=null){
 					var message = msg.errorMessage;
 					if(message == "success"){
 						alert("정상적으로 처리되었습니다.");
-						$("#section1_detail_view").css("display", "none"); //모달 종료
+						$("#exampleModalScrollable").modal('hide'); //모달 종료
 						fun_search();
 					}else if(message == "error"){
 						alert("정상적으로 처리되지 않았습니다.");
@@ -361,7 +362,7 @@ function fun_defineHiding(type,value){
 					var message = msg.errorMessage;
 					if(message == "success"){
 						alert("정상적으로 처리되었습니다.");
-						$("#section1_detail_view").css("display", "none"); //모달 종료
+						$("#exampleModalScrollable").modal('hide'); //모달 종료
 						fun_search();
 					}else if(message == "error"){
 						alert("정상적으로 처리되지 않았습니다.");
@@ -475,7 +476,8 @@ function fun_svae(type) {
 					var message = msg.errorMessage;
 					if(message == "success"){
 						alert("정상적으로 처리되었습니다.");
-						$("#section1_update_view").css("display", "none");
+						//$("#section1_update_view").css("display", "none");
+						$("#exampleModalScrollable").modal('hide'); //모달 종료
 						fun_search();
 					}else if(message == "error"){
 						alert("정상적으로 처리되지 않았습니다.");
@@ -491,7 +493,8 @@ function fun_svae(type) {
 					var message = msg.errorMessage;
 					if(message == "success"){
 						alert("정상적으로 처리되었습니다.");
-						$("#section1_update_view").css("display", "none");
+						//$("#section1_update_view").css("display", "none");
+						$("#exampleModalScrollable").modal('hide'); //모달 종료
 						fun_search();
 					}else if(message == "error"){
 						alert("정상적으로 처리되지 않았습니다.");
@@ -862,7 +865,7 @@ function changeNickNm(value) {
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary min-width-90px" id="close" data-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-secondary min-width-90px" id="close" data-dismiss="modal">취소</button>
                             <button type="button" class="btn btn-primary min-width-90px" onclick="fun_svae('U');">저장</button>
                             <button type="button" class="btn btn-danger min-width-90px" onclick="fun_svae('D');">삭제</button>
                           </div>

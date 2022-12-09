@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
  -->
 <script>
-var boardListInfo;
+var faqListInfo;
 
 $(document).ready(function () {
 	var ua = navigator.userAgent;
@@ -17,16 +17,16 @@ $(document).ready(function () {
 	});
 	
 	
-	fun_setboardListInfo();
+	fun_setfaqListInfo();
 	
-	$("#boardListLength").change(function(){
-		var length = $("#boardListLength").val();
-		$("#boardListInfo").DataTable().page.len(length).draw();
+	$("#faqListLength").change(function(){
+		var length = $("#faqListLength").val();
+		$("#faqListInfo").DataTable().page.len(length).draw();
 	});
 	
    $("#txt_searchText").on('keyup click', function () {
 	   if($('#chk_searchTable').is(':checked')){
-	      $("#boardListInfo").DataTable().search(
+	      $("#faqListInfo").DataTable().search(
 	         $("#txt_searchText").val()
 	      ).draw();
 	   }
@@ -34,13 +34,13 @@ $(document).ready(function () {
 });
 
 function fun_search(){
-	var boardDiv = $("#search_boardDiv").val();
+	var faqDiv = $("#search_faqDiv").val();
 	var searchText = $("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	
-	var inputData = {"boardDiv": boardDiv, "searchText": searchText,"searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
-	fun_ajaxPostSend("/board/select/boardAllList.do", inputData, true, function(msg){
+	var inputData = {"faqDiv": faqDiv, "searchText": searchText,"searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
+	fun_ajaxPostSend("/faq/select/faqAllList.do", inputData, true, function(msg){
 		if(msg!=null){
 			switch(msg.code){
 				case "0000":
@@ -51,15 +51,15 @@ function fun_search(){
 			for (let i = 0; i < tempResult.length; i++) {
 				tempResult[i].listIndex = i + 1
 			}
-			fun_dataTableAddData("#boardListInfo", tempResult);
+			fun_dataTableAddData("#faqListInfo", tempResult);
 		}
 	});
 }
 
 //text값 공백처리
 function fun_reset(type){
-	$("#hidden_boardSeq").val("");
-	$("#txt_boardDiv").val("");
+	$("#hidden_faqSeq").val("");
+	$("#txt_faqDiv").val("");
 	$("#txt_insDt").val("");
 	$("#txt_title").val("");
 	$("#txt_viewCnt").val("");
@@ -67,31 +67,31 @@ function fun_reset(type){
 }
 
 //상세보기
-function fun_viewDetail(boardSeq) {
+function fun_viewDetail(faqSeq) {
 	fun_reset();
 	$("#section1_detail_edit").css("display", "none");
 	$("#section1_detail_view").removeAttr("style");
-	var inputData = {"boardSeq": boardSeq};
-	fun_ajaxPostSend("/board/select/boardListDetail.do", inputData, true, function(msg){
+	var inputData = {"faqSeq": faqSeq};
+	fun_ajaxPostSend("/faq/select/faqListDetail.do", inputData, true, function(msg){
 		if(msg!=null){
 			var tempResult = JSON.parse(msg.result);
-			var boardSeq = tempResult.boardSeq == null ? "N/A" : tempResult.boardSeq;                    //공지사항번호
-			var boardDiv  = tempResult.boardDiv == null ? "N/A" : tempResult.boardDiv;                   //구분
+			var faqSeq = tempResult.faqSeq == null ? "N/A" : tempResult.faqSeq;                          //FAQ번호
+			var faqDiv  = tempResult.faqDiv == null ? "N/A" : tempResult.faqDiv;                         //구분
 			var insDt  = tempResult.insDt == null ? "N/A" : tempResult.insDt;                            //등록일
 			var title = tempResult.title == null ? "N/A" : tempResult.title;                             //제목
 			var viewCnt  = tempResult.viewCnt == null ? "N/A" : tempResult.viewCnt;                      //조회수
 			var content  = tempResult.content == null ? "N/A" : tempResult.content;                      //내용
 			//상세보기 데이터	
-			$("#hidden_boardSeq").val(boardSeq);
-			$("#txt_boardDiv").val(boardDiv);
+			$("#hidden_faqSeq").val(faqSeq);
+			$("#txt_faqDiv").val(faqDiv);
 			$("#txt_insDt").val(insDt);
 			$("#txt_title").val(title);
 			$("#txt_viewCnt").val(viewCnt);
 			$("#txt_content").val(content);
 			
 			//상세보기 수정 데이터
-			$("#hidden_up_boardSeq").val(boardSeq);
-			$("#search_up_boardDiv").val(boardDiv);
+			$("#hidden_up_faqSeq").val(faqSeq);
+			$("#search_up_faqDiv").val(faqDiv);
 			$("#txt_up_insDt").val(insDt);
 			$("#txt_up_title").val(title);
 			$("#txt_up_viewCnt").val(viewCnt);
@@ -110,8 +110,8 @@ function fun_update(type) {
 		$("#btn_delete").hide();
 		var sDate = c21.date_today("yyyy-MM-dd hh:mm:ss");
 		
-		$("#hidden_up_boardSeq").val("");
-		$("#search_up_boardDiv").val("");
+		$("#hidden_up_faqSeq").val("");
+		$("#search_up_faqDiv").val("");
 		$("#txt_up_insDt").val(sDate);
 		$("#txt_up_title").val("");
 		$("#txt_up_viewCnt").val("");
@@ -123,12 +123,12 @@ function fun_update(type) {
 	$("#section1_detail_edit").removeAttr("style");
 }
 
-function fun_setboardListInfo() {
-	boardListInfo = $("#boardListInfo").DataTable({
+function fun_setfaqListInfo() {
+	faqListInfo = $("#faqListInfo").DataTable({
 		"columns": [
 			  {"data": "listIndex"}
-			, {"data": "boardSeq"}
-			, {"data": "boardDiv"}
+			, {"data": "faqSeq"}
+			, {"data": "faqDiv"}
 			, {"data": "title"}
 			, {"data": "viewCnt"}
 			, {"data": "insDt" }
@@ -184,7 +184,7 @@ function fun_setboardListInfo() {
 				"targets": [6]
 				, "class": "text-center"
 				, "render": function (data, type, row) {
-					var msg = row.boardSeq;
+					var msg = row.faqSeq;
 					var insertTr = "";
 					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(' + msg + ')">상세보기</button>'; 
 					return insertTr;
@@ -194,16 +194,16 @@ function fun_setboardListInfo() {
 	});
 };
 
-//공지사항 등록,수정,삭제 저장 버튼
+//FAQ 등록,수정,삭제 저장 버튼
 function fun_save(type){
-	var boardSeq         = $("#hidden_up_boardSeq").val();
-	var boardDiv         = $("#search_up_boardDiv").val();
+	var faqSeq         = $("#hidden_up_faqSeq").val();
+	var faqDiv         = $("#search_up_faqDiv").val();
 	var insDt            = $("#txt_up_insDt").val();
 	var title            = $("#txt_up_title").val();
 	var viewCnt          = $("#txt_up_viewCnt").val();
 	var content          = $("#txt_up_content").val();
 	
-	var inputData = {"boardSeq": boardSeq , "boardDiv": boardDiv , "insDt": insDt , "title": title, "viewCnt": viewCnt, "content": content,"type": type};
+	var inputData = {"faqSeq": faqSeq , "faqDiv": faqDiv , "insDt": insDt , "title": title, "viewCnt": viewCnt, "content": content,"type": type};
 	if(type == "I"){
 		var result = confirm('추가 하시겠습니까?');
 	}else if(type == "U"){
@@ -213,7 +213,7 @@ function fun_save(type){
 	}
 	
 	if(result){
-		fun_ajaxPostSend("/board/save/boardSave.do", inputData, true, function(msg){
+		fun_ajaxPostSend("/faq/save/faqSave.do", inputData, true, function(msg){
 			if(msg.errorMessage !=null){
 				var message = msg.errorMessage;
 				if(message == "success"){
@@ -226,57 +226,6 @@ function fun_save(type){
 			}
 		});
 	}
-	
-/* 	if(type == "I"){
-		var result = confirm('추가 하시겠습니까?');
-		if(result){
-			fun_ajaxPostSend("/board/save/boardSave.do", inputData, true, function(msg){
-				if(msg.errorMessage !=null){
-					var message = msg.errorMessage;
-					if(message == "success"){
-						alert("정상적으로 처리되었습니다.");
-						$("#exampleModalScrollable").modal('hide');
-						fun_search();
-					}else if(message == "error"){
-						alert("정상적으로 처리되지 않았습니다.");
-					}
-				}
-			});
-		}
-	}else if(type == "U"){
-		var result = confirm('수정 하시겠습니까?');
-		if(result){
-			fun_ajaxPostSend("/board/save/boardSave.do", inputData, true, function(msg){
-				if(msg.errorMessage !=null){
-					var message = msg.errorMessage;
-					if(message == "success"){
-						alert("정상적으로 처리되었습니다.");
-						$("#exampleModalScrollable").modal('hide');
-						fun_search();
-					}else if(message == "error"){
-						alert("정상적으로 처리되지 않았습니다.");
-					}
-				}
-			});
-		}
-	}else{
-		var result = confirm('삭제하시겠습니까?');
-		if(result){
-			fun_ajaxPostSend("/board/save/boardDelete.do", inputData, true, function(msg){
-				if(msg.errorMessage !=null){
-					var message = msg.errorMessage;
-					if(message == "success"){
-						alert("정상적으로 처리되었습니다.");
-						$("#exampleModalScrollable").modal('hide'); 
-						fun_search();
-					}else if(message == "error"){
-						alert("정상적으로 처리되지 않았습니다.");
-					}
-				}
-			});
-		}
-		
-	} */
 }
 </script>
 <body class="hold-transition sidebar-mini">
@@ -287,7 +236,7 @@ function fun_save(type){
                <div class="container-fluid">
                   <div class="row">
                      <div class="col">
-                        <h1 class="title">공지사항</h1>
+                        <h1 class="title">FAQ</h1>
                      </div>
                   </div>
                </div>
@@ -339,9 +288,9 @@ function fun_save(type){
                                     <tr>
                                         <th>구분</th>
                                         <td>
-                                            <select class="form-control" id="search_boardDiv">
+                                            <select class="form-control" id="search_faqDiv">
                                                 <option value="">선택</option>
-                                                <option value="INFO">공지사항</option>
+                                                <option value="INFO">FAQ</option>
                                                 <option value="UPDATE">업데이트</option>
                                                 <option value="EVENT">이벤트</option>
                                             </select>
@@ -368,9 +317,9 @@ function fun_save(type){
                             <div class="col-auto">
                             </div>
                             <div class="col-auto">
-                            	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">공지사항 등록</button>
+                            	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">FAQ 등록</button>
                                 <button type="button" class="btn btn-outline-primary mr-1" onclick="fn_go_list_excel()">엑셀다운로드</button>
-                                <select id="boardListLength" class="custom-select w-auto">
+                                <select id="faqListLength" class="custom-select w-auto">
                                 	<option value="10">10</option>
                                 	<option value="20">20</option>
                                 	<option value="50">50</option>
@@ -378,11 +327,11 @@ function fun_save(type){
                             </div>
                         </div>
                          <div class="main_search_result_list">
-                                <table id="boardListInfo" class="table table-bordered">
+                                <table id="faqListInfo" class="table table-bordered">
                                     <thead>
                                     	<tr>
 	                                        <th class="text-center">번호</th>
-	                                       	<th class="text-center">공지사항번호</th>
+	                                       	<th class="text-center">FAQ번호</th>
 	                                        <th class="text-center">구분</th>
 	                                        <th class="text-center">제목</th>
 	                                        <th class="text-center">조회수</th>
@@ -420,8 +369,8 @@ function fun_save(type){
                                <tbody>
                                   <tr>
                                      <th>구분</th>
-                                     <td><input class="form-control" type="text" id="txt_boardDiv" readOnly/>
-                                         <input class="form-control" type="hidden" id="hidden_boardSeq" readOnly/>
+                                     <td><input class="form-control" type="text" id="txt_faqDiv" readOnly/>
+                                         <input class="form-control" type="hidden" id="hidden_faqSeq" readOnly/>
                                      </td>
                                      <th>등록일</th>
                                      <td><input class="form-control" type="text" id="txt_insDt" readOnly/></td>
@@ -457,7 +406,7 @@ function fun_save(type){
                     <section id="section1_detail_edit" style="display:none;">
                         <div class="modal-content" style="width: 1200px;">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalScrollableTitle">공지사항 수정</h5>
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">FAQ 수정</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
@@ -475,13 +424,13 @@ function fun_save(type){
                                   <tr>
                                      <th>구분</th>
                                      <td>
-                                       <select class="form-control" id="search_up_boardDiv">
+                                       <select class="form-control" id="search_up_faqDiv">
                                                 <option value="">선택</option>
-                                                <option value="INFO">공지사항</option>
+                                                <option value="INFO">FAQ</option>
                                                 <option value="UPDATE">업데이트</option>
                                                 <option value="EVENT">이벤트</option>
                                        </select>
-                                         <input class="form-control" type="hidden" id="hidden_up_boardSeq" readOnly/>
+                                         <input class="form-control" type="hidden" id="hidden_up_faqSeq" readOnly/>
                                      </td>
                                      
                                      

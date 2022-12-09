@@ -1,25 +1,27 @@
-package kr.co.infovine.dkmm.service.board;
+package kr.co.infovine.dkmm.service.faq;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.infovine.dkmm.db.model.board.TBoard;
+import kr.co.infovine.dkmm.db.model.faq.TFaq;
 import kr.co.infovine.dkmm.mapper.board.TBoardMapper;
+import kr.co.infovine.dkmm.mapper.faq.TFaqMapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class OperationBoardServiceImpl implements OperationBoardService{
+public class OperationFaqServiceImpl implements OperationFaqService{
 	
 	@Autowired
-	TBoardMapper boardMapper;
+	TFaqMapper faqMapper;
 	
 	@Override
-	public List<TBoard> selectboardAllList(TBoard board) {
-		return boardMapper.selectboardAllList(board);
+	public List<TFaq> selectFaqAllList(TFaq faq) {
+		return faqMapper.selectFaqAllList(faq);
 	}
-	
+	/*
 	@Override
 	public TBoard selectboardListDetail(TBoard board) {
 		return boardMapper.selectBoardDetail(board);
@@ -38,5 +40,5 @@ public class OperationBoardServiceImpl implements OperationBoardService{
 	@Override 
 	public int deleteBoard(Integer boardSeq) {
 		return boardMapper.deleteByPrimaryKey(boardSeq); 
-	}
+	}*/
 }

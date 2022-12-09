@@ -159,6 +159,7 @@ var c21 = {
         if(format=="yyyyMMddhh") s= s.substring(0,10);
         if(format=="yyyyMMddhhmm") s= s.substring(0,12);
         if(format=="yyyyMMddhhmmss") s= s.substring(0,14);
+        if(format=="yyyy-MM-dd hh:mm:ss") s= s.substring(0,4)+"-"+s.substring(4,6)+"-"+s.substring(6,8)+" "+s.substring(8,10)+":"+s.substring(10,12)+":"+s.substring(12,14);
         return s;
     },
 
