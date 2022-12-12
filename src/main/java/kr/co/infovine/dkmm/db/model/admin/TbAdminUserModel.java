@@ -134,4 +134,9 @@ public class TbAdminUserModel {
     private String newPassword1;
     
     private String newPassword2;
+    
+  //조건
+  	private String searchText;
+  	private String searchStartDt;
+  	private String searchEndDt;
 }

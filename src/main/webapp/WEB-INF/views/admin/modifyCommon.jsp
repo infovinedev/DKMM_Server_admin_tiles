@@ -59,10 +59,10 @@ function searchDataTable(){
 	      $("#jdtListCommonCode").DataTable().search(
 	         $("#txt_searchText").val()
 	      ).draw();
-	   }
-	   else{
-		   $("#jdtListCommonCode").DataTable().search("").draw();
-	   }
+	}
+	else{
+		$("#jdtListCommonCode").DataTable().search("").draw();
+	}
 }
 
 function fun_getGroupSelect(argResult){

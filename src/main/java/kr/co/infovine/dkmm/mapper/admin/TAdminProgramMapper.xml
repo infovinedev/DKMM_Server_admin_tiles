@@ -72,8 +72,8 @@
     -->
     select admin_program_seq, program_id, parents_program_id, level, program_name, program_sort, 
     use_yn, location
-    ,substring(reg_date, 0, 5)||'-'||substring(reg_date, 5, 2)||'-'||substring(reg_date, 7, 2)  AS reg_date
-    ,substring(update_date , 0, 5)||'-'||substring(update_date , 5, 2)||'-'||substring(update_date , 7, 2)  AS update_date 
+    ,reg_date
+    ,update_date 
     from t_admin_program
     where admin_program_seq = #{adminProgramSeq,jdbcType=INTEGER}
     <![CDATA[
@@ -89,12 +89,12 @@
     -->
     select admin_program_seq, program_id, parents_program_id, level, program_name, program_sort, 
     use_yn, location
-    ,substring(reg_date, 0, 5)||'-'||substring(reg_date, 5, 2)||'-'||substring(reg_date, 7, 2)  AS reg_date
-    ,substring(update_date , 0, 5)||'-'||substring(update_date , 5, 2)||'-'||substring(update_date , 7, 2)  AS update_date 
+    ,reg_date
+    ,update_date 
     from t_admin_program
     where 1=1
     <if test='searchStartDt neq null and !"".equals(searchStartDt)'>
-      AND substring(reg_date, 0, 5) BETWEEN #{searchStartDt} AND #{searchEndDt}
+      AND substring(reg_date, 0, 5)||'-'||substring(reg_date, 5, 2)||'-'||substring(reg_date, 7, 2) BETWEEN #{searchStartDt} AND #{searchEndDt}
     </if>
     <if test='searchText neq null and !"".equals(searchText)'>
       AND program_name LIKE CONCAT('%', #{searchText}, '%')

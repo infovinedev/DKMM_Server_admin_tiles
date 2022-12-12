@@ -433,7 +433,18 @@ public class AdminController{
 						programName = "<b><font Color='Blue'>" + programName + "</font></b>"; 
 					}
 					else {
-						programName = "&nbsp;&nbsp;<img src='../assets/images/L.gif' />"  + programName;
+						
+						try {
+							String nbsp = "";
+							int iLevel = Integer.parseInt(level);
+							for (int i=0; i<iLevel; i++) {
+								nbsp = nbsp + "&nbsp;&nbsp;";
+							}
+							
+							programName = nbsp + "▶ "  + programName;
+						} catch (Exception e) {
+							programName = "&nbsp;&nbsp;└ "  + programName;
+						}
 					}
 				}
 				
@@ -648,11 +659,12 @@ public class AdminController{
 	@RequestMapping(value="/select/adminUser.do", method = RequestMethod.POST
 			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
 	@ResponseBody
-	public ResponseModel selectAdminUser(HttpServletRequest request, HttpServletResponse response, HttpSession session
+	public ResponseModel selectAdminUser(HttpServletRequest request, HttpServletResponse response
+			, HttpSession session, @RequestBody TbAdminUserModel tbAdminUserModel
 		) {
 		ResponseModel result = new ResponseModel();
 		
-		List<TbAdminUserModel> resultSet = tbAdminService.selectAllAdminUser();
+		List<TbAdminUserModel> resultSet = tbAdminService.selectAllAdminUser(tbAdminUserModel);
 		
 		if(resultSet!=null) {
 			try {
@@ -795,17 +807,21 @@ public class AdminController{
 						result.setCode("0000");
 					}
 					else {
-						result.setCode("0001");
+						result.setCode("9999");
+						result.setErrorMessage("최고 관리자는 블럭 할 수 없습니다.");
 					}
 				}
 				else {
-					result.setCode("0001");
+					result.setCode("0002");
+					result.setErrorMessage("관리자 정보를 조회 할 수 없습니다.");
 				}
 			}else {
 				result.setCode("0001");
+				result.setErrorMessage("비밀번호가 다릅니다.");
 			}
 		} catch (Exception e) {
 			result.setCode("0001");
+			result.setErrorMessage("비밀번호가 다릅니다.");
 		}
 		return result;
 	}

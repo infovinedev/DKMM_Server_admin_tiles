@@ -56,9 +56,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 					
 				}
 				else {
-					//response.sendRedirect("/admin/loginView.do");
-					response.sendError(403);
-					flag = false;
+					
+					String contentsType =  request.getHeader("content-type");
+					if ( contentsType != null && "application/json; charset=UTF-8".equals(contentsType)) {
+						response.sendError(403);
+						flag = false;
+					}
+					else {
+						response.sendRedirect("/admin/loginView.do?errorCode=session");
+					}
 				}
 			}
 		}

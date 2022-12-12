@@ -24,9 +24,9 @@ public interface TAdminService {
     
     int updateByAdminUserBlock(TbAdminUserModel record);
     
-    TbAdminUserModel selectByAdminUserPrimaryKey(Integer adminUserSeq);
+    TbAdminUserModel selectByAdminUserPrimaryKey(int adminUserSeq);
 
-    List<TbAdminUserModel> selectAllAdminUser();
+    List<TbAdminUserModel> selectAllAdminUser(TbAdminUserModel tbAdminUserModel);
     
     public int updateByAdminUserPassword(TbAdminUserModel tbAdminUser);
     

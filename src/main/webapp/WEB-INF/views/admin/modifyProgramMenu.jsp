@@ -24,14 +24,19 @@ $(document).ready(function () {
 		$('#jdtListMain').dataTable().fnAdjustColumnSizing();              //페이지 Resize시 dataTable 재설정
 	});
 
-	$('.panel').on('shown.bs.collapse', function (e) {
-		$('#jdtListMain').dataTable().fnAdjustColumnSizing();
-	});
 
 	fun_setJdtListProgram(function(){
 		fun_selectJdtListProgram(function(){
 
 		});
+	});
+	
+	$("#txt_searchText").on('keyup click', function () {
+		searchDataTable();	   
+	});
+	
+	$("#chk_searchTable").on('keyup click', function () {
+		searchDataTable();
 	});
 	
 	$("input:text[numberOnly]").on("keyup", function() {
@@ -43,10 +48,19 @@ $(document).ready(function () {
 	
 });
 
-
+function searchDataTable(){
+	if($('#chk_searchTable').is(':checked')){
+	      $("#jdtListMain").DataTable().search(
+	         $("#txt_searchText").val()
+	      ).draw();
+	}
+	else{
+		$("#jdtListMain").DataTable().search("").draw();
+	}
+}
 
 function fun_selectJdtListProgram(callback){
-	var searchText = $("#txt_searchText").val();
+	var searchText = ""; //$("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	
@@ -76,7 +90,7 @@ function fun_selectJdtListProgram(callback){
 function fun_setJdtListProgram(callback) {
 	jdtListMain = $("#jdtListMain").DataTable({
 		"columns": [
-			  { "title": "adminProgramSeq", "data": "adminProgramSeq" }
+			  { "title": "Seq", "data": "adminProgramSeq" }
 			, { "title": "프로그램이름", "data": "programName" }
 			, { "title": "프로그램ID", "data": "programId" }
 			, { "title": "상위ID", "data": "parentsProgramId" }
@@ -92,7 +106,7 @@ function fun_setJdtListProgram(callback) {
 		, "sort": false                     // 소팅 여부
 		, "paging": false            // Table Paging
 		, "info": false             // 'thisPage of allPage'
-		, "filter": false               // 검색 부분 사용 여부
+		, "filter": true               // 검색 부분 사용 여부
 		, "autoWidth": false
 		, "search": true
 		, "scrollXInner": "100%"
@@ -142,10 +156,26 @@ function fun_setJdtListProgram(callback) {
 			, {
 				"targets": [8]
 				, "class": "text-center"
+				, "render": function (data, type, row, meta) {
+					var insertTr = "";
+					if ( row.regDate != "" ){
+						insertTr = row.regDate.substring(0,4) + "-" + row.regDate.substring(4,6) + "-" + row.regDate.substring(6,8);
+						insertTr = insertTr + " " +  row.regDate.substring(8,10) + ":" + row.regDate.substring(10,12) + ":" + row.regDate.substring(12,14);
+					}
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [9]
 				, "class": "text-center"
+				, "render": function (data, type, row, meta) {
+					var insertTr = "";
+					if ( row.updateDate != "" ){
+						insertTr = row.updateDate.substring(0,4) + "-" + row.updateDate.substring(4,6) + "-" + row.updateDate.substring(6,8);
+						insertTr = insertTr + " " +  row.updateDate.substring(8,10) + ":" + row.updateDate.substring(10,12) + ":" + row.updateDate.substring(12,14);
+					}
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [10]
@@ -477,7 +507,7 @@ function fun_clickButtonOfDeleteProgramMenu(){
                             </div>
                             <div class="col-auto">
                             	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_insert();">프로그램등록</button>
-                                <select id="nameStopLength" class="custom-select w-auto">
+                                <select id="nameStopLength" class="custom-select w-auto" style="display:none;">
                                 	<option value="10">10</option> 
                                 	<option value="20">20</option>
                                 	<option value="50">50</option>
@@ -487,16 +517,16 @@ function fun_clickButtonOfDeleteProgramMenu(){
                          <div class="main_search_result_list">
                                 <table id="jdtListMain" class="table table-bordered">
 	                                <thead>
-	                                	<th class="text-center" width="5%">adminProgramSeq</th> 
+	                                	<th class="text-center" width="3%">adminProgramSeq</th> 
                                         <th class="text-center">금지어명</th>
-                                       	<th class="text-center" width="8%">코드</th>
-                                        <th class="text-center" width="8%">상위아이디</th>
-                                        <th class="text-center" width="5%">레벨</th>   
-                                        <th class="text-center" width="5%">정렬</th>   
+                                       	<th class="text-center" width="7%">코드</th>
+                                        <th class="text-center" width="7%">상위아이디</th>
+                                        <th class="text-center" width="4%">레벨</th>   
+                                        <th class="text-center" width="4%">정렬</th>   
                                         <th class="text-center" width="15%">경로</th>   
                                         <th class="text-center" width="5%">사용여부</th>   
-                                        <th class="text-center" width="8%">만든일자</th>   
-                                        <th class="text-center" width="8%">수정일자</th>  
+                                        <th class="text-center" width="11%">만든일자</th>   
+                                        <th class="text-center" width="11%">수정일자</th>  
                                         <th class="text-center" width="8%"></th>
 	                                </thead>
 	                                <tbody>

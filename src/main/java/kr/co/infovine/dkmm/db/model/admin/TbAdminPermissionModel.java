@@ -20,7 +20,7 @@ public class TbAdminPermissionModel {
      * @mbg.generated Mon May 10 14:15:37 KST 2021
      */
 	//@JsonIgnore
-	private Integer adminPermissionSeq;
+	private int adminPermissionSeq;
 
     /**
      *
@@ -30,7 +30,7 @@ public class TbAdminPermissionModel {
      * @mbg.generated Mon May 10 14:15:37 KST 2021
      */
 	//@JsonIgnore
-	private Integer adminUserSeq;
+	private int adminUserSeq;
 
     /**
      *
@@ -40,7 +40,7 @@ public class TbAdminPermissionModel {
      * @mbg.generated Mon May 10 14:15:37 KST 2021
      */
 	//@JsonIgnore
-	private Integer adminProgramSeq;
+	private int adminProgramSeq;
 
     /**
      *

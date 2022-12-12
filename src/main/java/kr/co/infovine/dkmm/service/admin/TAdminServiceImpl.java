@@ -95,13 +95,13 @@ public class TAdminServiceImpl implements TAdminService {
 	}
 
 	@Override
-	public TbAdminUserModel selectByAdminUserPrimaryKey(Integer adminUserSeq) {
+	public TbAdminUserModel selectByAdminUserPrimaryKey(int adminUserSeq) {
 		return tbAdminUserMapper.selectByPrimaryKey(adminUserSeq);
 	}
 
 	@Override
-	public List<TbAdminUserModel> selectAllAdminUser() {
-		return tbAdminUserMapper.selectAll();
+	public List<TbAdminUserModel> selectAllAdminUser(TbAdminUserModel tbAdminUserModel) {
+		return tbAdminUserMapper.selectAll(tbAdminUserModel);
 	}
 
 	@Override
