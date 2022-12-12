@@ -4,6 +4,7 @@
 
 var jdtListMain;
 var jdtListMainDetail;
+var jdtListModal;
 
 window.onload = function(){
 };
@@ -30,6 +31,13 @@ $(document).ready(function () {
 
 		});
 	});
+	
+	fun_setJdtListModal(function(){
+		fun_selectJdtListModal(function(){
+
+		});
+	});
+	
 	
 	$("#txt_searchText").on('keyup click', function () {
 		searchDataTable();	   
@@ -128,6 +136,23 @@ function fun_setJdtListProgram(callback) {
 			, {
 				"targets": [1]
 				, "class": "text-left"
+				, "render": function (data, type, row, meta) {
+					var insertTr = "";
+					if ( row.level != "" ){
+						if ( row.level == "1"){
+							insertTr = "<b><font Color='Blue'>" + row.programName + "</font></b>";
+						}else
+						{
+							var iLevel = row.level * 1;
+							var nbsp = "";
+							for (var i=0; i<iLevel; i++) {
+								nbsp = nbsp + "&nbsp;&nbsp;";
+							}
+							insertTr = nbsp + "▶ "  + row.programName;
+						}
+					}
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [2]
@@ -191,6 +216,92 @@ function fun_setJdtListProgram(callback) {
 	callback();
 };
 
+
+//----- 모달 그리드
+function fun_selectJdtListModal(callback){
+	var inputData = {"searchLevel" : "1"};
+	fun_ajaxPostSend("/admin/select/programMenu.do", inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					break;
+				case "0001":
+			}
+			var tempResult = JSON.parse(msg.result);
+			fun_dataTableAddData("#jdtListModal", tempResult);
+			callback();
+		}
+		else{
+			//alert('서비스가 일시적으로 원활하지 않습니다.');
+		}
+	});
+}
+
+
+function fun_setJdtListModal(callback) {
+	jdtListModal = $("#jdtListModal").DataTable({
+		"columns": [
+			  { "title": "프로그램이름", "data": "programName" }
+			, { "title": "프로그램ID", "data": "programId" }
+			, { "title": "경로", "data": "location" }
+			, { "title": "사용여부", "data": "useYn" }
+			, { "title": "선택", "data": "add" }
+			
+		]
+		, "sort": false                     // 소팅 여부
+		, "paging": false            // Table Paging
+		, "info": false             // 'thisPage of allPage'
+		, "filter": true               // 검색 부분 사용 여부
+		, "autoWidth": false
+// 		, "search": true
+// 		, "scrollXInner": "100%"
+// 			, "scrollX": "100%"             // X축 스크롤 사이즈 처리
+// 			, "scrollY": "235"              // 테이블 높이 설정 ( 테이블의 스크롤 Y축 설정 )
+		, "order": [[ 0, "desc" ]]
+		, "deferRender": true                // defer
+		, "lengthMenu": [10,20,50]           // Row Setting [-1], ["All"]
+		, "lengthChange": true
+		, "dom": 't<"bottom"p><"clear">'
+		, "language": {
+			"zeroRecords": "데이터가 없습니다."
+		}
+		, "columnDefs": [               // 컬럼 정의 부분 (컬럼별 옵션 처리)
+			 {
+				"targets": [0]
+				, "class": "text-left"
+				, "render": function (data, type, row, meta) {
+					var insertTr = "";
+					insertTr = "<b><font Color='Blue'>" + row.programName + "</font></b>";
+					return insertTr;
+                }
+			}
+			, {
+				"targets": [1]
+				, "class": "text-center"
+			}
+			, {
+				"targets": [2]
+				, "class": "text-left"
+			}
+			, {
+				"targets": [3]
+				, "class": "text-center"
+			}
+			, {
+				"targets": [4]
+				, "class": "text-center"
+				, "render": function (data, type, row, meta) {
+					var insertTr = "";
+					insertTr += '<button type="button" class="btn btn-secondary btn-sm" onclick="fun_clickJdtModal(\'' + row.programId + '\')">선택</button>'; 
+					return insertTr;
+                }
+			}
+		]
+	});
+	callback();
+};
+
+
 function formReset(){
 	$("#hdf_adminProgramSeq").val("");
 	$("#txt_programId").val("");
@@ -206,9 +317,10 @@ var gfFlag = "";
 function fun_insert(){
 	formReset();
 	$("#hdf_adminProgramSeq").val("-1");
-	$("#section1_detail_view").removeAttr("style");
+	$("#exampleModalScrollable").modal('show');
 	gfFlag = "I";
 	$("#btnCancel").hide();
+	$("#btnUpper").show();
 }
 
 
@@ -230,10 +342,18 @@ function fun_clickJdtListMain(rowIdx) {
 		$("#sel_useYn").val(row.useYn);
 		$("#txt_programSort").val(row.programSort);
 		
-		$("#section1_detail_view").removeAttr("style");
+// 		$("#section1_detail_view").removeAttr("style");
+		$("#exampleModalScrollable").modal('show');
 		
 		gfFlag = "U";
 		$("#btnCancel").show();
+		
+		if ( row.level == "1"){
+			$("#btnUpper").hide();
+		}else
+		{
+			$("#btnUpper").show();
+		}
 	}
 	else{
 		fun_insert();
@@ -306,7 +426,6 @@ function fun_validationSaveChk(){
 
 	return true;
 }
-
 
 
 function fun_clickButtonOfInsertProgramMenu() {
@@ -424,6 +543,47 @@ function fun_clickButtonOfDeleteProgramMenu(){
 	}
 	return false;
 }
+
+
+function fun_clickJdtModal(argUpperMenu){ 
+	$("#txt_parentsProgramId").val(argUpperMenu);
+	
+	var inputData = { 'programId' :argUpperMenu };
+
+	fun_ajaxPostSend("/admin/select/nextProgramId.do", inputData, true, function(msg){
+		
+		console.log(msg);	
+		
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					var jsonBean = JSON.parse(msg.result);
+					$("#txt_programId").val(jsonBean.programId);
+					$("#sel_level").val("2");
+					break;
+				case "0001":
+					break;
+			}
+		}
+		else{
+			//alert('서비스가 일시적으로 원활하지 않습니다.');
+		}
+		
+		fun_clickBtnCloseSection2();
+	});
+	
+	
+}
+
+function fun_clickButtonOfselectUpperMenu(){
+	$("#section1_detail_view").hide();
+	$("#section2_detail_view").show();
+}
+
+function fun_clickBtnCloseSection2(){
+	$("#section1_detail_view").show();
+	$("#section2_detail_view").hide();
+}
 </script>
 
 <form id="membership" method="post" enctype="multipart/form-data" action="">
@@ -515,24 +675,24 @@ function fun_clickButtonOfDeleteProgramMenu(){
                             </div>
                         </div>
                          <div class="main_search_result_list">
-                                <table id="jdtListMain" class="table table-bordered">
-	                                <thead>
-	                                	<th class="text-center" width="3%">adminProgramSeq</th> 
-                                        <th class="text-center">금지어명</th>
-                                       	<th class="text-center" width="7%">코드</th>
-                                        <th class="text-center" width="7%">상위아이디</th>
-                                        <th class="text-center" width="4%">레벨</th>   
-                                        <th class="text-center" width="4%">정렬</th>   
-                                        <th class="text-center" width="15%">경로</th>   
-                                        <th class="text-center" width="5%">사용여부</th>   
-                                        <th class="text-center" width="11%">만든일자</th>   
-                                        <th class="text-center" width="11%">수정일자</th>  
-                                        <th class="text-center" width="8%"></th>
-	                                </thead>
-	                                <tbody>
-	                                                    
-	                                </tbody>
-	                            </table>
+	                         <table id="jdtListMain" class="table table-bordered">
+	                           <thead>
+	                           	<th class="text-center" width="3%">adminProgramSeq</th> 
+	                                  <th class="text-center">금지어명</th>
+	                                 	<th class="text-center" width="7%">코드</th>
+	                                  <th class="text-center" width="7%">상위아이디</th>
+	                                  <th class="text-center" width="4%">레벨</th>   
+	                                  <th class="text-center" width="4%">정렬</th>   
+	                                  <th class="text-center" width="15%">경로</th>   
+	                                  <th class="text-center" width="5%">사용여부</th>   
+	                                  <th class="text-center" width="11%">만든일자</th>   
+	                                  <th class="text-center" width="11%">수정일자</th>  
+	                                  <th class="text-center" width="8%"></th>
+	                           </thead>
+	                           <tbody>
+	                                               
+	                           </tbody>
+	                        </table>
                         </div>
                 	</section>
                 </div>
@@ -541,7 +701,7 @@ function fun_clickButtonOfDeleteProgramMenu(){
                   <div class="modal-dialog modal-dialog-scrollable" role="document">
                     
                     <!-- 상세보기 start-->
-                    <section id="section1_detail_view" style="display:none;">
+                    <section id="section1_detail_view">
                         <div class="modal-content" style="width: 1200px;">
                          <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalScrollableTitle">상세정보</h5>
@@ -555,17 +715,21 @@ function fun_clickButtonOfDeleteProgramMenu(){
                                   <col style="width:15%">
                                   <col style="width:35%">
                                   <col style="width:15%">
-                                  <col style="width:35%">
+                                  <col style="width:25%">
+                                  <col style="width:10%">
                                </colgroup>
                                <tbody>
                                   <tr> 
                                      <th>프로그램아이디</th>
                                      <td>
-                                     	<input type="text" id="txt_programId" class="form-control" placeholder="Ex) 10000001" />
+                                     	<input type="text" id="txt_programId" class="form-control" placeholder="Ex) 10000001" numberOnly />
                                      </td>
                                      <th>상위메뉴아이디</th>
                                      <td>
-                                     	<input type="text" ID="txt_parentsProgramId" class="form-control" placeholder="Ex) 10000001" />
+                                     	<input type="text" ID="txt_parentsProgramId" class="form-control" placeholder="Ex) 10000001" style="width:70%;" numberOnly />
+                                     </td>
+                                     <td>
+                                     	<button type="button" class="btn btn-primary" id="btnUpper"  onclick="return fun_clickButtonOfselectUpperMenu();">선택</button>
                                      </td>
                                   </tr>
                                   
@@ -575,7 +739,7 @@ function fun_clickButtonOfDeleteProgramMenu(){
                                      	<input type="text" ID="txt_programName" class="form-control" placeholder="Ex) 프로그램메뉴관리" />
                                      </td>
                                      <th>경로</th>
-                                     <td>
+                                     <td colspan="2">
                                      	<input type="text" ID="txt_location" class="form-control" placeholder="Ex) ../admin/modifyProgram.do">
                                      </td>
                                   </tr>
@@ -587,12 +751,12 @@ function fun_clickButtonOfDeleteProgramMenu(){
                                             <option value="0">--선택--</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
+<!--                                             <option value="3">3</option> -->
+<!--                                             <option value="4">4</option> -->
                                         </select>
                                      </td>
                                      <th>순서</th>
-                                     <td>
+                                     <td colspan="2">
                                      	<input type="text" ID="txt_programSort" class="form-control" numberOnly />
                                      </td>
                                   </tr>
@@ -607,7 +771,7 @@ function fun_clickButtonOfDeleteProgramMenu(){
                                         </select>
                                      </td>
                                      <th>로그인<br>비밀번호</th>
-                                     <td>
+                                     <td colspan="2">
                                      	<input type="password" id="txt_adminPassword" class="form-control">
                                      </td>
                                   </tr>
@@ -622,9 +786,37 @@ function fun_clickButtonOfDeleteProgramMenu(){
                           </div>
                         </div>
                     </section>
+                    <section id="section2_detail_view" style="display:none;">
+                        <div class="modal-content" style="width: 1200px;">
+                         <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">상세정보</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                          	<table id="jdtListModal" class="table table-bordered">
+	                           <thead>
+	                                  <th class="text-center">프로그램이름</th>
+	                                  <th class="text-center" width="15%">프로그램ID</th>
+	                                  <th class="text-center" width="15%">경로</th>   
+	                                  <th class="text-center" width="10%">사용여부</th>   
+	                                  <th class="text-center" width="10%"></th>
+	                           </thead>
+	                           <tbody>
+	                                               
+	                           </tbody>
+	                        </table>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="return fun_clickBtnCloseSection2();">닫기</button>
+                          </div>
+                        </div>
+                    </section>
                   </div>
                 </div>
                 <!-- 상세보기 모달창 end -->
+                
             </div>
         </div>
     </div>

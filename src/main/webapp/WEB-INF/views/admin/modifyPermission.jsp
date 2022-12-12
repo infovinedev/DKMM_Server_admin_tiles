@@ -556,7 +556,7 @@ function fun_clickButtonOfCancel() {
                                     	<th>검색어</th>
                                         <td colspan="3">
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:84%;" class="form-control" placeholder="" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <input type="text" style="width:84%;" class="form-control" placeholder="사용자정보" id="txt_searchText" name="searchText" onKeypress="" />
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>
@@ -575,7 +575,7 @@ function fun_clickButtonOfCancel() {
                             <div class="col-auto">
                             </div>
                             <div class="col-auto">
-                            	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_insert();">코드등록</button>
+<!--                             	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_insert();">코드등록</button> -->
                                 <select id="nameStopLength" class="custom-select w-auto" style="display:none;">
                                 	<option value="10">10</option> 
                                 	<option value="20">20</option>

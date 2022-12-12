@@ -485,7 +485,7 @@ function fun_clickButtonInsertAdminUser(){
                                         <th>검색어</th>
                                         <td colspan="3">
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:94%;" class="form-control" placeholder="프로그램이름" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <input type="text" style="width:94%;" class="form-control" placeholder="사용자정보" id="txt_searchText" name="searchText" onKeypress="" />
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>

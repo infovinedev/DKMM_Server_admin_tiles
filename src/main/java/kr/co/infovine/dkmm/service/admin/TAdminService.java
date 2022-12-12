@@ -38,6 +38,8 @@ public interface TAdminService {
 	
 	public List<TbAdminProgramModel> selectAllProgramMenu(TbAdminProgramModel programMenu);
 	
+	TbAdminProgramModel selectNextProgramId(TbAdminProgramModel programMenu);
+	 
 	public int insertByProgramMenu(TbAdminProgramModel record);
 	
 	public int updateByProgramMenu(TbAdminProgramModel record);

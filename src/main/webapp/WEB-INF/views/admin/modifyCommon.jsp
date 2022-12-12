@@ -516,7 +516,7 @@ function fun_clickButtonInsertCommonCode(){
                                         <th>검색어</th>
                                         <td>
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:84%;" class="form-control" placeholder="프로그램이름" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <input type="text" style="width:84%;" class="form-control" placeholder="코드정보" id="txt_searchText" name="searchText" onKeypress="" />
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>

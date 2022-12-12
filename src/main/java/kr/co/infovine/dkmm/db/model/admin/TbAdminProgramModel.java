@@ -112,4 +112,6 @@ public class TbAdminProgramModel {
 	private String searchText;
 	private String searchStartDt;
 	private String searchEndDt;
+	
+	private String searchLevel;
 }

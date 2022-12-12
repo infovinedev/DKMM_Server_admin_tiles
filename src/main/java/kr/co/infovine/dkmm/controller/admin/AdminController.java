@@ -406,6 +406,29 @@ public class AdminController{
 	}
 	// end region
 	
+	@RequestMapping(value="/select/nextProgramId.do", method = RequestMethod.POST
+			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
+	@ResponseBody
+	public ResponseModel selectNextProgramId(HttpServletRequest request, HttpServletResponse response, HttpSession session
+			, @RequestBody TbAdminProgramModel programMenu
+		) {
+		ResponseModel result = new ResponseModel();
+		
+		TbAdminProgramModel tbAdminProgramModel = tbAdminService.selectNextProgramId(programMenu);
+		
+		try {
+			result.setCode("0000");
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonBean = mapper.writeValueAsString(tbAdminProgramModel);
+			result.setResult(jsonBean);
+		} catch (Exception e) {
+			result.setCode("0001");
+			log.error(e.getMessage());
+		}
+		
+		return result;
+	}
+	
 	
 	// region 설명: 사용자의 허가를 주기위한 메뉴 불러오기
 	/**

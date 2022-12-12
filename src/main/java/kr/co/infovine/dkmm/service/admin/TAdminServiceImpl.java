@@ -68,7 +68,12 @@ public class TAdminServiceImpl implements TAdminService {
 	public List<TbAdminProgramModel> selectAllProgramMenu(TbAdminProgramModel programMenu) {
 		return tbAdminProgramMapper.selectAll(programMenu);
 	}
-
+	
+	@Override
+	public TbAdminProgramModel selectNextProgramId(TbAdminProgramModel programMenu) {
+		return tbAdminProgramMapper.selectNextProgramId(programMenu);
+	}
+	
 	@Override
 	public int insertByProgramMenu(TbAdminProgramModel record) {
 		return tbAdminProgramMapper.insert(record);

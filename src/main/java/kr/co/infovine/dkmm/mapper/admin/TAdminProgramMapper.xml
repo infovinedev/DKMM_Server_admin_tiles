@@ -99,6 +99,17 @@
     <if test='searchText neq null and !"".equals(searchText)'>
       AND program_name LIKE CONCAT('%', #{searchText}, '%')
     </if>
+    <if test='searchLevel neq null and !"".equals(searchLevel)'>
+      AND level = #{searchLevel}
+    </if>
     order by program_sort desc, program_id asc
   </select>
+  
+  <select id="selectNextProgramId" resultMap="BaseResultMap">
+    select MAX(CAST (program_id AS integer) ) + 1 as program_id
+    from t_admin_program
+    where 1=1
+    and (program_id = #{programId} OR parents_program_id = #{programId})
+  </select>
+  
 </mapper>

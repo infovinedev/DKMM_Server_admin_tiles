@@ -43,4 +43,6 @@ public interface TAdminProgramMapper {
      * @mbg.generated Mon May 10 14:15:22 KST 2021
      */
     int updateByPrimaryKey(TbAdminProgramModel record);
+    
+    TbAdminProgramModel selectNextProgramId(TbAdminProgramModel record);
 }
