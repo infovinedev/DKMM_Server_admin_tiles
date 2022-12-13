@@ -137,7 +137,8 @@ public class BaseController {
 			String str = json.getString("admin");
 			if(str.equals("kdh")) {
 //				storeMetaBatchService.batchStoreOrgPstmtInsert();
-				storeMetaBatchService.batchStoreOrgBulkInsert();
+//				storeMetaBatchService.batchStoreOrgBulkInsert();
+				storeMetaBatchService.batchStoreOrgBulkInsertToExcelStreaming();
 				result.setCode("0000");
 			}
 		}

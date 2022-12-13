@@ -13,6 +13,10 @@ public interface StoreMetaBatchService {
 	
 	void getCoordinatesToStoreInfo(); //store info
 	
+	@Deprecated
 	void batchStoreOrgBulkInsert(); //store org 엑셀 업로드
+	@Deprecated
 	void batchStoreOrgPstmtInsert() throws SQLException; //store org 엑셀 업로드
+	
+	void batchStoreOrgBulkInsertToExcelStreaming(); //store org 엑셀 업로드
 }

@@ -32,7 +32,8 @@ public class BatchStoreOrgExcelUploadService extends QuartzJobBean implements In
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		log.info("========= 상점 ORG EXCEL UPLOAD Batch =====");
 		try {
-			storeMetaBatchService.batchStoreOrgBulkInsert();
+//			storeMetaBatchService.batchStoreOrgBulkInsert();
+			storeMetaBatchService.batchStoreOrgBulkInsertToExcelStreaming();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

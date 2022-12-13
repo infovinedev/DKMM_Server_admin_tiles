@@ -1,6 +1,9 @@
 package kr.co.infovine.dkmm.service.store;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,6 +16,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +32,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.monitorjbl.xlsx.StreamingReader;
+
+//import com.monitorjbl.xlsx.StreamingReader;
+
 import kr.co.infovine.dkmm.db.model.common.TCommonCodeModel;
 import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 import kr.co.infovine.dkmm.db.model.store.TStoreInfoOrgExcel;
@@ -32,6 +43,7 @@ import kr.co.infovine.dkmm.mapper.common.TCommonCodeMapper;
 import kr.co.infovine.dkmm.mapper.store.TStoreInfoMapper;
 import kr.co.infovine.dkmm.mapper.store.TStoreInfoOrgExcelMapper;
 import kr.co.infovine.dkmm.util.ExcelSheetHandler;
+//import kr.co.infovine.dkmm.util.ExcelSheetHandler;
 import lombok.extern.slf4j.Slf4j;
 import reactor.netty.http.client.HttpClient;
 
@@ -407,6 +419,13 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	//end region
 	
 	
+	/* 	
+	 *  Sax를 이용하여 Excel을 Xml로 변환 후 사용하는 상점 Upload 배치. XML 변환시 CPU 사용율이 높아지고 DB 입력시에는 낮아진다. 시간이 조금더 단축 된다
+	 *  전체 등록 상점 건수 : 2548326 등록시 2132초(35분)
+	 * 	해당 Method는 xlsx-streamer라이브러리를 사용할 경우 정상 동작 하지않기에 @Deprecated 처리
+	 *  상세내용은 ExcelSheetHandler 객체의 주석 참조
+	 */
+	@Deprecated
 	@Override
 	public void batchStoreOrgBulkInsert() {
 		
@@ -458,9 +477,11 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 				    		}
 				    	}
 				    	
-				    	if ( cellData.indexOf("47000") > -1) {
-				    		log.info("count >>>" + count);
-				    		log.info("cellCount >>>" + cellCount);
+				    	if ( cellCount == 0 ) {
+				    		if ( "번호".equals(cellData.replaceAll(" ", ""))   ) {
+				    			nullChk = false;
+					    		break;
+				    		}
 				    	}
 				    	
 						if ( cellCount == 0 ) orgBean.setSeq(cellData);
@@ -523,14 +544,12 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 						totalCount++;
 					}
 				    
-//				    log.info("list >>" + list.size());
-				    
-				    if ( count%500 == 0) {
-				    	
-//				    	log.info("list.size >>>" + list.size());
-				    	
-				    	tStoreInfoOrgExcelMapper.bulkInsert(list);
-						list.clear();
+				    if ( count != 0 && count%500 == 0) {
+				    	if ( list.size() > 0) {
+				    		log.info("count ==>" + count);
+				    		tStoreInfoOrgExcelMapper.bulkInsert(list);
+							list.clear();
+				    	}
 					}
 				    
 				    if ( count%10000 == 0) {
@@ -574,6 +593,12 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 		
 	}
 	
+	/* 	
+	 *  Mybatis가 아닌 PreparedStatement 방식으로 DB 등록
+	 * 	해당 Method는 Sax방식으로 작성 되어있고 xlsx-streamer라이 브러리를 사용할 경우 정상 동작 하지않기에 @Deprecated 처리
+	 *  상세내용은 ExcelSheetHandler 객체의 주석 참조
+	 */
+	@Deprecated
 	@Override
 	public void batchStoreOrgPstmtInsert() throws SQLException{
 		
@@ -817,5 +842,188 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 		    if(con != null) con.close();
 		}
 	}
+	
+	/* 	
+	 * 	xlsx-streamer 를 사용한 상점 Upload 배치. CPU 사용율이 높지 않게 유지 되지만 시간이 조금 더 걸림.
+	 *  전체 등록 상점 건수 : 2548326 등록시 3012초(50분)
+	 */
+	@Override
+	public void batchStoreOrgBulkInsertToExcelStreaming() {
+		
+		log.info( "==========  batchStoreOrgBulkInsertToExcelStreaming : STORE META DATA Bulk INSERT - MyBatis =============" );
+		
+		InputStream is = null;
+		
+		try {
+			
+			log.info( "Store Meta Excel File Location  : " + storeExcelDir );
+			
+			File dir = new File(storeExcelDir);
+		    File files[] = dir.listFiles();
+			
+		    log.info( " :::::::: 처리 파일 건수 : " + files.length );
+			
+		    if ( files.length == 0 ) return;
+			
+		    long start = System.currentTimeMillis();
+		    
+		    //Step1 - 엑셀 Data 불러오기
+			// - 엑셀 파일은 여러개일수 있으며 시작시 디렉토리의 파일 명을 Array - For 문을 이용하여 Loop
+		    long totalCount = 0;
+		    
+			for (int i=0; i<files.length; i++) {
+				
+				log.info(" ====== 엑셀 파일 등록 처리 시작  : " + files[i] );
+				
+				is = new FileInputStream(storeExcelDir + "\\" + files[i].getName());
+				
+				Workbook workbook = StreamingReader.builder()
+				          .rowCacheSize(100)
+				          .bufferSize(4096)
+				          .open(is);
+				
+				long count = 0; //처리 카운트
+				List<TStoreInfoOrgExcel> list = new ArrayList<TStoreInfoOrgExcel>();
+				
+				for (Sheet sheet : workbook){
+//				    System.out.println(sheet.getSheetName());
+					for (Row row : sheet) {
+				    	boolean nullChk = true;
+				    	int cellCount = 0;
+				    	TStoreInfoOrgExcel orgBean = new TStoreInfoOrgExcel();
+				    	 
+				    	for (Cell cell : row) {
+//				    		 log.info(cell.getStringCellValue());
+				    		 String cellData = cell.getStringCellValue();
+					    
+						    //store_seq, manage_no, status_type 등이 값이 없을 경우 해당 ROW 등록 하지않음
+					    	if ( cellCount == 0 || cellCount == 4 || cellCount == 7 || cellCount == 8 ) {
+					    		if ( cellData.replaceAll(" ", "") == "") {
+					    			nullChk = false;
+						    		break;
+					    		}
+					    	}
+					    	
+					    	if ( cellCount == 0 ) {
+					    		if ( "번호".equals(cellData.replaceAll(" ", ""))   ) {
+					    			nullChk = false;
+						    		break;
+					    		}
+					    	}
+					    	
+					    	if ( cellCount == 0 ) orgBean.setSeq(cellData);
+							if ( cellCount == 1 ) orgBean.setServiceNm(cellData);
+							if ( cellCount == 2 ) orgBean.setServiceId(cellData);
+							if ( cellCount == 3 ) orgBean.setAreaCode(cellData);
+							if ( cellCount == 4 ) orgBean.setManageNo(cellData);
+							if ( cellCount == 5 ) orgBean.setApprovalDt(cellData);
+							if ( cellCount == 6 ) orgBean.setCancelDt(cellData);
+							if ( cellCount == 7 ) orgBean.setStatusType(cellData);
+							if ( cellCount == 8 ) orgBean.setStatusNm(cellData);
+							if ( cellCount == 9 ) orgBean.setStatusCode(cellData);
+							if ( cellCount == 10 ) orgBean.setStatusNm2(cellData);
+							if ( cellCount == 11 ) orgBean.setCloseDt(cellData);
+							if ( cellCount == 12 ) orgBean.setHolidayStartDt(cellData);
+							if ( cellCount == 13 ) orgBean.setHolidayEndDt(cellData);
+							if ( cellCount == 14 ) orgBean.setReopenDt(cellData);
+							if ( cellCount == 15 ) orgBean.setTel(cellData);
+							if ( cellCount == 16 ) orgBean.setAreaSize(cellData);
+							if ( cellCount == 17 ) orgBean.setZip(cellData);
+							if ( cellCount == 18 ) orgBean.setAddr(cellData);
+							if ( cellCount == 19 ) orgBean.setRoadAddr(cellData);
+							if ( cellCount == 20 ) orgBean.setRoadZip(cellData);
+							if ( cellCount == 21 ) orgBean.setStoreNm(cellData);
+							if ( cellCount == 22 ) orgBean.setUptDt(cellData);
+							if ( cellCount == 23 ) orgBean.setSqlType(cellData);
+							if ( cellCount == 24 ) orgBean.setDataUptDt(cellData);
+							if ( cellCount == 25 ) orgBean.setCtgryNm(cellData);
+							if ( cellCount == 26 ) orgBean.setPositionX(cellData.trim());
+							if ( cellCount == 27 ) orgBean.setPositionY(cellData.trim());
+							if ( cellCount == 28 ) orgBean.setCtgryNm2(cellData);
+							if ( cellCount == 29 ) orgBean.setManCnt(cellData);
+							if ( cellCount == 30 ) orgBean.setWomanCnt(cellData);
+							if ( cellCount == 31 ) orgBean.setAreaType(cellData);
+							if ( cellCount == 32 ) orgBean.setDegreeType(cellData);
+							if ( cellCount == 33 ) orgBean.setWaterType(cellData);
+							if ( cellCount == 34 ) orgBean.setPersonCnt1(cellData);
+							if ( cellCount == 35 ) orgBean.setPersonCnt2(cellData);
+							if ( cellCount == 36 ) orgBean.setPersonCnt3(cellData);
+							if ( cellCount == 37 ) orgBean.setPersonCnt4(cellData);
+							if ( cellCount == 38 ) orgBean.setPersonCnt5(cellData);
+							if ( cellCount == 39 ) orgBean.setStoreBuyType(cellData);
+							if ( cellCount == 40 ) orgBean.setStoreMoney(cellData);
+							if ( cellCount == 41 ) orgBean.setStoreMonthMoney(cellData);
+							if ( cellCount == 42 ) orgBean.setManyUseYn(cellData);
+							if ( cellCount == 43 ) orgBean.setAreaTot(cellData);
+							if ( cellCount == 44 ) orgBean.setCultureNo(cellData);
+							if ( cellCount == 45 ) orgBean.setCultureMenu(cellData);
+							if ( cellCount == 46 ) orgBean.setHompage(cellData);
+							if ( cellCount == 47 ) orgBean.setProcessYn("Y");
+					    	
+							cellCount++;
+				    	}
+				      
+				    	if ( nullChk ) {
+				    		list.add(orgBean);
+							count++;
+							totalCount++;
+					    }
+				    	 
+				    	if ( count != 0 && count%500 == 0) {
+				    		if ( list.size() > 0) {
+				    			log.info("count ==>" + count);
+				    			tStoreInfoOrgExcelMapper.bulkInsert(list);
+					    		list.clear();
+				    		}
+				    	 }
 
+				    	 if ( count%10000 == 0) {
+				    		 log.info(" :::::: 현재 처리 건수 : " + count );
+				    		 log.info(" :::::: 전체 처리 건수 : " + totalCount );
+				    	 }
+					}
+				    
+					if ( list.size() > 0) {
+						tStoreInfoOrgExcelMapper.bulkInsert(list);
+						list.clear();
+					}
+				}
+				
+				if ( list.size() > 0) {
+					tStoreInfoOrgExcelMapper.bulkInsert(list);
+					list.clear();
+				}
+				
+				log.info(" :::::: 등록 상점 건수 : " + count );
+				log.info(" ====== 파일 처리 완료  : " + files[i] );
+				
+			}
+			
+			log.info(" :::::: 처리 파일 갯수 : " + files.length );
+			log.info(" :::::: 전체 등록 상점 건수 : " + totalCount );
+			log.info(" :::::: ALL STEP PROC TIME(초): " + ( System.currentTimeMillis() - start)/1000  + "초" );
+			log.info(" :::::: ALL STEP PROC TIME(분) : " + ( System.currentTimeMillis() - start)/1000/60  + "분" );
+			
+			//Step2 기존 백업 디렉토리의 모든 파일을 삭제하고 작업이 끝난 파일들을 백업 디렉토리로 이동
+			log.info(" :::::: File Backup Thread START " );
+			FileBackupThread thread = new FileBackupThread(storeExcelDir, storeExcelBackDir);
+			thread.start();
+			
+		}catch (Exception e) {
+			log.error("");
+			log.error(" =================== batchStoreOrgBulkInsert ERROR================== ");
+			e.printStackTrace();
+			log.error(" ===================================================================== ");
+			log.error("");
+			
+		}finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+//				e.printStackTrace();
+			}
+		}
+		
+	}
 }

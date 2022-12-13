@@ -34,7 +34,7 @@ public class FileBackupThread extends Thread{
 			else{
 				File[] fileBackupList = backupDirectory.listFiles();
 				
-				System.out.println( "fileBackupList.length >> " + fileBackupList.length);
+				log.info( "fileBackupList.length >> " + fileBackupList.length);
 				
 				if ( fileBackupList.length > 0) {				//파일목록이 있을 경우에만 삭제
 					for (int i = 0; i < fileBackupList.length; i++) {

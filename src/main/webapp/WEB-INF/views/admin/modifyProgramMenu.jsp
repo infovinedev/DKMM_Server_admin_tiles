@@ -9,6 +9,52 @@ var jdtListModal;
 window.onload = function(){
 };
 
+//모달 위치 초기화 - 모달 창이 열리기 전에 실행
+$(document).on('show.bs.modal', '.modal', function(){
+    // 화면에 보여지는 모달수 추적
+    if ( typeof( $('body').data( 'fv_open_modals' ) ) == 'undefined' ) {
+        $('body').data( 'fv_open_modals', 0 );
+    }
+
+    // 이 모달의 z-index 속성이 정해져 있다면 무시
+    if ($(this).hasClass('fv-modal-stack')) {
+        return;
+    }
+
+    $(this).addClass('fv-modal-stack');
+    $('body').data('fv_open_modals', $('body').data('fv_open_modals' ) + 1 );
+    $(this).css('z-index', 1040 + (10 * $('body').data('fv_open_modals' )));
+    $('.modal-backdrop').not('.fv-modal-stack').css('z-index', 1039 + (10 * $('body').data('fv_open_modals')));
+    $('.modal-backdrop').not('fv-modal-stack').addClass('fv-modal-stack'); 
+    
+    // 모달 위치 초기화
+    $(this).find($('.modal-dialog')).css('top',100);
+    $(this).find($('.modal-dialog')).css('right',0);
+    $(this).find($('.modal-dialog')).css('left',0);
+
+    // 모달창 드래그 기능
+    $(this).find($('.modal-dialog')).draggable({ handle: ".modal-header" });
+
+})
+
+// 모달창이 완전히 사라진 후 호출
+$(document).on('hidden.bs.modal', '.modal', function(e){
+    $(this).removeClass( 'fv-modal-stack' );
+    $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) - 1 );
+});
+
+// 클릭한 모달의 화면 우선순위
+$(document).on('click', '.modal', function(){
+    $(this).css('z-index', 1040 + (10 * $('body').data('fv_open_modals' )));  
+    $('body').data('fv_open_modals', $('body').data('fv_open_modals' ) + 1 ); 
+    
+    if ( typeof( $('body').data( 'fv_open_modals' ) ) == 'undefined' ) {
+        $('body').data( 'fv_open_modals', 0 );
+    }
+});
+
+
+
 $(document).ready(function () {
 	var ua = navigator.userAgent;
 	var checker = {
@@ -183,7 +229,7 @@ function fun_setJdtListProgram(callback) {
 				, "class": "text-center"
 				, "render": function (data, type, row, meta) {
 					var insertTr = "";
-					if ( row.regDate != "" ){
+					if ( row.regDate != "" && row.regDate != null){
 						insertTr = row.regDate.substring(0,4) + "-" + row.regDate.substring(4,6) + "-" + row.regDate.substring(6,8);
 						insertTr = insertTr + " " +  row.regDate.substring(8,10) + ":" + row.regDate.substring(10,12) + ":" + row.regDate.substring(12,14);
 					}
@@ -195,7 +241,7 @@ function fun_setJdtListProgram(callback) {
 				, "class": "text-center"
 				, "render": function (data, type, row, meta) {
 					var insertTr = "";
-					if ( row.updateDate != "" ){
+					if ( row.updateDate != "" && row.updateDate != null ){
 						insertTr = row.updateDate.substring(0,4) + "-" + row.updateDate.substring(4,6) + "-" + row.updateDate.substring(6,8);
 						insertTr = insertTr + " " +  row.updateDate.substring(8,10) + ":" + row.updateDate.substring(10,12) + ":" + row.updateDate.substring(12,14);
 					}
@@ -321,6 +367,7 @@ function fun_insert(){
 	gfFlag = "I";
 	$("#btnCancel").hide();
 	$("#btnUpper").show();
+	fun_clickBtnCloseSection2();
 }
 
 
@@ -343,6 +390,9 @@ function fun_clickJdtListMain(rowIdx) {
 		$("#txt_programSort").val(row.programSort);
 		
 // 		$("#section1_detail_view").removeAttr("style");
+
+		fun_clickBtnCloseSection2();
+		
 		$("#exampleModalScrollable").modal('show');
 		
 		gfFlag = "U";
@@ -496,7 +546,7 @@ function fun_clickButtonOfDeleteProgramMenu(){
 		alert("프로그램을 선택해주세요");
 		return false;
 	}
-	if (confirm('프로그램을 사용하지 않으시겠습니까?')){
+	if (confirm('프로그램을 삭제 하시시겠습니까?\n프로그램이 완전 삭제 되니 사용여부를 N으로 수정하시길 권고 합니다.')){
 		var password = $("#txt_adminPassword").val();
 		var shaPassword = "";
 		if(password != ""){
@@ -573,6 +623,14 @@ function fun_clickJdtModal(argUpperMenu){
 	});
 	
 	
+}
+
+function fun_modaltest(){
+	$('#secondModal').modal('show');
+}
+
+function fun_modaltestClose(){
+	$('#secondModal').modal('hide');
 }
 
 function fun_clickButtonOfselectUpperMenu(){
@@ -816,7 +874,6 @@ function fun_clickBtnCloseSection2(){
                   </div>
                 </div>
                 <!-- 상세보기 모달창 end -->
-                
             </div>
         </div>
     </div>
