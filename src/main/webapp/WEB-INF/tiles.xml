@@ -15,6 +15,9 @@
    <definition name="admin/login" template="/WEB-INF/views/admin/login.jsp">					<!-- 로그인시 tiles 필요없음 -->
    </definition>
    
+   <definition name="test/testPage" template="/WEB-INF/views/test/testPage.jsp">					<!-- test tiles 필요없음 -->
+   </definition>
+   
    <definition name="admin/firstPassword" template="/WEB-INF/views/admin/firstPassword.jsp">					<!-- 첫 로그인시 패스워드 변경 tiles 필요없음 -->
    </definition>
    

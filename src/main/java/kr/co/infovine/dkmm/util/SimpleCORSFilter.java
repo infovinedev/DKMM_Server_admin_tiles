@@ -42,7 +42,7 @@ public class SimpleCORSFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		RereadableRequestWrapper rereadableRequestWrapper = new RereadableRequestWrapper(request);
-		trackingAdminLog(rereadableRequestWrapper);
+		//trackingAdminLog(rereadableRequestWrapper);
 			
 		chain.doFilter(rereadableRequestWrapper, res);
 
