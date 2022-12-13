@@ -2,6 +2,7 @@ package kr.co.infovine.dkmm.mapper.faq;
 
 import java.util.List;
 
+import kr.co.infovine.dkmm.db.model.board.TBoard;
 import kr.co.infovine.dkmm.db.model.faq.TFaq;
 
 public interface TFaqMapper {
@@ -47,4 +48,7 @@ public interface TFaqMapper {
     
     //FAQ 전체 조회
     List<TFaq> selectFaqAllList(TFaq faq);
+    
+    //FAQ 상세보기
+    TFaq selectFaqDetail(TFaq faq);
 }

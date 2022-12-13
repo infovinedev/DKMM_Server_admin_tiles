@@ -290,9 +290,11 @@ function fun_save(type){
                                         <td>
                                             <select class="form-control" id="search_faqDiv">
                                                 <option value="">선택</option>
-                                                <option value="INFO">FAQ</option>
-                                                <option value="UPDATE">업데이트</option>
+                                                <option value="POLICY" >운영정책</option>  
+                                                <option value="ERROR">오류</option>
                                                 <option value="EVENT">이벤트</option>
+                                                <option value="ROLE">기능</option>
+                                                <option value="OTHER">기타</option>
                                             </select>
                                         </td>
                                         <th>검색어</th>
@@ -425,10 +427,12 @@ function fun_save(type){
                                      <th>구분</th>
                                      <td>
                                        <select class="form-control" id="search_up_faqDiv">
-                                                <option value="">선택</option>
-                                                <option value="INFO">FAQ</option>
-                                                <option value="UPDATE">업데이트</option>
-                                                <option value="EVENT">이벤트</option>
+                                           <option value="">선택</option>
+                                           <option value="POLICY" >운영정책</option>  
+                                           <option value="ERROR">오류</option>
+                                           <option value="EVENT">이벤트</option>
+                                           <option value="ROLE">기능</option>
+                                           <option value="OTHER">기타</option>
                                        </select>
                                          <input class="form-control" type="hidden" id="hidden_up_faqSeq" readOnly/>
                                      </td>

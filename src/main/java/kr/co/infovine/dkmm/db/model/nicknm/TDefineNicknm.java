@@ -2,6 +2,8 @@ package kr.co.infovine.dkmm.db.model.nicknm;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 @Getter
@@ -68,7 +70,7 @@ public class TDefineNicknm {
      *
      * @mbg.generated Fri Nov 25 11:29:08 KST 2022
      */
-    private Long insSeq;
+    private int insSeq;
 
     /**
      *
@@ -77,6 +79,7 @@ public class TDefineNicknm {
      *
      * @mbg.generated Fri Nov 25 11:29:08 KST 2022
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Date insDt;
 
     /**
@@ -86,7 +89,7 @@ public class TDefineNicknm {
      *
      * @mbg.generated Fri Nov 25 11:29:08 KST 2022
      */
-    private Long uptSeq;
+    private int uptSeq;
 
     /**
      *
@@ -95,6 +98,7 @@ public class TDefineNicknm {
      *
      * @mbg.generated Fri Nov 25 11:29:08 KST 2022
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Date uptDt;
 
     /**
@@ -109,7 +113,10 @@ public class TDefineNicknm {
     //추가
     private String rowNum;
     private String workNm;
-    
+    private String fileNm;
+    private String fileSaveNm;
+    private String type;
+
     //조건
     private String searchText;
     private String searchType;

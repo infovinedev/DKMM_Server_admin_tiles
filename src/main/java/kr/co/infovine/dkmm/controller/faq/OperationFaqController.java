@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
+import kr.co.infovine.dkmm.api.model.base.SessionModel;
 import kr.co.infovine.dkmm.controller.map.MapController;
 import kr.co.infovine.dkmm.db.model.faq.TFaq;
 import kr.co.infovine.dkmm.service.faq.OperationFaqService;
@@ -60,15 +62,14 @@ public class OperationFaqController {
 		}
 		return result;
 	}
-	/*
 	@RequestMapping(value = "/select/faqListDetail.do", method = RequestMethod.POST
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public ResponseModel selectRealestateParcelInfoDetail(HttpServletRequest request, HttpServletResponse response 
-	,@RequestBody Tfaq faq) {
+	,@RequestBody TFaq faq) {
 	ResponseModel result = new ResponseModel();
 		try {
-			Tfaq model = operationfaqService.selectfaqListDetail(faq);
+			TFaq model = operationfaqService.selectFaqListDetail(faq);
 			ObjectMapper mapper = new ObjectMapper();
 			String faqlInfoDetail = mapper.writeValueAsString(model);
 			result.setCode("0000");
@@ -79,22 +80,27 @@ public class OperationFaqController {
 		return result;
 	}
 	
-	
 	//저장 수정 삭제.
 	@RequestMapping(value = "/save/faqSave.do", method = RequestMethod.POST 
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody 
 	public ResponseModel insertSavafaq(HttpServletRequest request, HttpServletResponse response 
-	,@RequestBody Tfaq faq) {
+			,HttpSession session,@RequestBody TFaq faq) {
 	ResponseModel result = new ResponseModel();
 		try {
+			SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
 			if(faq.getType().equals("I")) {
-				operationfaqService.insertfaq(faq);
+				faq.setInsSeq(sessionModel.getAdminUserSeq());
+				operationfaqService.insertFaq(faq);
+				
+				
 			}else if(faq.getType().equals("U")) {
-				operationfaqService.updatefaq(faq);
+				faq.setUptSeq(sessionModel.getAdminUserSeq());
+				operationfaqService.updateFaq(faq);
+				
 			}else {
-				int faqSeq = faq.getfaqSeq();
-				operationfaqService.deletefaq(faqSeq);
+				int faqSeq = faq.getFaqSeq();
+				operationfaqService.deleteFaq(faqSeq);
 			}
 			result.setErrorMessage("success"); 
 		} catch (Exception e) {
@@ -103,5 +109,4 @@ public class OperationFaqController {
 		} 
 		return result;
 	}
-	*/
 }

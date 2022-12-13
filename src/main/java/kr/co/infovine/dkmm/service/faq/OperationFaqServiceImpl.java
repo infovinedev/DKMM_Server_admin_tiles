@@ -21,24 +21,25 @@ public class OperationFaqServiceImpl implements OperationFaqService{
 	public List<TFaq> selectFaqAllList(TFaq faq) {
 		return faqMapper.selectFaqAllList(faq);
 	}
-	/*
+	
 	@Override
-	public TBoard selectboardListDetail(TBoard board) {
-		return boardMapper.selectBoardDetail(board);
+	public TFaq selectFaqListDetail(TFaq faq) {
+		return faqMapper.selectFaqDetail(faq);
+	}
+	
+	
+	@Override 
+	public int insertFaq(TFaq faq) {
+		return faqMapper.insert(faq); 
 	}
 	
 	@Override 
-	public int insertBoard(TBoard board) {
-		return boardMapper.insert(board); 
+	public int updateFaq(TFaq faq) {
+		return faqMapper.updateByPrimaryKey(faq); 
 	}
 	
 	@Override 
-	public int updateBoard(TBoard board) {
-		return boardMapper.updateByPrimaryKey(board); 
+	public int deleteFaq(Integer faqSeq) {
+		return faqMapper.deleteByPrimaryKey(faqSeq); 
 	}
-	
-	@Override 
-	public int deleteBoard(Integer boardSeq) {
-		return boardMapper.deleteByPrimaryKey(boardSeq); 
-	}*/
 }

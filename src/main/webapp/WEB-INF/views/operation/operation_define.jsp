@@ -134,7 +134,7 @@ function fun_btnInsert() {
 			$('#sel_add_nickSeq').append($('<option></option>').val("").html("선택"));
 			for(var i=0; i<tempResult.length; i++){
 				var nickSeq = tempResult[i].nickSeq;
-				if(!seqString.includes(nickSeq)){
+				if(nickSeq != null || nickSeq != " "){
 						var nickNm = tempResult[i].nickNm;
 						$('#sel_add_nickSeq').append($('<option></option>').val(nickSeq).html(nickNm));
 				}
@@ -300,7 +300,7 @@ function fun_defineHiding(){
 				var message = msg.errorMessage;
 				if(message == "success"){
 					alert("정상적으로 처리되었습니다.");
-					$("#section1_detail_view").css("display", "none");
+					$("#exampleModalScrollable").modal('hide');
 					fun_search();
 				}else if(message == "error"){
 					alert("정상적으로 처리되지 않았습니다.");
@@ -354,7 +354,7 @@ function fun_btnDefineinsert() {
 				var message = msg.errorMessage;
 				if(message == "success"){
 					alert("정상적으로 처리되었습니다.");
-					$("#section1_inser_view").css("display", "none");
+					$("#exampleModalScrollable").modal('hide');
 					fun_search();
 				}else if(message == "error"){
 					alert("정상적으로 처리되지 않았습니다.");
