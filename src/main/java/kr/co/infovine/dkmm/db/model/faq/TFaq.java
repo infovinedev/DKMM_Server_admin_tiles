@@ -70,7 +70,7 @@ public class TFaq {
      *
      * @mbg.generated Thu Dec 08 17:45:02 KST 2022
      */
-    private Long insSeq;
+    private int insSeq;
 
     /**
      *
@@ -89,7 +89,7 @@ public class TFaq {
      *
      * @mbg.generated Thu Dec 08 17:45:02 KST 2022
      */
-    private Long uptSeq;
+    private int uptSeq;
 
     /**
      *
@@ -115,4 +115,8 @@ public class TFaq {
     private String searchStartDt;
     private String searchEndDt;
     private String type;
+    
+    //file
+    private String fileNm;
+    private String fileSaveNm;
 }

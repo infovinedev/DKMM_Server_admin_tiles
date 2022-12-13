@@ -69,10 +69,8 @@
       work_seq = #{workSeq,jdbcType=BIGINT},
       nick_comment = #{nickComment,jdbcType=VARCHAR},
       del_yn = #{delYn,jdbcType=VARCHAR},
-      ins_seq = #{insSeq,jdbcType=BIGINT},
-      ins_dt = #{insDt,jdbcType=TIMESTAMP},
       upt_seq = #{uptSeq,jdbcType=BIGINT},
-      upt_dt = #{uptDt,jdbcType=TIMESTAMP},
+      upt_dt = now(),
       file_uuid = #{fileUuid,jdbcType=VARCHAR}
     where nick_seq = #{nickSeq,jdbcType=INTEGER}
   </update>
@@ -117,5 +115,22 @@
      ORDER BY nick_seq DESC
   </select>
   
+  
+  <select id="selectNicknmDetail" parameterType="kr.co.infovine.dkmm.db.model.nicknm.TDefineNicknm" resultMap="BaseResultMap">
+  SELECT
+             a.nick_seq
+            ,a.nick_nm
+            ,a.nick_comment
+            ,a.del_yn
+            ,ins_dt
+            ,upt_dt
+            ,a.file_uuid
+            ,(SELECT file_nm FROM t_file_sub WHERE file_uuid_sub = a.file_uuid) as fileNm
+			,(SELECT file_save_nm FROM t_file_sub WHERE file_uuid_sub = a.file_uuid) as fileSaveNm
+            ,(SELECT work_nm FROM t_define_work WHERE nick_seq = a.nick_seq and DEL_YN = 'N' and use_yn = 'Y') as workNm
+        FROM t_define_nicknm a
+        WHERE 1=1
+        AND nick_seq = ${nickSeq}
+  </select>
   
 </mapper>

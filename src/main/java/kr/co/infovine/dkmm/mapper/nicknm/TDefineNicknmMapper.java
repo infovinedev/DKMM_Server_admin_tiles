@@ -47,4 +47,6 @@ public interface TDefineNicknmMapper {
     
     //칭호 조회
     List<TDefineNicknm> selectAlldefineNicknm(TDefineNicknm defineNicknm);
+    
+    TDefineNicknm selectNicknmDetail(TDefineNicknm defineNicknm);
 }

@@ -220,7 +220,11 @@
     
     <update id="upDateDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
     /* 업적 사용여부 수정 upDateDefineWork */
-    UPDATE t_define_work SET use_yn = 'N' WHERE work_seq = ${upWorkSeq}
+    UPDATE t_define_work 
+    SET use_yn = 'N',
+        upt_seq = #{uptSeq,jdbcType=BIGINT},
+        upt_dt = now() 
+    WHERE work_seq = ${upWorkSeq}
     </update>
     
     <insert id="insertDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
@@ -239,8 +243,6 @@
         ,work_type
         ,ins_dt
         ,ins_seq
-        ,upt_seq
-        ,upt_dt
         ,work_condition_desc
         ,zombie_yn
         ,limit_yn
@@ -258,10 +260,8 @@
         ,#{endDt ,jdbcType=VARCHAR}
         ,#{nickSeq}
         ,#{workType ,jdbcType=VARCHAR}
-        ,NOW()
-        ,1
-        ,1
-        ,NOW()
+        ,now()
+        ,#{insSeq,jdbcType=BIGINT}
         ,#{workConditionDesc ,jdbcType=VARCHAR}
         ,#{zombieYn ,jdbcType=VARCHAR}
         ,#{limitYn ,jdbcType=VARCHAR}
@@ -269,8 +269,6 @@
       )
     </insert>
     <!--                                                                      업적등록 end                                                                      -->
-    
-    
     
     <!--                                                                      업적등록승인 start                                                                      -->
     <select id="selectAlldefineWorkApproval" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
@@ -352,7 +350,7 @@
                 ,end_dt	 				= #{endDt ,jdbcType=VARCHAR}
                 ,nick_seq 				= #{nickSeq ,jdbcType=VARCHAR}
                 ,work_type	 			= #{workType ,jdbcType=VARCHAR}
-                ,upt_dt 				= NOW()
+                ,upt_dt 				= now()
                 ,work_condition_desc 	= #{workConditionDesc ,jdbcType=VARCHAR}
                 ,zombie_yn				= #{zombieYn ,jdbcType=VARCHAR}
                 ,limit_yn				= #{limitYn ,jdbcType=VARCHAR}

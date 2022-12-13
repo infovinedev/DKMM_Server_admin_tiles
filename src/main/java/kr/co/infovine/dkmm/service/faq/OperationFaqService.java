@@ -10,14 +10,12 @@ import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 public interface OperationFaqService {
     List<TFaq> selectFaqAllList(TFaq faq);
     
-    /*
-    TBoard selectboardListDetail(TBoard board);
+    TFaq selectFaqListDetail(TFaq faq);
     
     //수정
-    int insertBoard(TBoard board);
+    int insertFaq(TFaq faq);
     //수정
-    int updateBoard(TBoard board);
+    int updateFaq(TFaq faq);
     //삭제
-    int deleteBoard(Integer boardSeq);
-*/
+    int deleteFaq(Integer faqSeq);
 }

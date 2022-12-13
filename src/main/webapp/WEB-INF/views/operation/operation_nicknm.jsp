@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
- -->
 <script>
 var nicknmListInfo;
 
@@ -54,8 +53,8 @@ function fun_search(){
 
 //text값 공백처리
 function fun_reset(type){
-	$("#txt_workSeq").val("");             //업적번호
-	$("#txt_workNm").val("");              //업적명
+	$("#txt_nickSeq").val("");             //업적번호
+	$("#txt_nickSeq").val("");              //업적명
 	$("#txt_workCondition").val(""); 	  //달성조건
 	$("#txt_workCnt").val("");             //달성 상세 요건
 	$("#txt_point").val("");               //포인트
@@ -70,63 +69,34 @@ function fun_reset(type){
 	$("#txt_limitYn").val("");             //기간한정여부
 	$("#txt_unitTxt").val("");             //단위텍스트
 }
-
-//칭호관리 등록버튼
-function fun_btnInsert() {
-	$("#section1_detail_view").css("display", "none");
-	$("#section1_inser_view").removeAttr("style");
-}
-
 //상세보기
-function fun_viewDetail(workSeq) {
+function fun_viewDetail(nickSeq) {
 	fun_reset();
-	$("#section1_inser_view").css("display", "none");
+	$("#section1_detail_edit").css("display", "none");
 	$("#section1_detail_view").removeAttr("style");
-	var inputData = {"workSeq": workSeq};
-	fun_ajaxPostSend("/define/select/defineWorkDetail.do", inputData, true, function(msg){
+	var inputData = {"nickSeq": nickSeq};
+	fun_ajaxPostSend("/nicknm/select/defineNicknmDetail.do", inputData, true, function(msg){
 		if(msg!=null){
+			var tempResult = JSON.parse(msg.result);
 			var tempResult         = JSON.parse(msg.result);
-			var workSeq            = tempResult.workSeq == null ? "" : tempResult.workSeq;                       //업적번호
-			var workNm             = tempResult.workNm == null ? "" : tempResult.workNm;                         //업적명
-			var workCondition      = tempResult.workCondition == null ? "" : tempResult.workCondition;           //달성조건
-			var workCnt            = tempResult.workCnt == null ? "" : tempResult.workCnt;                       //달성 상세 요건
-			var point              = tempResult.point == null ? "" : tempResult.point;                           //포인트
-			var workType           = tempResult.workType == null ? "" : tempResult.workType;                     //업적구분
-			var nickSeq            = tempResult.nickSeq == null ? "" : tempResult.nickSeq;                       //칭호
-			var nickComment        = tempResult.nickComment == null ? "" : tempResult.nickComment;               //칭호코멘트
-			var startDt            = tempResult.startDt == null ? "" : tempResult.startDt;                       //기간 설정
-			var endDt              = tempResult.endDt == null ? "" : tempResult.endDt;                           //기간 설정
-			var workConditionDesc  = tempResult.workConditionDesc == null ? "" : tempResult.workConditionDesc;   //업적설명
-			var exceptCondition    = tempResult.exceptCondition == null ? "" : tempResult.exceptCondition;       //업적제외조건
-			var zombieYn           = tempResult.zombieYn == null ? "" : tempResult.zombieYn;                     //달성이후누적
-			var limitYn            = tempResult.limitYn == null ? "" : tempResult.limitYn;                       //기간한정여부
-			var unitTxt            = tempResult.unitTxt == null ? "" : tempResult.unitTxt;                       //단위텍스트 
+			var nickSeq            = tempResult.nickSeq == null ? "" : tempResult.nickSeq;            //칭호번호
+			var nickNm             = tempResult.nickNm == null ? "" : tempResult.nickNm;              //칭호명
+			var fileUuid           = tempResult.fileUuid == null ? "N" : "Y";                         //칭호이미지
+			var workNm             = tempResult.workNm == null ? "" : tempResult.workNm;              //연결업적
+			var nickComment        = tempResult.nickComment == null ? "" : tempResult.nickComment;    //칭호코멘트
 			
-			if(workCondition == "SELF"){
-				workCnt = "-";
-			}else if(workCondition == "PMONEY"){
-				workCnt = workCnt + "P";
-			}else if(workCondition == "PMONEY"){
-				workCnt = workCnt
-			}else{
-				workCnt = workCnt + "회";
-			}
-			
-			$("#txt_workSeq").val(workSeq);
-			$("#txt_workNm").val(workNm);
-			$("#txt_workCondition").val(workCondition);
-			$("#txt_workCnt").val(workCnt);
-			$("#txt_point").val(point);
-			$("#txt_workType").val(workType);
 			$("#txt_nickSeq").val(nickSeq);
+			$("#txt_nickNm").val(nickNm);
+			$("#txt_fileUuid").val(fileUuid);
+			$("#txt_workNm").val(workNm);
 			$("#txt_nickComment").val(nickComment);
-			$("#txt_startDt").val(startDt);
-			$("#txt_endDt").val(endDt);
-			$("#txt_workConditionDesc").val(workConditionDesc);
-			$("#txt_exceptCondition").val(exceptCondition);
-			$("#txt_zombieYn").val(zombieYn);
-			$("#txt_limitYn").val(limitYn);
-			$("#txt_unitTxt").val(unitTxt);
+			
+			//수정 시 text셋팅
+			$("#hidden_up_nickSeq").val(nickSeq);
+			$("#txt_up_nickNm").val(nickNm);
+			$("#txt_up_fileUuid").val(fileUuid);
+			$("#txt_up_workNm").val(workNm);
+			$("#txt_up_nickComment").val(nickComment);
 		}
 	});
 }
@@ -137,7 +107,7 @@ function fun_setNicknmListInfo() {
 			  {"data":  "rowNum"}
 			, {"data":  "nickSeq"}
 			, {"data":  "nickNm"}
-			, {"data": "workNm"}
+			, {"data": "nickSeq"}
 			, {"data": "fileUuid"}
 			, {"data": "nickComment"}
 			, {"data": "add" }
@@ -193,7 +163,7 @@ function fun_setNicknmListInfo() {
 				"targets": [6]
 				, "class": "text-center"
 				, "render": function (data, type, row) {
-					var msg = row.workSeq;
+					var msg = row.nickSeq;
 					var insertTr = "";
 					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(' + msg + ')">상세보기</button>'; 
 					return insertTr;
@@ -203,39 +173,52 @@ function fun_setNicknmListInfo() {
 	});
 };
 
+function fun_update(type) {
+	$("#btn_insert").show();
+	$("#btn_update").show();
+	$("#btn_delete").show();
+	
+	if(type == "insert"){
+		$("#btn_update").hide();
+		$("#btn_delete").hide();
+		$("#txt_up_nickNm").val("");
+		$("#txt_up_fileUuid").val("");
+		$("#txt_up_workNm").val("-");
+		$("#txt_up_nickComment").val("");
+	}else{
+		$("#btn_insert").hide();
+	}
+	$("#section1_detail_view").css("display", "none");
+	$("#section1_detail_edit").removeAttr("style");
+}
 
-//칭호관리 등록
-function fun_btnDefineinsert() {
-	var workSeq = $("#txt_add_workSeq").val();
-	var workNm = $("#txt_add_workNm").val();
-	var workCondition = $("#sel_add_workCondition").val();
-	var workCnt = $("#txt_add_workCnt").val();
-	var point = $("#txt_add_point").val();
-	var workType = $("#sel_add_workType").val();
-	var nickSeq = $("#txt_add_nickSeq").val();
-	var startDt = $("#txt_add_startDt").val();
-	var endDt = $("#txt_add_endDt").val();
-	var startDt = $("#txt_add_startDt").val() == null ? "" : $("#txt_add_startDt").val().replaceAll("-", "");
-	var endDt   = $("#txt_add_startDt").val() == null ? "" : $("#txt_add_endDt").val().replaceAll("-", "");
-	var workConditionDesc = $("#txt_add_workConditionDesc").val();
-	var exceptCondition = $("#txt_add_exceptCondition").val();
-	var zombieYn = $("#sel_add_zombieYn").val();
-	var limitYn = $("#txt_add_limitYn").val();
-	var unitTxt = $("#txt_add_unitTxt").val();
+
+
+//칭호 등록,수정,삭제 저장 버튼
+function fun_save(type){
+	var nickSeq          = $("#hidden_up_nickSeq").val();
+	var nickNm           = $("#txt_up_nickNm").val();
+	var fileUuid         = $("#txt_up_fileUuid").val();
+	var workNm           = $("#txt_up_workNm").val();
+	var nickComment      = $("#txt_up_nickComment").val();
+
 	
-	var result = confirm('업적 등록하시겠습니까?');
+	var inputData = {"nickSeq": nickSeq , "nickNm": nickNm , "fileUuid": fileUuid , "workNm": workNm, "nickComment": nickComment};
+	if(type == "I"){
+		var result = confirm('추가 하시겠습니까?');
+	}else if(type == "U"){
+		var result = confirm('수정 하시겠습니까?');
+	}else{
+		var result = confirm('삭제하시겠습니까?');
+	}
 	
-	var inputData = {"workSeq": workSeq, "workNm": workNm, "workCondition": workCondition,"workCnt": workCnt, "point": point, "workType": workType
-					 ,"nickSeq": nickSeq, "startDt": startDt, "endDt": endDt,"workConditionDesc": workConditionDesc, "exceptCondition": exceptCondition
-					 ,"zombieYn": zombieYn, "limitYn": limitYn, "unitTxt": unitTxt
-					};
-	if(result){	
-		fun_ajaxPostSend("/define/save/defineWorkinsert.do", inputData, true, function(msg){
+	if(result){
+		fun_ajaxPostSend("/nicknm/save/nickNmSave.do", inputData, true, function(msg){
 			if(msg.errorMessage !=null){
 				var message = msg.errorMessage;
 				if(message == "success"){
 					alert("정상적으로 처리되었습니다.");
-					$("#section1_detail_view").css("display", "none");
+					$("#exampleModalScrollable").modal('hide');
 					fun_search();
 				}else if(message == "error"){
 					alert("정상적으로 처리되지 않았습니다.");
@@ -366,7 +349,7 @@ function fn_admin_file_callback(th, data, pageType){
                         <div class="row justify-content-between align-items-end mb-3">
                                 <div class="col-auto"></div>
                                 <div class="col-auto">
-                                    <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_btnInsert()">칭호등록</button>
+                                    <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">칭호등록</button>
                                     <select id="userListLength" class="custom-select w-auto">
                                     	<option value="10">10</option>
                                     	<option value="20">20</option>
@@ -416,71 +399,35 @@ function fn_admin_file_callback(th, data, pageType){
                                </colgroup>
                                <tbody>
                                   <tr>
-                                     <th>업적번호</th>
-                                     <td><input class="form-control" type="text" id="txt_workSeq" readOnly/></td>
-                                     <th>업적명</th>
+                                     <th>칭호번호</th>
+                                     <td><input class="form-control" type="text" id="txt_nickSeq" readOnly/></td>
+                                     <th>칭호명</th>
+                                     <td><input class="form-control" type="text" id="txt_nickNm" readOnly/></td>
+                                  </tr>
+                                  <tr>
+                                     <th>칭호이미지</th>
+                                     <td><input class="form-control" type="text" id="txt_fileUuid" readOnly/></td>
+                                     <th>연결업적</th>
                                      <td><input class="form-control" type="text" id="txt_workNm" readOnly/></td>
                                   </tr>
                                   <tr>
-                                     <th>달성조건</th>
-                                     <td><input class="form-control" type="text" id="txt_workCondition" readOnly/></td>
-                                     <th>달성 상세 요건</th>
-                                     <td><input class="form-control" type="text" id="txt_workCnt" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>포인트</th>
-                                     <td><input class="form-control" type="text" id="txt_point" readOnly/></td>
-                                     <th>업적구분</th>
-                                     <td><input class="form-control" type="text" id="txt_workType" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>칭호</th>
-                                     <td><input class="form-control" type="text" id="txt_nickSeq" readOnly/></td>
-                                     <th>달성유저 수 (명)</th>
-                                     <td>추후 작업</td>
-                                  </tr>
-                                  <tr>
                                      <th>칭호코멘트</th>
-                                     <td><input class="form-control" type="text" id="txt_nickComment" readOnly/></td>
-                                     <th>기간 설정</th>
-                                     <td>
-                                        <div class="row row-10 align-items-center">
-	                                       <div class="col-auto col-sm-5"> 
-	                                          <input class="form-control" type="text" id="txt_startDt" readOnly/>
-	                                       </div> ~
-	                                       <div class="col-auto col-sm-5">
-	                                          <input class="form-control" type="text" id="txt_endDt"readOnly />
-	                                       </div>
-                                        </div>
-                                     </td>
-                                  </tr>
-                                  <tr>
-                                     <th>업적설명</th>
-                                     <td><input class="form-control" type="text" id="txt_workConditionDesc" readOnly/></td>
-                                     <th>업적제외조건</th>
-                                     <td><input class="form-control" type="text" id="txt_exceptCondition" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>달성이후누적</th>
-                                     <td><input class="form-control" type="text" id="txt_zombieYn" readOnly/></td>
-                                     <th>기간한정여부</th>
-                                     <td><input class="form-control" type="text" id="txt_limitYn" readOnly/></td>
-                                  </tr>
-                                  <tr>
-                                     <th>단위텍스트</th>
-                                     <td colspan="3"><input class="form-control" type="text" id="txt_unitTxt" readOnly/></td>
+                                     <td colspan="3"><textarea class="form-control" type="text" id="txt_nickComment" readOnly/></textarea>
                                   </tr>
                                </tbody>
                             </table>
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-primary" onclick="fun_update('edit');">수정</button>
+                            
                           </div>
                         </div>
                     </section>
                     <!-- 상세보기 모달창 end  -->
-                    <!-- 등록 모달창 -->
-                    <section id="section1_inser_view" style="display:none;">
+                    
+                    <!-- 등록, 모달창 -->
+                    <section id="section1_detail_edit" style="display:none;">
                         <div class="modal-content" id="insertModal" style="width: 1200px;">
                          <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalScrollableTitle">업적등록</h5>
@@ -499,24 +446,33 @@ function fn_admin_file_callback(th, data, pageType){
                                <tbody>
                                   <tr>
                                      <th>칭호명 <span class="text-red">*</span></th>
-                                     <td colspan="3"><input class="form-control" type="text" id="txt_add_workNm"/></td>
+                                     <td colspan="3"><input class="form-control" type="text" id="txt_up_nickNm"/>
+                                        <input class="form-control" type="hidden" id="hidden_up_nickSeq"/>
+                                     </td>
                                   </tr>
                                   <tr>
                                     <th>칭호이미지 <span class="text-red">*</span></th>
-                                    <td colspan="3">
-                                    
+                                    <td colspan="3"> 추후작업
                                     </td>
                                   </tr>
                                   <tr>
+                                    <th>연결업적</th>
+                                    <td colspan="3"><input class="form-control" type="text" id="txt_up_workNm" readOnly/></td>
+                                  </tr>
+                                  
+                                  <tr>
                                     <th>칭호코멘트<span class="text-red">*</span></th>
-                                    <td colspan="3"><input class="form-control" type="text" id="txt_add_workNm"/></td>
+                                    <td colspan="3"><input class="form-control" type="text" id="txt_up_nickComment"/></td>
                                   </tr>
                                </tbody>
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">취소</button>
-                            <button type="button" class="btn btn-danger" onclick="fun_btnDefineinsert()">저장</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                            <button type="button" id="btn_insert" class="btn btn-primary" onclick="fun_save('I');">저장</button>
+                            <button type="button" id="btn_update" class="btn btn-primary" onclick="fun_save('U');">저장</button>
+                            <button type="button" id="btn_delete" class="btn btn-danger" onclick="fun_save('D');">삭제</button>
+                            
                           </div>
                         </div>
                     </section>
