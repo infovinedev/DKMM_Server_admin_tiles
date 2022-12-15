@@ -47,8 +47,6 @@
     <result column="push_token" jdbcType="VARCHAR" property="pushToken" />
     <result column="sms_yn" jdbcType="VARCHAR" property="smsYn" />
     <result column="inflow_channel" jdbcType="VARCHAR" property="inflowChannel" />
-    <result column="point" jdbcType="VARCHAR" property="point" />
-    <result column="like_cnt" jdbcType="VARCHAR" property="likeCnt" />
   </resultMap>
   
 	<sql id="searchCondition_user">
@@ -189,14 +187,8 @@
 			ROW_NUMBER() OVER() AS rowNum
 			,a.user_seq
 			,a.nick_name
-			,(CASE
-				  WHEN a.gender = 'M' THEN '남'
-				  WHEN a.gender = 'F' THEN '여'
-				  ELSE '-'
-				END
-			) AS gender
-			,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
-			,coalesce((SELECT sum(point) FROM t_user_work WHERE user_seq = a.user_seq ), 0) as point
+			,a.gender
+			,ins_dt
 			,a.os_type
 		FROM t_user_info a
 		WHERE 1=1
@@ -208,44 +200,41 @@
 	<resultMap id="JoinResultMap" type="kr.co.infovine.dkmm.db.model.user.TUserInfo" extends="BaseResultMap">
 		<id column="user_seq" jdbcType="VARCHAR" property="userSeq" />
 		<association property="waitCnt" column="{userSeq=user_seq}" select="kr.co.infovine.dkmm.mapper.user.TUserInfoMapper.selectWaitCnt"/>
+		<association property="point" column="{userSeq=user_seq}" select="kr.co.infovine.dkmm.mapper.user.TUserInfoMapper.selectPoint"/>
+		<association property="likeCnt" column="{userSeq=user_seq}" select="kr.co.infovine.dkmm.mapper.user.TUserInfoMapper.selectLikeCnt"/>
 	</resultMap>
 	
-	<select id="selectWaitCnt" parameterType="kr.co.infovine.dkmm.db.model.user.TUserInfo" resultMap="BaseResultMap">
+	<select id="selectWaitCnt" parameterType="kr.co.infovine.dkmm.db.model.user.TUserInfo" resultType="int">
 	/* 회원정보 조회 selectWaitCnt  association_test*/
 		SELECT COUNT(*) FROM t_store_wait WHERE DEL_YN = 'N' AND user_seq = #{userSeq}
 	</select>
 	
-	<select id="selectDetail" parameterType="kr.co.infovine.dkmm.db.model.user.TUserInfo" resultMap="BaseResultMap">
+	<select id="selectPoint" parameterType="kr.co.infovine.dkmm.db.model.user.TUserInfo" resultType="String">
+	/* 회원정보 조회 selectPoint  */
+		SELECT coalesce( (SELECT sum(point) FROM t_user_work WHERE user_seq = #{userSeq}), 0)
+	</select>
+	
+	<select id="selectLikeCnt" parameterType="kr.co.infovine.dkmm.db.model.user.TUserInfo" resultType="String">
+	/* 회원정보 조회 selectLikeCnt */
+		SELECT COUNT(*) FROM t_store_like WHERE user_seq = #{userSeq}
+	</select>
+	
+	<select id="selectDetail" parameterType="kr.co.infovine.dkmm.db.model.user.TUserInfo" resultMap="JoinResultMap">
 	/* 회원정보 상세조회 selectDetail */
 		SELECT
 			 a.user_seq
 			,a.user_id
 			,a.user_type
 			,a.nick_name
-			,(CASE
-			   WHEN a.gender = 'M' THEN '남'
-			   WHEN a.gender = 'F' THEN '여'
-			   ELSE '-'
-			  END
-			) AS gender
+			,a.gender
 			,CONCAT(substring(fn_decrypt(a.phone) from 1 for 3),'-' ,substring(fn_decrypt(a.phone) from 4 for 4), '-' ,substring(fn_decrypt(a.phone) from 8 for 4)) as phone
 			,COALESCE(fn_decrypt(a.email) , '-') as email
 			,a.birth
 			,EXTRACT(year from age(a.birth::date))+1 as age
-			,coalesce((SELECT sum(point) FROM t_user_work WHERE user_seq = a.user_seq ), 0) as point
-			,(SELECT count(*) FROM t_user_work WHERE user_seq = a.user_seq ) as coupon
-			,'-' as category
-			,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
-			,(SELECT COUNT(*) FROM t_store_wait WHERE DEL_YN = 'N' AND user_seq = a.user_seq) as wait_cnt
-			,(SELECT COUNT(*) FROM t_store_like WHERE DEL_YN = 'N' AND user_seq =a.user_seq) as like_cnt
-			,(CASE
-			   WHEN a.ci is not null THEN 'Y'
-			   ELSE 'N'
-			  END
-			) as use_yn
+			,a.ins_dt
 			,a.os_type
             ,a.ci
 		FROM t_user_info a
-		WHERE a.user_seq = ${userSeq}
+		WHERE a.user_seq = #{userSeq}
 	</select>
 </mapper>

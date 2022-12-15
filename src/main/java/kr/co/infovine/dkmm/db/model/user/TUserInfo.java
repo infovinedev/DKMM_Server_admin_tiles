@@ -2,6 +2,8 @@ package kr.co.infovine.dkmm.db.model.user;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 @Getter
@@ -14,7 +16,7 @@ public class TUserInfo {
 	 *
 	 * @mbg.generated Tue Nov 22 17:05:02 KST 2022
 	 */
-	private Integer userSeq;
+	private int userSeq;
 	
 	/**
 	 *
@@ -159,6 +161,7 @@ public class TUserInfo {
 	 *
 	 * @mbg.generated Tue Nov 22 17:05:02 KST 2022
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private Date lastTime;
 	
 	/**
@@ -204,7 +207,7 @@ public class TUserInfo {
 	 *
 	 * @mbg.generated Tue Nov 22 17:05:02 KST 2022
 	 */
-	private Long insSeq;
+	private int insSeq;
 	
 	/**
 	 *
@@ -213,7 +216,8 @@ public class TUserInfo {
 	 *
 	 * @mbg.generated Tue Nov 22 17:05:02 KST 2022
 	 */
-	private String insDt;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+	private Date insDt;
 	
 	/**
 	 *
@@ -231,7 +235,7 @@ public class TUserInfo {
 	 *
 	 * @mbg.generated Tue Nov 22 17:05:02 KST 2022
 	 */
-	private Long uptSeq;
+	private int uptSeq;
 	
 	/**
 	 *
@@ -240,6 +244,7 @@ public class TUserInfo {
 	 *
 	 * @mbg.generated Tue Nov 22 17:05:02 KST 2022
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private Date uptDt;
 	
 	/**
@@ -276,7 +281,7 @@ public class TUserInfo {
 	 *
 	 * @mbg.generated Tue Nov 22 17:05:02 KST 2022
 	 */
-	private Long nickSeq;
+	private int nickSeq;
 	
 	/**
 	 *
@@ -321,6 +326,7 @@ public class TUserInfo {
 	 *
 	 * @mbg.generated Tue Nov 22 17:05:02 KST 2022
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private Date approvalDt;
 	
 	/**
@@ -384,4 +390,35 @@ public class TUserInfo {
 	private String searchText;
 	private String searchStartDt;
 	private String searchEndDt;
+	
+	
+	public String getGender() {
+		if ( this.gender == null) {
+			this.gender = "-";
+		}
+		else {
+			if ( "F".equals(this.gender) ) {
+				this.gender = "여자";
+			}
+			else if ( "M".equals(this.gender) ) {
+				this.gender = "남자";
+			}
+			else {
+				this.gender = "-";
+			}
+		}
+		
+		return this.gender;
+	}
+	
+	public String getUseYn() {
+		if ( this.getCi() == null) {
+			this.useYn = "N";
+		}
+		else {
+			this.useYn = "Y";
+		}
+		
+		return this.useYn;
+	}
 }

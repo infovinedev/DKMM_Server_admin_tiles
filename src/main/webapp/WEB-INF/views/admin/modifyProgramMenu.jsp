@@ -154,7 +154,7 @@ function fun_setJdtListProgram(callback) {
 			, { "title": "사용여부", "data": "useYn" }
 			, { "title": "만든일자", "data": "regDate" }
 			, { "title": "수정일자", "data": "updateDate" }
-			, { "title": "수정", "data": "add" }
+			, { "title": "관리", "data": "add" }
 			
 		]
 		, "sort": false                     // 소팅 여부
@@ -745,7 +745,7 @@ function fun_clickBtnCloseSection2(){
 	                                  <th class="text-center" width="5%">사용여부</th>   
 	                                  <th class="text-center" width="11%">만든일자</th>   
 	                                  <th class="text-center" width="11%">수정일자</th>  
-	                                  <th class="text-center" width="8%"></th>
+	                                  <th class="text-center" width="8%">관리</th>
 	                           </thead>
 	                           <tbody>
 	                                               

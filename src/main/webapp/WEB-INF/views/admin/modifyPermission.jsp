@@ -118,7 +118,7 @@ function fun_setjdtListAdminUser(callback) {
 			, { "title": "마지막로그인", "data": "lastloginDate" }
 			, { "title": "블록", "data": "blockYn" }
 			, { "title": "등록일", "data": "regDate" }
-			, { "title": "수정", "data": "add" }
+			, { "title": "관리", "data": "add" }
 			 
 		]
 		, "sort": true                     // 소팅 여부
@@ -595,7 +595,7 @@ function fun_clickButtonOfCancel() {
 	                                        <th class="text-center" width="11%">마지막로그인</th>   
 	                                        <th class="text-center" width="10%">블록</th>   
 	                                        <th class="text-center" width="11%">등록일</th>   
-	                                        <th class="text-center" width="8%">수정</th>
+	                                        <th class="text-center" width="8%">관리</th>
                                         </tr>
 	                                </thead>
 	                                <tbody>

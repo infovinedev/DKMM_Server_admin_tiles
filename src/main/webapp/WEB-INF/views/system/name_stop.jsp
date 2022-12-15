@@ -301,7 +301,7 @@ function fun_setNameStopListInfo() {
                             <div class="col-auto">
                             	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">금지어등록</button>
                                 <button type="button" class="btn btn-outline-success mr-1" onclick="fn_go_list_excel()">엑셀업로드</button>
-                                <a href="/upload/doc/nick_sample.xlsx" class="btn btn-outline-primary mr-1" download="금지어샘플.xlsx">엑셀샘플</a>
+                                <a href="/filedownloadWebLink.do?fName=nick_sample.xlsx" class="btn btn-outline-primary mr-1" download="금지어샘플.xlsx">엑셀샘플</a>
                                 <button type="button" class="btn btn-outline-primary mr-1" onclick="fn_go_list_excel()">엑셀다운로드</button>
                                 <select id="nameStopLength" class="custom-select w-auto">
                                 	<option value="10">10</option> 

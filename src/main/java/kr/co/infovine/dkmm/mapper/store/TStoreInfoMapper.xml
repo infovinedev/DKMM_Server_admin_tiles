@@ -162,7 +162,7 @@
 					 ,a.file_uuid
 					 ,a.last_wait_user_seq
 					 ,a.last_wait_person_cnt
-					 ,TO_CHAR(a.last_wait_ins_dt, 'YYYY-MM-DD HH:MI') as last_wait_ins_dt
+					 ,a.last_wait_ins_dt
 			FROM t_store_info a
 		 WHERE 1 = 1
 		   AND use_yn = 'Y'
@@ -190,8 +190,8 @@
 					 , longitude
 					 , store_open_time
 					 , store_end_time
-					 , TO_CHAR(ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
-					 , TO_CHAR(last_wait_ins_dt, 'YYYY-MM-DD HH:MI') as last_wait_ins_dt
+					 , ins_dt
+					 , last_wait_ins_dt
 			FROM t_store_info
 		 WHERE 1 = 1
 		   AND store_seq = #{storeSeq}

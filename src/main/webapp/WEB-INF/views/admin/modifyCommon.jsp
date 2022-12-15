@@ -137,7 +137,7 @@ function fun_setjdtListCommonCode(callback) {
 			, { "title": "내용", "data": "codeDescription"}
 			, { "title": "순서", "data": "dispOrder" }
 			, { "title": "등록일자", "data": "insDt" }
-			, { "title": "수정", "data": "add" }
+			, { "title": "관리", "data": "add" }
 		]
 		, "sort": false                     // 소팅 여부
 		, "paging": false            // Table Paging
@@ -553,7 +553,7 @@ function fun_clickButtonInsertCommonCode(){
 	                                        <th class="text-center" >내용</th>   
 	                                        <th class="text-center" width="8%">순서</th>
 	                                        <th class="text-center" width="12%">등록일자</th>   
-	                                        <th class="text-center" width="8%">수정</th>
+	                                        <th class="text-center" width="8%">관리</th>
                                         </tr>
 	                                </thead>
 	                                <tbody>

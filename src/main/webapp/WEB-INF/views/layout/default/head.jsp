@@ -64,6 +64,7 @@
 	<!-- 삭제<script src="../assets/js/all.min.js" type="text/javascript"></script> -->
 	<script src="../assets/js/cryptoJs/sha512.js"></script>
 	<script src="../assets/js/module.js?version=0.1"></script>
+	<script src="../assets/js/blockUI.js?version=0.1"></script>
 	<script>
 	let leftMenuLevel1 = [];
 	let leftMenuLevel2 = [];

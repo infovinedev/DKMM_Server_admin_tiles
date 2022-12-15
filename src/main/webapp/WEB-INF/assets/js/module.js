@@ -358,10 +358,31 @@ function fun_ajaxGetSend(url, inputData, bAsync, callback) {
     }); // end ajax
 } // end fun_ajaxPostSend
 
+function fun_startBlockUI(){
+	$.blockUI({ 
+				message: "Loading 중입니다.", 
+				css: { 
+		            border: 'none', 
+		            padding: '15px', 
+		            backgroundColor: '#000', 
+		            '-webkit-border-radius': '10px', 
+		            '-moz-border-radius': '10px', 
+		            opacity: .5, 
+		            color: '#fff' 
+		            } 
+		       }); 
+}
+
+function fun_endBlockUI(){
+	$.unblockUI();
+}
 
 // ajax post send
 function fun_ajaxPostSend(url, inputData, bAsync, callback) {
 	//console.log("fun_ajaxPostSend " + url);
+	
+	fun_startBlockUI();
+        
 	$.ajax({
         type: 'POST'
         , url: url
@@ -370,9 +391,11 @@ function fun_ajaxPostSend(url, inputData, bAsync, callback) {
         , data: JSON.stringify(inputData)
         , dataType: "json"
         , success: function (msg) {
+        	fun_endBlockUI();
             callback(msg);
         } // end success
         , error: function (xhr, status, error) {
+        	fun_endBlockUI();
 			if(xhr.status==403){
 				alert("세션이 만료되었습니다");
 				location.href='/admin/loginView.do';
@@ -388,6 +411,9 @@ function fun_ajaxPostSend(url, inputData, bAsync, callback) {
 } // end fun_ajaxPostSend
 
 function fun_ajaxSendOther(url, inputData, sendType, contentType, processData, dataType, asyncType, callback) {
+
+	fun_startBlockUI();
+	
 	$.ajax({
           type        : sendType
         , url         : url
@@ -397,16 +423,21 @@ function fun_ajaxSendOther(url, inputData, sendType, contentType, processData, d
         , data        : inputData
         , dataType    : dataType
         , success     : function (msg) {
+        	fun_endBlockUI()
             callback(msg);
 
         } // end success
         , error       : function (xhr, status, error) {
+        	fun_endBlockUI()
         } // end error
     }); // end ajax
 } // end fun_ajaxSendOther
 
 // ajax post send
 function fun_ajaxPostSendOther(url, inputData, sendType, contentType, processData, dataType, enctype, callback) {
+	
+	fun_startBlockUI();
+	
 	$.ajax({
         type: sendType
         , url: url
@@ -416,10 +447,12 @@ function fun_ajaxPostSendOther(url, inputData, sendType, contentType, processDat
 		//, dataType: dataType
 		, enctype: enctype
         , success: function (msg) {
+        	fun_endBlockUI()
             callback(msg);
 
         } // end success
         , error: function (xhr, status, error) {
+        	fun_endBlockUI()
             console.log("xhr : " + xhr + "  , status : " + status + " , error : " + error);
         } // end error
     }); // end ajax

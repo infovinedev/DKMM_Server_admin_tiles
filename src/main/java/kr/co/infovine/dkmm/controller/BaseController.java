@@ -1,7 +1,11 @@
 package kr.co.infovine.dkmm.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import org.codehaus.jettison.json.JSONObject;
@@ -146,5 +151,42 @@ public class BaseController {
 			result.setCode("0001");
 		}
 		return result;
+	}
+	
+	@RequestMapping("/filedownloadWebLink.do")
+	public void fileDownloadOnWebBroweser(HttpServletRequest req, HttpServletResponse res) throws Exception  {
+		
+		String fName = req.getParameter("fName");
+		
+		File f = new File(req.getServletContext().getRealPath( File.separator + "upload" + File.separator + "doc") + File.separator + fName);
+
+		String downloadName = null;
+		String browser = req.getHeader("User-Agent");
+		//파일 인코딩
+		if(browser.contains("MSIE") || browser.contains("Trident") || browser.contains("Chrome")){
+		  //브라우저 확인 파일명 encode  		             
+		  downloadName = URLEncoder.encode(f.getName(), "UTF-8").replaceAll("\\+", "%20");		             
+		}else{		             
+		  downloadName = new String(f.getName().getBytes("UTF-8"), "ISO-8859-1");
+		}        
+		res.setHeader("Content-Disposition", "attachment;filename=\"" + downloadName +"\"");             
+		res.setContentType("application/octer-stream");
+		res.setHeader("Content-Transfer-Encoding", "binary;");
+
+		try {
+			FileInputStream fis = new FileInputStream(f);
+			ServletOutputStream sos = res.getOutputStream();	
+	
+			byte[] b = new byte[1024];
+			int data = 0;
+
+			while((data=(fis.read(b, 0, b.length))) != -1){		             
+				sos.write(b, 0, data);		             
+			}
+
+			sos.flush();
+		} catch(Exception e) {
+			throw e;
+		}
 	}
 }

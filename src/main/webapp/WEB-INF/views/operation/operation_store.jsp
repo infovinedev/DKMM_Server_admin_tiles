@@ -2,6 +2,7 @@
  -->
 <script>
 var storeListInfo;
+var beforeCtgry;
 
 $(document).ready(function () {
 	var ua = navigator.userAgent;
@@ -25,21 +26,51 @@ $(document).ready(function () {
 	});
 	
    $("#txt_searchText").on('keyup click', function () {
-	   if($('#chk_searchTable').is(':checked')){
+		searchDataTable();	   
+	});
+	
+	$("#chk_searchTable").on('keyup click', function () {
+		searchDataTable();
+	});
+	
+	$("#search_ctgryNm").on('focus', function () {
+		beforeCtgry = $("#search_ctgryNm").val();
+	});
+	
+	$("#search_ctgryNm").on('change', function () {
+		fun_search();
+	});
+	
+});
+
+function searchDataTable(){
+	 if($('#chk_searchTable').is(':checked')){
 	      $("#storeListInfo").DataTable().search(
 	         $("#txt_searchText").val()
 	      ).draw();
 	   }
-   });
-});
+	else{
+		$("#storeListInfo").DataTable().search("").draw();
+	}
+}
 
 function fun_search(){
+	
 	var ctgryNm = $("select[name=search_ctgryNm]").val();
-	var searchText = $("input[name=searchText]").val();
+	var searchText = ""; //$("input[name=searchText]").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	
-	var inputData = {"ctgryNm": ctgryNm, "searchText": searchText};
+	if ( ctgryNm == "" ){
+		alert("카테고리를 선택해 주세요.");
+		$("select[name=search_ctgryNm]").val(beforeCtgry);
+		return;
+	}
+	
+	$('#chk_searchTable').prop('checked', false);
+	searchDataTable();
+	
+	var inputData = {"ctgryNm": ctgryNm, "searchText": searchText, "searchStartDt" : searchStartDt, "searchEndDt" : searchEndDt};
 	fun_ajaxPostSend("/store/select/storeInfo.do", inputData, true, function(msg){
 		if(msg!=null){
 			switch(msg.code){
@@ -218,12 +249,16 @@ function fun_setStoreListInfo() {
 		}
 		, "columnDefs": [
 			{
+				"targets": [0]
+				, "class": "text-center"
+			}
+			,{
 				"targets": [1]
 				, "class": "text-center"
 			}
 			 , {
 				"targets": [2]
-				, "class": "text-center"
+				, "class": "text-left"
 			}
 			, {
 				"targets": [3]
@@ -253,6 +288,8 @@ function fun_setStoreListInfo() {
 			}
 		]
 	});
+	
+	fun_search();
 };
 
 function fun_save(type){
@@ -296,7 +333,6 @@ function fun_get_mapXY (address) {
 	});
 	
 }
-
 
 </script>
 <head>
@@ -365,9 +401,9 @@ function fun_get_mapXY (address) {
                                     <tr>
                                         <th>카테고리</th>
                                         <td>
-                                            <select class="form-control" name="search_ctgryNm">
+                                            <select class="form-control" id="search_ctgryNm" name="search_ctgryNm" style="width:80%;">
                                                 <option value="">선택</option>
-                                                <option value="감성주점">감성주점</option>
+                                                <option value="감성주점" selected>감성주점</option>
                                                 <option value="경양식">경양식</option>
                                                 <option value="기타">기타</option>
                                                 <option value="기타 휴게음식점">기타 휴게음식점</option>
@@ -395,13 +431,12 @@ function fun_get_mapXY (address) {
                                                 <option value="한식">한식</option>
                                                 <option value="호프/통닭">호프/통닭</option>
                                                 <option value="횟집">횟집</option>
-                                                <option></option>
                                             </select>
                                         </td>
                                         <th>검색어</th>
                                         <td>
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:94%;" class="form-control" placeholder="매장명" name="searchText" onKeypress="" id="txt_searchText"/>
+                                                  <input type="text" style="width:90%;" class="form-control" placeholder="카테고리, 매장명, 매장 주소..." name="searchText" onKeypress="" id="txt_searchText"/>
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>
@@ -434,14 +469,14 @@ function fun_get_mapXY (address) {
                                 <table id="storeListInfo" class="table table-bordered">
                                     <thead>
                                     	<tr>
-	                                        <th class="text-center">번호</th>
-	                                       	<th class="text-center">카테고리</th>
+	                                        <th class="text-center" width="5%">번호</th>
+	                                       	<th class="text-center" width="10%">카테고리</th>
 	                                        <th class="text-center">매장명</th>
-	                                        <th class="text-center">매장주소</th>
-	                                        <th class="text-center">매장찜</th>
-	                                        <th class="text-center">마지막<br>대기등록수</th>
-	                                        <th class="text-center">마지막<br>대기등록일자</th>
-	                                        <th class="text-center">관리</th>
+	                                        <th class="text-center" width="30%">매장주소</th>
+	                                        <th class="text-center" width="5%">매장찜</th>
+	                                        <th class="text-center" width="8%">마지막<br>대기등록수</th>
+	                                        <th class="text-center" width="12%">마지막<br>대기등록일자</th>
+	                                        <th class="text-center" width="8%">관리</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -17,7 +17,7 @@ $(document).ready(function () {
 	});
 	
 	
-	fun_setStoreListInfo();
+	fun_setUserListInfo();
 	
 	$("#userListLength").change(function(){
 		var length = $("#userListLength").val();
@@ -25,17 +25,37 @@ $(document).ready(function () {
 	});
 	
    $("#txt_searchText").on('keyup click', function () {
-	   if($('#chk_searchTable').is(':checked')){
+		searchDataTable();	   
+	});
+	
+	$("#chk_searchTable").on('keyup click', function () {
+		searchDataTable();
+	});
+	
+	$("#sel_osType").on('change', function () {
+		fun_search();
+	});
+	
+});
+
+function searchDataTable(){
+	 if($('#chk_searchTable').is(':checked')){
 	      $("#userListInfo").DataTable().search(
 	         $("#txt_searchText").val()
 	      ).draw();
 	   }
-   });
-});
+	else{
+		$("#userListInfo").DataTable().search("").draw();
+	}
+}
 
 function fun_search(){
+	
+	$('#chk_searchTable').prop('checked', false);
+	searchDataTable();
+	
 	var osType = $("#sel_osType").val();
-	var searchText = $("#txt_searchText").val();
+	var searchText = ""; //$("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	
@@ -49,6 +69,9 @@ function fun_search(){
 				case "0001":
 			}
 			var tempResult = JSON.parse(msg.result);
+			
+			console.log(tempResult);
+			
 			fun_dataTableAddData("#userListInfo", tempResult);
 		}
 	});
@@ -130,7 +153,7 @@ function fun_viewDetail(userSeq) {
 	});
 }
 
-function fun_setStoreListInfo() {
+function fun_setUserListInfo() {
 	userListInfo = $("#userListInfo").DataTable({
 		"columns": [
 			  {"data":  "rowNum"}
@@ -180,7 +203,7 @@ function fun_setStoreListInfo() {
 			}
 			, {
 				"targets": [3]
-				, "class": "text-center"
+				, "class": "text-left"
 			}
 			, {
 				"targets": [4]
@@ -210,6 +233,8 @@ function fun_setStoreListInfo() {
 			}
 		]
 	});
+	
+	fun_search();
 };
 </script>
 <head>
@@ -275,17 +300,16 @@ function fun_setStoreListInfo() {
                                     <tr>
                                         <th>접속기기유형</th>
                                         <td>
-                                            <select class="form-control" id="sel_osType" name="search_osType">
+                                            <select class="form-control" id="sel_osType" name="search_osType" style="width:80%;">
                                                 <option value="">선택</option>
                                                 <option value="AOS">AOS</option>
                                                 <option value="IOS">IOS</option>
-                                                <option></option>
                                             </select>
                                         </td>
                                         <th>검색어</th>
                                         <td>
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:94%;" class="form-control" placeholder="닉네임" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <input type="text" style="width:90%;" class="form-control" placeholder="닉네임" id="txt_searchText" name="searchText" onKeypress="" />
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>
@@ -312,15 +336,15 @@ function fun_setStoreListInfo() {
                                 <table id="userListInfo" class="table table-bordered">
                                     <thead>
                                     	<tr>
-	                                        <th class="text-center">번호</th>
-	                                        <th class="text-center">사용자ID</th>
-	                                       	<th class="text-center">OS</th>
+	                                        <th class="text-center" width="5%">번호</th>
+	                                        <th class="text-center" width="10%">사용자ID</th>
+	                                       	<th class="text-center" width="8%">OS</th>
 	                                        <th class="text-center">닉네임</th>
-	                                        <th class="text-center">성별</th>
-	                                        <th class="text-center">대기등록횟수</th>
-	                                        <th class="text-center">가입일</th>
-	                                        <th class="text-center">보유포인트</th>
-	                                        <th class="text-center">관리</th>
+	                                        <th class="text-center" width="8%">성별</th>
+	                                        <th class="text-center" width="10%">대기등록횟수</th>
+	                                        <th class="text-center" width="12%">가입일</th>
+	                                        <th class="text-center" width="10%">보유포인트</th>
+	                                        <th class="text-center" width="8%">관리</th>
                                         </tr>
                                     </thead>
                                     <tbody>
