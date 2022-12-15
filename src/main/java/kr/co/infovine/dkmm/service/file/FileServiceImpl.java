@@ -7,7 +7,7 @@ import kr.co.infovine.dkmm.mapper.file.TFileMapper;
 import kr.co.infovine.dkmm.mapper.file.TFileSubMapper;
 
 @Service
-public class FileServiceImpl {
+public class FileServiceImpl implements FileService {
 	@Autowired
 	TFileMapper tFileMapper;
 	
