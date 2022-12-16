@@ -19,6 +19,15 @@
     <result column="regit_cnt" jdbcType="INTEGER" property="regitCnt" />
     <result column="week_cnt" jdbcType="INTEGER" property="weekCnt" />
     <result column="ins_dt" jdbcType="VARCHAR" property="insDt" />
+    <!-- 추가 -->
+    <result column="click_cnt_aos" jdbcType="INTEGER" property="clickCntAos" />
+    <result column="click_cnt_ios" jdbcType="INTEGER" property="clickCntIos" />
+    <result column="move_store_cnt_aos" jdbcType="INTEGER" property="moveStoreCntAos" />
+    <result column="move_store_cnt_ios" jdbcType="INTEGER" property="moveStoreCntIos" />
+    <result column="down_cnt_aos" jdbcType="INTEGER" property="downCntAos" />
+    <result column="down_cnt_ios" jdbcType="INTEGER" property="downCntIos" />
+    <result column="regit_cnt_aos" jdbcType="INTEGER" property="regitCntAos" />
+    <result column="regit_cnt_ios" jdbcType="INTEGER" property="regitCntIos" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
@@ -83,9 +92,17 @@
   <select id="marketingMonthly" resultMap="BaseResultMap">
    SELECT
         count(marketing_seq) as click_cnt
+        ,count(case when os_type='AOS' then marketing_seq end) as click_cnt_aos
+        ,count(case when os_type='IOS' then marketing_seq end) as click_cnt_ios
         ,sum(move_store_cnt) as move_store_cnt
+        ,sum(case when os_type='AOS' then move_store_cnt end) as move_store_cnt_aos
+        ,sum(case when os_type='IOS' then move_store_cnt end) as move_store_cnt_ios
         ,sum(down_cnt) as down_cnt
+        ,sum(case when os_type='AOS' then down_cnt end) as down_cnt_aos
+        ,sum(case when os_type='IOS' then down_cnt end) as down_cnt_ios
         ,sum(regit_cnt) as regit_cnt
+        ,sum(case when os_type='AOS' then  regit_cnt end) as regit_cnt_aos
+        ,sum(case when os_type='IOS' then  regit_cnt end) as regit_cnt_ios
         ,TO_CHAR(now(), 'YYYYMM') as ins_dt
      FROM t_marketing_analysis
         where 1=1

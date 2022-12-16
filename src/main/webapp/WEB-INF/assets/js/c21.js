@@ -150,7 +150,6 @@ var c21 = {
             this.date_zero(d.getHours(), 2)+
             this.date_zero(d.getMinutes(), 2)+
             this.date_zero(d.getSeconds(), 2);
-
         if(format=="yyyy") s = s.substring(0, 4);
         if(format=="yyyyMM") s = s.substring(0, 6);
         if(format=="yyyyMMdd") s = s.substring(0, 8);
@@ -160,6 +159,30 @@ var c21 = {
         if(format=="yyyyMMddhhmm") s= s.substring(0,12);
         if(format=="yyyyMMddhhmmss") s= s.substring(0,14);
         if(format=="yyyy-MM-dd hh:mm:ss") s= s.substring(0,4)+"-"+s.substring(4,6)+"-"+s.substring(6,8)+" "+s.substring(8,10)+":"+s.substring(10,12)+":"+s.substring(12,14);
+        return s;
+    },
+    
+    //이번주 월,화,수,목,금,토,일  월.일() 
+    date_Week : function(format) {
+         var currentDay = new Date();  
+				var theYear = currentDay.getFullYear();
+				var theMonth = currentDay.getMonth();
+				var theDate  = currentDay.getDate();
+				var theDayOfWeek = currentDay.getDay();
+				 
+				var s = [];
+                 for(var i=1; i<8; i++) {
+				  var resultDay = new Date(theYear, theMonth, theDate + (i - theDayOfWeek));
+				  var yyyy = resultDay.getFullYear();
+				  var mm = Number(resultDay.getMonth()) + 1;
+				  var dd = resultDay.getDate();
+				 
+				  mm = String(mm).length === 1 ? '0' + mm : mm;
+				  dd = String(dd).length === 1 ? '0' + dd : dd;
+				 
+				  s[i] = yyyy + '/' + mm + '/' + dd;
+				}
+				
         return s;
     },
 

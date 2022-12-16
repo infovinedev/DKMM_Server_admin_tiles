@@ -69,9 +69,9 @@ function fun_search(){
 				case "0001":
 			}
 			var tempResult = JSON.parse(msg.result);
-			
-			console.log(tempResult);
-			
+			for (let i = 0; i < tempResult.length; i++) {
+				tempResult[i].listIndex = i + 1
+			}
 			fun_dataTableAddData("#userListInfo", tempResult);
 		}
 	});
@@ -156,7 +156,7 @@ function fun_viewDetail(userSeq) {
 function fun_setUserListInfo() {
 	userListInfo = $("#userListInfo").DataTable({
 		"columns": [
-			  {"data":  "rowNum"}
+			  {"data":  "listIndex"}
 			, {"data":  "userSeq"}
 			, {"data": "osType"}
 			, {"data": "nickName"}

@@ -80,11 +80,9 @@ $(document).ready(function() {
     var month = startOfMonth.getMonth()+1;
     var year = startOfMonth.getFullYear();
     $("#todayText1").html("("+ year+"년 "+month+"월"+")");
-    
 	fun_draw_char1();
 	fun_draw_char2();
 });
-
 
 function fun_draw_char1(){
 	var inputData = {};
@@ -97,59 +95,87 @@ function fun_draw_char1(){
 			}
 			var tempResult = JSON.parse(msg.result);
 			var _chartData1 = [0,0,0,0];
+			var _chartAOS = [];
+			var _chartIOS = [];
+			
 			var a1 = tempResult[0].clickCnt;
 			var a2 = tempResult[0].moveStoreCnt;
 			var a3 = tempResult[0].downCnt;
 			var a4 = tempResult[0].regitCnt;
+			
+			var a1Aos =tempResult[0].clickCntAos;
+			var a1Ios =tempResult[0].clickCntIos;
+			var a2Aos =tempResult[0].moveStoreCntAos;
+			var a2Ios =tempResult[0].moveStoreCntIos;
+			var a3Aos =tempResult[0].downCntAos;
+			var a3Ios =tempResult[0].downCntIos;
+			var a4Aos =tempResult[0].regitCntAos;
+			var a4Ios =tempResult[0].regitCntIos;
 			
 			_chartData1[0] = Number(a1);
 			_chartData1[1] = Number(a2);
 			_chartData1[2] = Number(a3);
 			_chartData1[3] = Number(a4);
 			
+			_chartAOS[0] = Number(a1Aos);
+			_chartIOS[0] = Number(a1Ios);
+			_chartAOS[1] = Number(a2Aos);
+			_chartIOS[1] = Number(a2Ios);
+			_chartAOS[2] = Number(a3Aos);
+			_chartIOS[2] = Number(a3Ios);
+			_chartAOS[3] = Number(a4Aos);
+			_chartIOS[3] = Number(a4Ios);
+
+			
 			// 월간 채널 가입 통계 차트
 			const ctx = document.getElementById('monthly-chart').getContext('2d');
 			const chartMonthly = new Chart(ctx, {
-				type: 'doughnut',
-				plugins: [ChartDataLabels],
-				data: {
-					labels: ['유입수', '스토어이동', '설치완료수', '가입자수'],
-					datasets: [{
-						data:_chartData1,
-						backgroundColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)', ],
+				type: 'doughnut'
+				,plugins: [ChartDataLabels]
+				,data: {
+					labels: ['유입수','스토어이동', '설치완료수', '가입자수']
+					,datasets: [{
+						data:_chartData1,_chartAOS,_chartIOS
+						,backgroundColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)' ]
 						}]
-				},
-	 		options: {
+				}
+			,options: {
 					plugins: {
 						legend: {
-							display: true,
-						},
-						tooltip: {
-							enabled: true,
-						},
-						datalabels: {
-							display: true,
-								textAlign: 'center',
-								color: '#555',
-								font: {
-									weight: 'bold',
-									size: '14',
-								},
-								formatter: function(value, ctx) {
-									value = c21.set_addComma(value);
-									return ctx.chart.data.labels[ctx.dataIndex] + '\n' + value;
+							display: false
+						}
+						,tooltip: {
+							//enabled: true,
+							callbacks: {
+								beforeLabel: function(tooltipItem, data) {
+									var index = tooltipItem.dataIndex;
+									var aos = tooltipItem.dataset._chartAOS[index];
+									var ios = tooltipItem.dataset._chartIOS[index];
+										tooltipItem.label="AOS : " + aos;
+										tooltipItem.formattedValue="/ iOS : " + ios;	
+									
 								}
-						},
-						doughnutlabel: {
-							labels: [{
-								text: '채널 가입 통계',
-								font: {
-									size: 20,
+							}
+						}
+						,datalabels: {
+							display: true
+								,textAlign: 'center'
+								,color: '#555'
+								,font: {
 									weight: 'bold'
+									,size: '14'
+								,}
+						}
+						,doughnutlabel: {
+							labels: [{
+								text: '채널 가입 통계'
+								,font: {
+									size: 20
+									,weight: 'bold'
 								}
-							}, {
-								text: ' 100%',
-							}]
+							}
+								,{text: ' 100%'}
+							]
 						}
 					}
 				}
@@ -157,6 +183,53 @@ function fun_draw_char1(){
 		}
 	}); 
 }//월간채널 가입통계 차트 셋팅 end
+
+function fun_draw_char3(){
+	var inputData = {};
+	fun_ajaxPostSend("/marketing/select/marketingweekly.do", inputData, true, function(msg){
+		var dailylabels = ['월', '화', '수', '목', '금', '토', '일'];
+		var tempResult = JSON.parse(msg.result);
+		var _chartData1 = [];
+		var _chartData2 = [];
+		for (var i = 0; i < tempResult.length; i++) {
+			_chartData1[i] = Number(tempResult[i].osTypeAos);
+			_chartData2[i] = Number(tempResult[i].osTypeIos);
+		}
+		
+		new Chart("weekly-chart", {
+			type: "bar",
+			data: {
+			labels: dailylabels
+			,datasets: [{
+				label: 'AOS'
+				, data: _chartData1
+				, backgroundColor: ['rgba(255, 99, 132, 0.7)']
+			}
+			, {
+				label: 'IOS'
+				, data: _chartData2
+			    , backgroundColor: ['rgba(75, 192, 192, 0.7)']
+		     }]
+	
+			}
+			,options: {
+				legend: {display: false}
+				,title: {
+					display: true
+				}
+				,tooltip: {
+					//enabled: true
+					beforeEvent(chart, args, pluginOptions) {
+					}
+				}
+				,plugins: [{
+					beforeEvent(chart, args, pluginOptions) {
+					}
+				}]
+			}
+		});
+	});
+}
 
 
 function fun_draw_char2(){
@@ -168,87 +241,82 @@ function fun_draw_char2(){
 					break;
 				case "0001":
 			}
-		var tempResult = JSON.parse(msg.result);
-		var _chartData1 = [];
-		var _chartData2 = [];
-		for (var i = 0; i < tempResult.length; i++) {
-			_chartData1[i] = Number(tempResult[i].osTypeAos);
-			_chartData2[i] = Number(tempResult[i].osTypeIos);
-		}
-
-		//주간 차트
-		const dailylabels = ['월', '화', '수', '목', '금', '토', '일'];
-		const weeklydata = {
-				
-				labels: dailylabels,
-				datasets: [
-					{
-					label: 'AOS',
-					data: _chartData1,
-					backgroundColor: [
-						'rgba(255, 99, 132, 0.7)',
-					]
-					} ,
-					
-					{
-						label: 'IOS',
-						data: _chartData2,
-						backgroundColor: [
-							'rgba(75, 192, 192, 0.7)',
-						]
-					}
-				
-				],
-				options: {
-					plugins: {
-						legend: {
-							display: false,
-						},
-						tooltip: {
-							enabled: false,
-						},
-						datalabels: {
-							display: true,
-							textAlign: 'center',
-							color: '#555',
-							font: {
-								weight: 'bold',
-								size: '14',
-							},
-							formatter: function(value, ctx) {
-								value = c21.set_addComma(value);
-								return ctx.chart.data.labels[ctx.dataIndex] + '\n' + value;
+			var tempResult = JSON.parse(msg.result);
+			var _chartData1 = [];
+			var _chartData2 = [];
+			for (var i = 0; i < tempResult.length; i++) {
+				_chartData1[i] = Number(tempResult[i].osTypeAos);
+				_chartData2[i] = Number(tempResult[i].osTypeIos);
+			}
+			//주간 차트
+			const dailylabels = ['월', '화', '수', '목', '금', '토', '일'];
+			const weeklydata = {
+					labels: dailylabels
+					, datasets: [{
+								label: 'AOS'
+								, data: _chartData1
+								, backgroundColor: ['rgba(255, 99, 132, 0.7)']
+							}
+							, {
+								label: 'IOS'
+								, data: _chartData2
+							    , backgroundColor: ['rgba(75, 192, 192, 0.7)']
+						     }]
+					, options: {
+						plugins: {
+							legend: {
+								display: false
+							}
+							, tooltip: {
+								enabled: true
+								, callbacks: {
+									beforeEvent: function(tooltipItem, data) {
+										var index = tooltipItem.dataIndex;
+										var aos = tooltipItem.dataset._chartAOS[index];
+										var ios = tooltipItem.dataset._chartIOS[index];
+											tooltipItem.label="AOS : " + aos;
+											tooltipItem.formattedValue="/ iOS : " + ios;	
+										
+									}
+								}
+							}
+							, datalabels: {
+								display: true
+								, textAlign: 'center'
+								, color: '#555'
+								, font: {
+									weight: 'bold'
+									, size: '14'
+								}
+								, formatter: function(value, ctx) {
+									value = c21.set_addComma(value);
+									return ctx.chart.data.labels[ctx.dataIndex] + '\n' + value;
+								}
 							}
 						}
 					}
-			}
-		};
-		
-		
-		
-		
-		const weeklyChart = {
-			type: 'bar',
-			plugins: [ChartDataLabels],
-			data: weeklydata,
-			options: {
-				plugins: {
-				    legend: {
-				        display: false,
-				    },
-				},
-				scales: {
-					y: {
-						beginAtZero: true
-					},
+			};
+			const dailylabels2 = ['12/14', '12/14', '12/14', '12/14', '12/14', '12/14', '12/14'];
+			const weeklyChart = {
+				type: 'bar'
+				, plugins: [ChartDataLabels]
+				, data: weeklydata
+			};
+			weeklyChart.plugins[0].beforeEvent = function(t, e){
+				var Week = [];
+				Week = c21.date_Week();
+				
+				
+				for (var i = 0; i < Week.length; i++) {
+					t.data.labels[i] = Week[i+1]; 
 				}
-			},
-		};
-		const weekly = new Chart(
-			document.getElementById('weekly-chart'),
-			weeklyChart
-		);
+			};
+			const weekly = new Chart(
+				document.getElementById('weekly-chart'),
+				weeklyChart
+			);
 		}
 	});
 }//주간 가입자수 통계
+
 </script>

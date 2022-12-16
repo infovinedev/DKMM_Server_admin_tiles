@@ -87,4 +87,13 @@ public class TMarketingAnalysis {
     
     private int osTypeAos;
     private int osTypeIos;
+    
+    private int clickCntAos;
+    private int clickCntIos;
+    private int moveStoreCntAos;
+    private int moveStoreCntIos;
+    private int downCntAos;
+    private int downCntIos;
+    private int regitCntAos;
+    private int regitCntIos;
 }

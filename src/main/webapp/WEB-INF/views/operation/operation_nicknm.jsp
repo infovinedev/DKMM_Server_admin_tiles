@@ -66,6 +66,9 @@ function fun_search(){
 				case "0001":
 			}
 			var tempResult = JSON.parse(msg.result);
+			for (let i = 0; i < tempResult.length; i++) {
+				tempResult[i].listIndex = i + 1
+			}
 			fun_dataTableAddData("#nicknmListInfo", tempResult);
 		}
 	});
@@ -124,7 +127,7 @@ function fun_viewDetail(nickSeq) {
 function fun_setNicknmListInfo() {
 	nicknmListInfo = $("#nicknmListInfo").DataTable({
 		"columns": [
-			  {"data":  "rowNum"}
+			  {"data":  "listIndex"}
 			, {"data":  "nickSeq"}
 			, {"data":  "nickNm"}
 			, {"data": "nickSeq"}

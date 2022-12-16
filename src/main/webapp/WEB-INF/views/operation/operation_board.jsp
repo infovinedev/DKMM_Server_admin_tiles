@@ -226,57 +226,6 @@ function fun_save(type){
 			}
 		});
 	}
-	
-/* 	if(type == "I"){
-		var result = confirm('추가 하시겠습니까?');
-		if(result){
-			fun_ajaxPostSend("/board/save/boardSave.do", inputData, true, function(msg){
-				if(msg.errorMessage !=null){
-					var message = msg.errorMessage;
-					if(message == "success"){
-						alert("정상적으로 처리되었습니다.");
-						$("#exampleModalScrollable").modal('hide');
-						fun_search();
-					}else if(message == "error"){
-						alert("정상적으로 처리되지 않았습니다.");
-					}
-				}
-			});
-		}
-	}else if(type == "U"){
-		var result = confirm('수정 하시겠습니까?');
-		if(result){
-			fun_ajaxPostSend("/board/save/boardSave.do", inputData, true, function(msg){
-				if(msg.errorMessage !=null){
-					var message = msg.errorMessage;
-					if(message == "success"){
-						alert("정상적으로 처리되었습니다.");
-						$("#exampleModalScrollable").modal('hide');
-						fun_search();
-					}else if(message == "error"){
-						alert("정상적으로 처리되지 않았습니다.");
-					}
-				}
-			});
-		}
-	}else{
-		var result = confirm('삭제하시겠습니까?');
-		if(result){
-			fun_ajaxPostSend("/board/save/boardDelete.do", inputData, true, function(msg){
-				if(msg.errorMessage !=null){
-					var message = msg.errorMessage;
-					if(message == "success"){
-						alert("정상적으로 처리되었습니다.");
-						$("#exampleModalScrollable").modal('hide'); 
-						fun_search();
-					}else if(message == "error"){
-						alert("정상적으로 처리되지 않았습니다.");
-					}
-				}
-			});
-		}
-		
-	} */
 }
 </script>
 <body class="hold-transition sidebar-mini">

@@ -127,6 +127,9 @@ function fun_search(){
 					
 				}
 			}
+			for (let i = 0; i < tempResult.length; i++) {
+				tempResult[i].listIndex = i + 1
+			}
 			fun_dataTableAddData("#defineApprovalListInfo", tempResult);
 		}
 	});
@@ -232,7 +235,7 @@ function fun_viewDetail(workSeq) {
 function fun_setdefineApprovalListInfo() {
 	defineApprovalListInfo = $("#defineApprovalListInfo").DataTable({
 		"columns": [
-			  {"data":  "rowNum"}
+			  {"data":  "listIndex"}
 			, {"data":  "workNm"}   
 			, {"data": "workCondition"}
 			, {"data": "workCnt"}

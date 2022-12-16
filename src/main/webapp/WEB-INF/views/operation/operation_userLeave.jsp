@@ -66,6 +66,9 @@ function fun_search(){
 				case "0001":
 			}
 			var tempResult = JSON.parse(msg.result);
+			for (let i = 0; i < tempResult.length; i++) {
+				tempResult[i].listIndex = i + 1
+			}
 			fun_dataTableAddData("#userLeaveListInfo", tempResult);
 		}
 	});
@@ -108,7 +111,7 @@ function fun_viewDetail(leaveSeq) {
 function fun_setStoreListInfo() {
 	userLeaveListInfo = $("#userLeaveListInfo").DataTable({
 		"columns": [
-			  {"data":  "rowNum"}
+			  {"data":  "listIndex"}
 			, {"data":  "leaveSeq"}
 			, {"data": "userId"}
 			, {"data": "nickName"}

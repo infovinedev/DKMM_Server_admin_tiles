@@ -115,6 +115,9 @@ function fun_search(){
 				case "0001":
 			}
 			var tempResult = JSON.parse(msg.result);
+			for (let i = 0; i < tempResult.length; i++) {
+				tempResult[i].listIndex = i + 1
+			}
 			fun_dataTableAddData("#defineListInfo", tempResult);
 		}
 	});
@@ -221,7 +224,7 @@ function fun_viewDetail(workSeq) {
 function fun_setDefineListInfo() {
 	defineListInfo = $("#defineListInfo").DataTable({
 		"columns": [
-			  {"data":  "rowNum"}
+			  {"data":  "listIndex"}
 			, {"data":  "workNm"}   //업적명
 			, {"data": "workCondition"}    //달성조건    workCondition
 			, {"data": "workCnt"}    //달성상세요건 workCnt
