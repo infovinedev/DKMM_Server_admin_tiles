@@ -61,10 +61,18 @@ public interface TStoreInfoMapper {
 	/* STORE_INFO 폐업 상점 update  */
 	int updateCloseStoreInfo();	
 	
+	/* STORE_INFO '카페' 카테고리 기준 업데이트  */
+	int updateCafeCtgry();
+	
+	/* STORE_INFO '카페' 상호명 기준 업데이트  */
+	int updateCafeName();
+	
+	
 	/* STORE_INFO - 좌표값 없는 Data 조회  */
 	List<TStoreInfoModel> selectNonExistLatitude();
 	
 	int updateRoadAddrByPrimaryKey(TStoreInfoModel storeInfo);
 	
 	int updateFailVworldByPrimaryKey(TStoreInfoModel storeInfo);
+	
 }

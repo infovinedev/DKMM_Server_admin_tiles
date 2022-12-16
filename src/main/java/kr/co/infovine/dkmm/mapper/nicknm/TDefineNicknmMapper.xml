@@ -26,11 +26,13 @@
        <if test='searchText neq null and !"".equals(searchText)'>
         AND nick_nm LIKE CONCAT('%', #{searchText}, '%')
        </if>
-       <if test='searchType eq "Y" '>
-        AND file_uuid is not null
-       </if>
-       <if test='searchType eq "N" '>
-        AND file_uuid is null
+       <if test='searchType neq null and !"".equals(searchType)'>
+       		<if test='searchType eq "Y" '>
+	        AND file_uuid is not null
+	       </if>
+	       <if test='searchType eq "N" '>
+	        AND file_uuid is null
+	       </if>
        </if>
   </sql>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

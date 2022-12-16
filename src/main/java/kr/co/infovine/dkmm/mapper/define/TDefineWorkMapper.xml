@@ -19,9 +19,9 @@
     <result column="approval_yn" jdbcType="VARCHAR" property="approvalYn" />
     <result column="del_yn" jdbcType="VARCHAR" property="delYn" />
     <result column="ins_seq" jdbcType="BIGINT" property="insSeq" />
-    <result column="ins_dt" jdbcType="VARCHAR" property="insDt" />
+    <result column="ins_dt" jdbcType="TIMESTAMP" property="insDt" />
     <result column="upt_seq" jdbcType="BIGINT" property="uptSeq" />
-    <result column="upt_dt" jdbcType="VARCHAR" property="uptDt" />
+    <result column="upt_dt" jdbcType="TIMESTAMP" property="uptDt" />
     <result column="work_type" jdbcType="VARCHAR" property="workType" />
     <result column="work_text" jdbcType="VARCHAR" property="workText" />
     <result column="work_condition_desc" jdbcType="VARCHAR" property="workConditionDesc" />
@@ -175,8 +175,8 @@
         ,a.except_condition
         ,TO_DATE(a.start_dt, 'YYYYMMDD') as start_dt
         ,TO_DATE(a.end_dt, 'YYYYMMDD') as end_dt
-        ,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
-        ,TO_CHAR(a.upt_dt, 'YYYY-MM-DD HH:MI') as upt_dt
+        ,a.ins_dt
+        ,a.upt_dt
         ,(CASE
             WHEN a.work_type = 'NORMAL' THEN '일반'
             WHEN a.work_type  = 'PROMOTION' THEN '프로모션'
@@ -315,8 +315,8 @@
       ,a.except_condition
       ,TO_DATE(a.start_dt, 'YYYYMMDD') as start_dt
       ,TO_DATE(a.end_dt, 'YYYYMMDD') as end_dt
-      ,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
-      ,TO_CHAR(a.upt_dt, 'YYYY-MM-DD HH:MI') as upt_dt
+      ,a.ins_dt
+      ,a.upt_dt
       ,(CASE
         WHEN a.work_type = 'NORMAL' THEN '일반'
         WHEN a.work_type  = 'PROMOTION' THEN '프로모션'

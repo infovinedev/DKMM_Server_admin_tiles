@@ -33,14 +33,6 @@ $(document).ready(function () {
 		$("#defineApprovalListInfo").DataTable().page.len(length).draw();
 	});
 	
-   $("#txt_searchText").on('keyup click', function () {
-	   if($('#chk_searchTable').is(':checked')){
-	      $("#defineApprovalListInfo").DataTable().search(
-	         $("#txt_searchText").val()
-	      ).draw();
-	   }
-   });
-   
    $("#endDt_check").on("click", function(){
 	     	var today = c21.date_today("yyyy-MM-dd");
 	     	if($(this).is(":checked")){
@@ -67,7 +59,30 @@ $(document).ready(function () {
 	     		$("#txt_up_endDt").datepicker("enable");
 	     	}
 	   });
+   
+   	$("#txt_searchText").on('keyup click', function () {
+		searchDataTable();	   
+	});
+	
+	$("#chk_searchTable").on('keyup click', function () {
+		searchDataTable();
+	});
+	
+	$("#sel_workCond").on('change', function () {
+		fun_search();
+	});
 });
+
+function searchDataTable(){
+	 if($('#chk_searchTable').is(':checked')){
+	      $("#defineApprovalListInfo").DataTable().search(
+	         $("#txt_searchText").val()
+	      ).draw();
+	   }
+	else{
+		$("#defineApprovalListInfo").DataTable().search("").draw();
+	}
+}
 
 //콤보값 셋팅
 function fun_selectCommonCode(){
@@ -91,10 +106,13 @@ function fun_selectCommonCode(){
 
 function fun_search(){
 	var workCondition = $("#sel_workCond").val();
-	var searchText = $("#txt_searchText").val();
+	var searchText = "";//$("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	var inputData = {"workCondition": workCondition, "searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
+	
+	$('#chk_searchTable').prop('checked', false);
+	searchDataTable();
 	
 	fun_ajaxPostSend("/approval/select/defineWorkApprovalList.do", inputData, true, function(msg){
 		if(msg!=null){
@@ -311,6 +329,8 @@ function fun_setdefineApprovalListInfo() {
 			}
 		]
 	});
+	
+	fun_search();
 };
 //업적승인 및 숨김 처리 UPDATAE
 function fun_defineHiding(type,value){
@@ -588,13 +608,13 @@ function changeNickNm(value) {
                                     <tr>
                                         <th>달성조건</th>
                                         <td>
-                                            <select class="form-control" id="sel_workCond" name="search_workCond">
+                                            <select class="form-control" id="sel_workCond" name="search_workCond" style="width:80%;">
                                             </select>
                                         </td>
                                         <th>검색어</th>
                                         <td>
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:94%;" class="form-control" placeholder="업적명" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <input type="text" style="width:90%;" class="form-control" placeholder="업적명" id="txt_searchText" name="searchText" onKeypress="" />
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>

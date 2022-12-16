@@ -2,6 +2,8 @@ package kr.co.infovine.dkmm.db.model.define;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 @Getter
@@ -122,7 +124,8 @@ public class TDefineWork {
      *
      * @mbg.generated Wed Nov 23 17:41:12 KST 2022
      */
-    private String insDt;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private Date insDt;
 
     /**
      *
@@ -140,7 +143,8 @@ public class TDefineWork {
      *
      * @mbg.generated Wed Nov 23 17:41:12 KST 2022
      */
-    private String uptDt;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private Date uptDt;
 
     /**
      *

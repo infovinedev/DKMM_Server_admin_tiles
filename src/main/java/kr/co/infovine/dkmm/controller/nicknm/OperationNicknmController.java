@@ -46,6 +46,9 @@ public class OperationNicknmController {
 			,@RequestBody TDefineNicknm defineNicknm) {
 		ResponseModel result = new ResponseModel();
 		try {
+			
+			System.out.println( "defineNicknm.getSearchType() =>>" + defineNicknm.getSearchType());
+			
 			List<TDefineNicknm> model = nicknmService.selectAlldefineNicknm(defineNicknm);
 			ObjectMapper mapper = new ObjectMapper();
 			String nickNmWorkList = mapper.writeValueAsString(model);

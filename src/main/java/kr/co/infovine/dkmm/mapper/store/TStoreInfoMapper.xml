@@ -347,4 +347,71 @@
 	]]>     
   </update>
   
+  
+  <update id="updateCafeCtgry" >
+  	/* TStoreInfo.updateCafeCtgryUpdate   STORE_INFO '카페' 카테고리 기준 업데이트 */
+  	<![CDATA[
+		update t_store_info
+		set ctgry_nm = '카페'
+		where ctgry_nm in ('다방','까페', '커피숍')
+	]]>     
+  </update>
+  
+  <update id="updateCafeName" >
+  	/* TStoreInfo.updateCafeNameUpdate   STORE_INFO '카페' 상호명 기준 업데이트 */
+  	<![CDATA[
+		update t_store_info
+		set ctgry_nm = '카페'
+		where store_nm like '%스타벅스%'
+		or REPLACE(store_nm, ' ', '') like '%메가커피%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%MEGACOFFEE%'
+		or REPLACE(store_nm, ' ', '') like '%투썸플레이스%'
+		or REPLACE(store_nm, ' ', '') like '%투썸%'
+		or REPLACE(store_nm, ' ', '') like '%투썸플래이스%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%TWOSOMEPLACE%'
+		or REPLACE(store_nm, ' ', '') like '%빽다방%'
+		or REPLACE(store_nm, ' ', '') like '%이디야%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%EDIYA%'
+		or REPLACE(store_nm, ' ', '') like '%폴바셋%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%PAULBASSETT%'
+		or REPLACE(store_nm, ' ', '') like '%커피빈%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%COFFEEBEAN%'
+		or REPLACE(store_nm, ' ', '') like '%커피나무%'
+		or REPLACE(store_nm, ' ', '') like '%파스쿠찌%'
+		or REPLACE(store_nm, ' ', '') like '%파스쿠치%'
+		or REPLACE(store_nm, ' ', '') like '%할리스%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%HOLLYS%'
+		or REPLACE(store_nm, ' ', '') like '%엔제리너스%'
+		or REPLACE(store_nm, ' ', '') like '%앤제리너스%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%ANGEL-IN-US%'
+		or REPLACE(store_nm, ' ', '') like '%탐앤탐스%'
+		or REPLACE(store_nm, ' ', '') like '%탐엔탐스%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%TOMNTOMS%'
+		or REPLACE(store_nm, ' ', '') like '%커피베이%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%COFFEEBAY%'
+		or REPLACE(store_nm, ' ', '') like '%달콤커피%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%DAL.KOMM%'
+		or REPLACE(store_nm, ' ', '') like '%카페베네%'
+		or REPLACE(store_nm, ' ', '') like '%커피에반하다%'
+		or REPLACE(store_nm, ' ', '') like '%매머드커피%'
+		or REPLACE(store_nm, ' ', '') like '%메머드커피%'
+		or REPLACE(store_nm, ' ', '') like '%드롭탑%'
+		or REPLACE(store_nm, ' ', '') like '%드랍탑%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%DROPTOP%'
+		or REPLACE(store_nm, ' ', '') like '%커피스미스%'
+		or REPLACE(store_nm, ' ', '') like '%커피명가%'
+		or REPLACE(store_nm, ' ', '') like '%더카페%'
+		or REPLACE(store_nm, ' ', '') like '%만랩커피%'
+		or REPLACE(store_nm, ' ', '') like '%빈스빈스%'
+		or REPLACE(store_nm, ' ', '') like '%커피마마%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%COFFEEMAMA%'
+		or REPLACE(store_nm, ' ', '') like '%셀렉토커피%'
+		or REPLACE(store_nm, ' ', '') like '%더착한커피%'
+		or REPLACE(store_nm, ' ', '') like '%토프레소%'
+		or UPPER(REPLACE(store_nm, ' ', '')) like '%TOPRESSO%'
+		or REPLACE(store_nm, ' ', '') like '%그라찌에%'
+		or REPLACE(store_nm, ' ', '') like '%전광수커피%'
+		or REPLACE(store_nm, ' ', '') like '%카페보니또%'
+	]]>     
+  </update>
 </mapper>

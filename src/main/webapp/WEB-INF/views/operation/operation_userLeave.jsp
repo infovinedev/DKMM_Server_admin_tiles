@@ -25,20 +25,37 @@ $(document).ready(function () {
 	});
 	
    $("#txt_searchText").on('keyup click', function () {
-	   if($('#chk_searchTable').is(':checked')){
+		searchDataTable();	   
+	});
+	
+	$("#chk_searchTable").on('keyup click', function () {
+		searchDataTable();
+	});
+	
+	$("#sel_workCond").on('change', function () {
+		fun_search();
+	});
+});
+
+function searchDataTable(){
+	 if($('#chk_searchTable').is(':checked')){
 	      $("#userLeaveListInfo").DataTable().search(
 	         $("#txt_searchText").val()
 	      ).draw();
 	   }
-   });
-});
+	else{
+		$("#userLeaveListInfo").DataTable().search("").draw();
+	}
+}
 
 function fun_search(){
 	var delYn = $("#sel_delYn").val();
-	var searchText = $("#txt_searchText").val();
+	var searchText = "";//$("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	
+	$('#chk_searchTable').prop('checked', false);
+	searchDataTable();
 	
 	var inputData = {"delYn": delYn, "searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
 	fun_ajaxPostSend("/userLeave/select/userLeaveList.do", inputData, true, function(msg){
@@ -163,6 +180,7 @@ function fun_setStoreListInfo() {
 			}
 		]
 	});
+	fun_search();
 };
 </script>
 <head>
@@ -228,17 +246,16 @@ function fun_setStoreListInfo() {
                                     <tr>
                                         <th>탈퇴여부</th>
                                         <td>
-                                            <select class="form-control" id="sel_delYn" name="search_delYn">
+                                            <select class="form-control" id="sel_delYn" name="search_delYn" style="width:80%;">
                                                 <option value="">선택</option>
                                                 <option value="N">N</option>
                                                 <option value="Y">Y</option>
-                                                <option></option>
                                             </select>
                                         </td>
                                         <th>검색어</th>
                                         <td>
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:94%;" class="form-control" placeholder="닉네임,내용" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <input type="text" style="width:90%;" class="form-control" placeholder="닉네임,내용" id="txt_searchText" name="searchText" onKeypress="" />
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>

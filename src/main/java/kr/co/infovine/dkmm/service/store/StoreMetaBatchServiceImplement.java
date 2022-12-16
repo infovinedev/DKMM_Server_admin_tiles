@@ -153,6 +153,17 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
         log.info("	>>>>>> STEP 4 - UPDATE T_STORE_INFO_ORG - STATUS_TYPE : 02 RESULT_COUNT : " + updOrgStat02);
         log.info("	>>>>>> STEP 4 PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
         
+        int updCafeCtgryCnt = this.updateCafeCtgry();
+        
+        log.info("	>>>>>> STEP 5 - UPDATE T_STORE_INFO - CAFE Category : RESULT_COUNT : " + updCafeCtgryCnt);
+        log.info("	>>>>>> STEP 5 PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
+        
+        int updCafeNameCnt = this.updateCafeName();
+        
+        log.info("	>>>>>> STEP 6 - UPDATE T_STORE_INFO - CAFE Name : RESULT_COUNT : " + updCafeNameCnt);
+        log.info("	>>>>>> STEP 6 PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
+        
+        
         log.info("==================================================================================");
         log.info("============================== RESULT TOTAL ======================================");
         log.info(" :::::: T_STORE_INFO - MERGE COUNT : " + mergeCount );
@@ -160,9 +171,16 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
         log.info(" :::::: T_STORE_INFO - TOTAL EXECUTE COUNT : " + ( mergeCount + updCloseStore) );
         log.info("");
         log.info(" :::::: T_STORE_INFO_ORG - TOTAL EXECUTE COUNT : " + (updOrgStat01 + updOrgStat02) );
+        log.info("");
+        log.info(" :::::: T_STORE_INFO - Cafe Category UPDATE COUNT : " + updCafeCtgryCnt );
+        log.info(" :::::: T_STORE_INFO - Cafe Name UPDATE COUNT : " + updCafeNameCnt );
+        log.info("");
         log.info(" :::::: ALL STEP PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
         log.info("==================================================================================");
 		
+        
+        
+        
 	}
 	
 	/* STORE_INFO 정보 update  */
@@ -189,6 +207,19 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 		return tStoreInfoOrgExcelMapper.updateStoreOrgStatus02();
 	}
 
+	/* STORE_INFO '카페' 카테고리 기준 업데이트  */
+	@Override
+	public int updateCafeCtgry() {
+		return tStoreInfoMapper.updateCafeCtgry();
+	}
+	
+	/* STORE_INFO '카페' 상호명 기준 업데이트  */
+	@Override
+	public int updateCafeName() {
+		return tStoreInfoMapper.updateCafeName();
+	}
+	
+	
 	// region 설명: 주소 없는 녀석들(roadaddress)
 	/**
 	 * 2022-10-12 Made by Duhyun, Kim

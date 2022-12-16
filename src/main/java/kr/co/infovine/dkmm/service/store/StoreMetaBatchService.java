@@ -10,6 +10,8 @@ public interface StoreMetaBatchService {
 	int updateStoreOrgStatus01();	
 	int updateCloseStoreInfo();		
 	int updateStoreOrgStatus02();
+	int updateCafeCtgry();
+	int updateCafeName();
 	
 	void getCoordinatesToStoreInfo(); //store info
 	

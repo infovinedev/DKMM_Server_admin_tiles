@@ -24,19 +24,39 @@ $(document).ready(function () {
 	});
 	
    $("#txt_searchText").on('keyup click', function () {
-	   if($('#chk_searchTable').is(':checked')){
+		searchDataTable();	   
+	});
+	
+	$("#chk_searchTable").on('keyup click', function () {
+		searchDataTable();
+	});
+	
+	$("#sel_workCond").on('change', function () {
+		fun_search();
+	});
+	
+});
+
+function searchDataTable(){
+	 if($('#chk_searchTable').is(':checked')){
 	      $("#nicknmListInfo").DataTable().search(
 	         $("#txt_searchText").val()
 	      ).draw();
 	   }
-   });
-});
+	else{
+		$("#nicknmListInfo").DataTable().search("").draw();
+	}
+}
+
 function fun_search(){
-	var workCondition = $("#sel_workCond").val();
-	var searchText = $("#txt_searchText").val();
+	var searchType = $("#sel_workCond").val();
+	var searchText = "";//$("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
-	var inputData = {"workCondition": workCondition, "searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
+	var inputData = {"searchType": searchType, "searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
+	
+	$('#chk_searchTable').prop('checked', false);
+	searchDataTable();
 	
 	fun_ajaxPostSend("/nicknm/select/defineNicknmList.do", inputData, true, function(msg){
 		if(msg!=null){
@@ -171,6 +191,8 @@ function fun_setNicknmListInfo() {
 			}
 		]
 	});
+	
+	fun_search();
 };
 
 function fun_update(type) {
@@ -322,17 +344,16 @@ function fn_admin_file_callback(th, data, pageType){
                                     <tr>
                                         <th>칭호이미지여부</th>
                                         <td>
-                                            <select class="form-control" id="sel_workCond" name="search_workCond">
+                                            <select class="form-control" id="sel_workCond" name="search_workCond" style="width:80%;">
 	                                        	<option value="">선택</option>
 	                                        	<option value="Y">이미지있음</option>
 	                                        	<option value="N">이미지없음</option>
-                                              <option></option>
                                             </select>
                                         </td>
                                         <th>검색어</th>
                                         <td>
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:94%;" class="form-control" placeholder="칭호명" id="txt_searchText" name="searchText" onKeypress="" />
+                                                  <input type="text" style="width:90%;" class="form-control" placeholder="칭호명" id="txt_searchText" name="searchText" onKeypress="" />
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>

@@ -709,9 +709,9 @@ function fun_get_mapXY (address) {
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                             <button type="button" class="btn btn-primary" onclick="fun_save();">저장</button>
                             <button type="button" class="btn btn-danger">삭제</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                           </div>
                         </div>
                     </section>
