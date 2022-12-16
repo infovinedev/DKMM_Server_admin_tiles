@@ -87,17 +87,20 @@ public class OperationNicknmController {
 	ResponseModel result = new ResponseModel();
 		try {
 			SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
-			if(defineNicknm.getType().equals("I")) {
-				defineNicknm.setInsSeq(sessionModel.getAdminUserSeq());
-				nicknmService.insertFaq(defineNicknm);
-				
-			}else if(defineNicknm.getType().equals("U")) {
-				defineNicknm.setUptSeq(sessionModel.getAdminUserSeq());
-				nicknmService.updateFaq(defineNicknm);
-				
-			}else {
+			
+			if ( defineNicknm.getType() == null ) {
 				int nickSeq = defineNicknm.getNickSeq();
 				nicknmService.deleteFaq(nickSeq);
+			}
+			else {
+				if(defineNicknm.getType().equals("I")) {
+					defineNicknm.setInsSeq(sessionModel.getAdminUserSeq());
+					nicknmService.insertFaq(defineNicknm);
+					
+				}else if(defineNicknm.getType().equals("U")) {
+					defineNicknm.setUptSeq(sessionModel.getAdminUserSeq());
+					nicknmService.updateFaq(defineNicknm);
+				}
 			}
 			result.setErrorMessage("success"); 
 		} catch (Exception e) {
