@@ -160,7 +160,8 @@ function fun_setjdtListAdminUser(callback) {
 				, "class": "text-center"
 				, "render": function (data, type, row, meta) {
 					var insertTr = "";
-					if ( row.lastloginDate != "" ){
+					
+					if ( row.lastloginDate != "" && row.lastloginDate != null ){
 						insertTr = row.lastloginDate.substring(0,4) + "-" + row.lastloginDate.substring(4,6) + "-" + row.lastloginDate.substring(6,8);
 						insertTr = insertTr + " " +  row.lastloginDate.substring(8,10) + ":" + row.lastloginDate.substring(10,12) + ":" + row.lastloginDate.substring(12,14);
 					}
@@ -197,6 +198,7 @@ function fun_setjdtListAdminUser(callback) {
 	callback();
 };
 
+var flag = "";
 function fun_insert(){
 	fun_changeAfterinit();
 	$("#txt_userId").attr("disabled",false); 
@@ -207,6 +209,7 @@ function fun_insert(){
 	$("#section1_detail_view").removeAttr("style");
 	$("#btnBlockY").hide();
 	$("#btnBlockN").hide();
+	flag = "I";
 }
 
 function fun_clickjdtListAdminUser(rowIdx) {
@@ -229,6 +232,8 @@ function fun_clickjdtListAdminUser(rowIdx) {
 		$("#btnBlockN").show();
 		
 		$("#section1_detail_view").removeAttr("style");
+		
+		flag = "U";
 	}
 };
 
@@ -360,12 +365,39 @@ function fun_clickButtonUnBlockAdminUser(){
 
 function fun_clickButtonInsertAdminUser(){
 	
-	
 	if (confirm('등록 및 수정하시겠습니까?')){
 		var password = $("#txt_adminPassword").val();
 		var newPassword = $("#txt_newPassword").val();
 		var shaPassword = "";
 		var shaNewPassword = "";
+		
+		if ( flag == "I" ){
+			
+			if ( $("#txt_userId").val() == "" ){
+				$("#txt_userId").focus();
+				alert('아이디를 입력해주세요.');
+				return;
+			}
+			
+			if ( newPassword == "" ){
+				$("#txt_newPassword").focus();
+				alert('비밀번호를 입력해주세요.');
+				return;
+			}
+			
+			if ( $("#txt_userName").val() == "" ){
+				$("#txt_userName").focus();
+				alert('이름을 입력해주세요.');
+				return;
+			}
+		}
+		
+		
+		if ( $("#sel_userTypeCode").val() == "-1" ){
+			$("#sel_userTypeCode").focus();
+			alert('유저타입을 선택해주세요.');
+			return;
+		}
 		
 		if(password != ""){
 			shaPassword = hex_sha512(password);
@@ -376,6 +408,7 @@ function fun_clickButtonInsertAdminUser(){
 		if(password==''||password==null){
 			$("#txt_adminPassword").focus();
 			alert('로그인 비밀번호를 입력해주세요');
+			return;
 		}
 		else{
 			var inputData = { 'adminUserSeq': $("#hdf_adminUserSeq").val()
