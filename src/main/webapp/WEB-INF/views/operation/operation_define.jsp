@@ -342,7 +342,7 @@ function fun_btnDefineinsert() {
 	var workCnt = $("#txt_add_workCnt").val();
 	var point = $("#txt_add_point").val();
 	var workType = $("#sel_add_workType").val();
-	var nickSeq = $("#txt_add_nickSeq").val();
+	var nickSeq = $("#sel_add_nickSeq").val();
 	var startDt = $("#txt_add_startDt").val();
 	var endDt = $("#txt_add_endDt").val();
 	var startDt = $("#txt_add_startDt").val() == null ? "" : $("#txt_add_startDt").val().replaceAll("-", "");

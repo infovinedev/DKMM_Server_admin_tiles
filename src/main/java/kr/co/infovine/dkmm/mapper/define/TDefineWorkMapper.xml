@@ -133,32 +133,44 @@
     /* 업적목록 조회하기 selectAlldefineWork */
       SELECT
          ROW_NUMBER() OVER() AS rowNum
-        ,a.work_seq
-        ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
-        ,a.work_nm
-        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
-        ,a.work_cnt
-        ,a.work_text
-        ,a.nick_seq
-        ,CONCAT(a.point , 'P') as point
-        ,a.except_condition
-        ,a.start_dt
-        ,a.end_dt
-        ,a.work_type
-        ,a.approval_yn
-        ,a.use_yn
-        ,a.work_condition_desc
-        ,a.work_text
-        ,a.zombie_yn
-        ,a.limit_yn
-        ,a.unit_txt
-      FROM t_define_work a
-      WHERE 1=1
-        AND a.del_yn = 'N'
-        AND a.approval_yn = 'Y'
-        AND a.use_yn = 'Y'
-      <include refid="searchCondition_history"></include>
-      ORDER BY work_seq DESC
+         ,a.*
+      FROM (
+      	SELECT
+	        CASE WHEN a.limit_yn = 'Y' THEN 0 ELSE 1 END AS sortOrder1
+				,CASE WHEN a.limit_yn = 'Y' THEN '기간한정' ELSE '일반' END AS sortOrderTxt1
+				,CASE WHEN a.work_condition = 'EMAIL' THEN 0 
+					 WHEN a.work_condition = 'REGISTER' THEN 1
+					 WHEN a.work_condition = 'LIKE' THEN 2
+					 WHEN a.work_condition = 'ACT' THEN 3
+					 WHEN a.work_condition = 'GET' THEN 4
+				ELSE 1 END AS sortOrder3
+	        ,a.work_seq
+	        ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
+	        ,a.work_nm
+	        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
+	        ,a.work_cnt
+	        ,a.work_text
+	        ,a.nick_seq
+	        ,CONCAT(a.point , 'P') as point
+	        ,a.except_condition
+	        ,a.start_dt
+	        ,a.end_dt
+	        ,a.work_type
+	        ,a.approval_yn
+	        ,a.use_yn
+	        ,a.work_condition_desc
+	        ,a.work_text
+	        ,a.zombie_yn
+	        ,a.limit_yn
+	        ,a.unit_txt
+	      FROM t_define_work a
+	      WHERE 1=1
+	        AND a.del_yn = 'N'
+	        AND a.approval_yn = 'Y'
+	        AND a.use_yn = 'Y'
+	      <include refid="searchCondition_history"></include>
+	  ) a
+      ORDER BY sortOrder1, sortOrder3, work_seq DESC
     </select>
     
     <select id="selectdefineWorkDetail" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
@@ -272,33 +284,44 @@
     
     <!--                                                                      업적등록승인 start                                                                      -->
     <select id="selectAlldefineWorkApproval" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
-    SELECT
-         ROW_NUMBER() OVER() AS rowNum
-        ,a.work_seq
-        ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
-        ,a.work_nm
-        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
-        ,a.work_cnt
-        ,a.work_text
-        ,a.nick_seq
-        ,a.point
-        ,a.except_condition
-        ,a.start_dt
-        ,a.end_dt
-        ,a.work_type
-        ,(CASE WHEN a.approval_yn = 'Y' THEN '승인' 
-               WHEN a.approval_yn = 'N' THEN '승인대기' ELSE '승인취소' END) as approval_yn
-        ,(case when a.use_yn = 'Y' then '사용' else '숨김' end) as use_yn
-        ,a.work_condition_desc
-        ,a.work_text
-        ,a.zombie_yn
-        ,a.limit_yn
-        ,a.unit_txt
-      FROM t_define_work a
-      WHERE 1=1
-        AND a.del_yn = 'N'
-      <include refid="searchCondition_history"></include>
-      ORDER BY work_seq DESC
+    SELECT  ROW_NUMBER() OVER() AS rowNum
+    		,a.* 
+    FROM (
+		SELECT     
+	    	CASE WHEN a.limit_yn = 'Y' THEN 0 ELSE 1 END AS sortOrder1
+			,CASE WHEN a.limit_yn = 'Y' THEN '기간한정' ELSE '일반' END AS sortOrderTxt1
+			,CASE WHEN a.work_condition = 'EMAIL' THEN 0 
+				 WHEN a.work_condition = 'REGISTER' THEN 1
+				 WHEN a.work_condition = 'LIKE' THEN 2
+				 WHEN a.work_condition = 'ACT' THEN 3
+				 WHEN a.work_condition = 'GET' THEN 4
+			ELSE 1 END AS sortOrder3
+	        ,a.work_seq
+	        ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
+	        ,a.work_nm
+	        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
+	        ,a.work_cnt
+	        ,a.work_text
+	        ,a.nick_seq
+	        ,a.point
+	        ,a.except_condition
+	        ,a.start_dt
+	        ,a.end_dt
+	        ,a.work_type
+	        ,(CASE WHEN a.approval_yn = 'Y' THEN '승인' 
+	               WHEN a.approval_yn = 'N' THEN '승인대기' ELSE '승인취소' END) as approval_yn
+	        ,(case when a.use_yn = 'Y' then '사용' else '숨김' end) as use_yn
+	        ,a.work_condition_desc
+	        ,a.work_text
+	        ,a.zombie_yn
+	        ,a.limit_yn
+	        ,a.unit_txt
+	      FROM t_define_work a
+	      WHERE 1=1
+	        AND a.del_yn = 'N'
+	      <include refid="searchCondition_history"></include>
+	  ) a
+      ORDER BY sortOrder1, sortOrder3, work_seq DESC
     </select>
     
     <select id="selectdefineWorkApprovalDetail" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
