@@ -154,6 +154,7 @@ function fun_reset(type){
 	$("#txt_unitTxt").val("");             //단위텍스트
 	$("#sel_approvalYn").val("");          //승인여부
 	$("#sel_useYn").val("");               //사용여부
+	$("#txt_dispOrder").val("");           //소팅순서
 	
 	$("#hidden_workCondition").val(); //달성조건 value
 	$("#hidden_nickSeq").val(); //칭호 value
@@ -195,6 +196,7 @@ function fun_viewDetail(workSeq) {
 			var unitTxt            = tempResult.unitTxt == null ? "" : tempResult.unitTxt;                       //단위텍스트
 			var approvalYn         = tempResult.approvalYn == null ? "" : tempResult.approvalYn;                 //승인여부
 			var useYn              = tempResult.useYn == null ? "" : tempResult.useYn;                           //사용여부
+			var dispOrder			= tempResult.dispOrder == null ? "" : tempResult.dispOrder;
 			
  			if(codeValue == "SELF"){
 				workCnt = "-";
@@ -225,6 +227,7 @@ function fun_viewDetail(workSeq) {
 			$("#txt_zombieYn").val(zombieYn);
 			$("#txt_limitYn").val(limitYn);
 			$("#txt_unitTxt").val(unitTxt);
+			$("#txt_dispOrder").val(dispOrder);
 			
 			$("#sel_approvalYn").val(approvalYn);
 			$("#sel_useYn").val(useYn);
@@ -246,13 +249,14 @@ function fun_setdefineApprovalListInfo() {
 			, {"data": "zombieYn" }
 			, {"data": "limitYn" }
 			, {"data": "unitTxt" }
+			, {"data": "dispOrder" }    //정렬순서    dispOrder
 			, {"data": "add" }
 		]
 		, "paging": true            // Table Paging
 		, "info": false             // 'thisPage of allPage'
 		, "autoWidth": true
  		, "scrollXInner": "100%"
-		, "order": [[ 1, "desc" ]]
+		, "order": [[ 0, "asc" ]]
 		, "deferRender": true                // defer
 		, "lengthMenu": [10,20,50]           // Row Setting [-1], ["All"]
 		, "lengthChange": true
@@ -281,11 +285,15 @@ function fun_setdefineApprovalListInfo() {
 			}
 			 , {
 				"targets": [2]
-				, "class": "text-center"
+				, "class": "text-left"
 			}
 			, {
 				"targets": [3]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					var insertTr = row.workCnt + "회";
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [4]
@@ -294,10 +302,13 @@ function fun_setdefineApprovalListInfo() {
 			, {
 				"targets": [5]
 				, "class": "text-center"
-					, "render": function (data, type, row) {
-					   var point = row.point+"P";
-					   return point;
-		                }
+				, "render": function (data, type, row) {
+					var point = "";
+					if ( row.point != "" ){
+						point = row.point+"P";
+					}
+					return point;
+	            }
 				
 			}
 			, {
@@ -322,6 +333,10 @@ function fun_setdefineApprovalListInfo() {
 			}
 			, {
 				"targets": [11]
+				, "class": "text-center"
+			}
+			, {
+				"targets": [12]
 				, "class": "text-center"
 				, "render": function (data, type, row) {
 					var msg = row.workSeq;
@@ -449,6 +464,7 @@ function fun_updateDisplay() {
 	var zombieYn = $("#txt_zombieYn").val();
 	var limitYn = $("#txt_limitYn").val();
 	var unitTxt = $("#txt_unitTxt").val();
+	var dispOrder = $("#txt_dispOrder").val();
 	
 	$("#txt_up_workSeq").val(workSeq);
 	$("#txt_up_workNm").val(workNm);
@@ -467,6 +483,7 @@ function fun_updateDisplay() {
 	$("#sel_up_zombieYn").val(zombieYn);
 	$("#sel_up_limitYn").val(limitYn);
 	$("#txt_up_unitTxt").val(unitTxt);
+	$("#txt_up_dispOrder").val(dispOrder);
 	
 }
 
@@ -488,9 +505,12 @@ function fun_svae(type) {
 	var nickSeq           =	$("#sel_up_nickSeq").val();
 	var limitYn           =	$("#sel_up_limitYn").val();
 	var unitTxt           =	$("#txt_up_unitTxt").val();
+	var dispOrder           =	$("#txt_up_dispOrder").val();
 	
 	var inputData = {"workSeq": workSeq,"workNm": workNm,"workCondition": workCondition, "workCnt": workCnt, "point": point,"workType": workType,"startDt": startDt,"endDt": endDt
-					,"workConditionDesc": workConditionDesc,"exceptCondition": exceptCondition,"zombieYn": zombieYn,"nickSeq": nickSeq,"limitYn": limitYn,"unitTxt": unitTxt};
+					,"workConditionDesc": workConditionDesc,"exceptCondition": exceptCondition,"zombieYn": zombieYn,"nickSeq": nickSeq,"limitYn": limitYn,"unitTxt": unitTxt
+					,"dispOrder" : dispOrder
+					};
 	if(type == "U"){
 		var result = confirm('업적 수정하시겠습니까?');
 		if(result){
@@ -648,7 +668,7 @@ function changeNickNm(value) {
 	                                        <th class="text-center">번호</th>
 	                                        <th class="text-center">업적명</th>
 	                                       	<th class="text-center">달성조건</th>
-	                                        <th class="text-center">달성 상세요건</th>
+	                                        <th class="text-center">달성횟수</th>
 	                                        <th class="text-center">칭호</th>
 	                                        <th class="text-center">포인트</th>
 	                                        
@@ -658,7 +678,8 @@ function changeNickNm(value) {
 	                                        <th class="text-center">달성이후누적</th>
 	                                        <th class="text-center">기간한정여부</th>
 	                                        <th class="text-center">단위텍스트</th>
-	                                        <th class="text-center">관리</th>
+	                                        <th class="text-center">정렬순서</th>
+	                                        <th class="text-center" width="7%">관리</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -700,7 +721,7 @@ function changeNickNm(value) {
                                      <td><input class="form-control" type="text" id="txt_workCondition" readOnly/>
                                          <input class="form-control" type="hidden" id="hidden_workCondition"/>
                                      </td>
-                                     <th>달성 상세 요건
+                                     <th>달성횟수
                                        <!-- <button type="button" class="ml-1" data-placement="right" data-toggle="tooltip" data-html="true" title="dd">
                                             <i class="icon-exclamation"></i>
                                         </button> -->
@@ -754,7 +775,9 @@ function changeNickNm(value) {
                                   </tr>
                                   <tr>
                                      <th>단위텍스트</th>
-                                     <td colspan="3"><input class="form-control" type="text" id="txt_unitTxt" readOnly/></td>
+                                     <td><input class="form-control" type="text" id="txt_unitTxt" readOnly/></td>
+                                     <th>정렬순서</th>
+                                     <td><input class="form-control" type="text" id="txt_dispOrder" readOnly/></td>
                                   </tr>
                                   <tr>
                                      <th>승인처리</th>
@@ -817,7 +840,7 @@ function changeNickNm(value) {
                                         <select class="form-control" id="sel_up_workCond" name="search_workCond">
                                        </select>
                                      </td>
-                                     <th>달성 상세 요건</th>
+                                     <th>달성횟수</th>
                                      <td><input class="form-control" type="text" id="txt_up_workCnt" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></td>
                                   </tr>
                                   <tr>
@@ -882,7 +905,9 @@ function changeNickNm(value) {
                                   </tr>
                                   <tr>
                                      <th>단위텍스트</th>
-                                     <td colspan="3"><input class="form-control" type="text" id="txt_up_unitTxt"/></td>
+                                     <td><input class="form-control" type="text" id="txt_up_unitTxt"/></td>
+                                     <th>정렬순서</th>
+                                     <td><input class="form-control" type="text" id="txt_up_dispOrder" maxlength="9" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" /></td>
                                   </tr>
                                </tbody>
                             </table>

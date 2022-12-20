@@ -83,6 +83,16 @@ function fun_reset(type){
 	$("#txt_insDt").val("");
 }
 
+function replaceAll(strTemp, strValue1, strValue2){ 
+    while(1){
+        if( strTemp.indexOf(strValue1) != -1 )
+            strTemp = strTemp.replace(strValue1, strValue2);
+        else
+            break;
+    }
+    return strTemp;
+}
+
 //상세보기
 function fun_viewDetail(leaveSeq) {
 	fun_reset();

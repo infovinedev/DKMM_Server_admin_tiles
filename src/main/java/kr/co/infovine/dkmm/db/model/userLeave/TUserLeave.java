@@ -2,6 +2,8 @@ package kr.co.infovine.dkmm.db.model.userLeave;
 
 import java.util.Date;
 
+import org.springframework.web.util.HtmlUtils;
+
 import lombok.Getter;
 import lombok.Setter;
 @Getter
@@ -90,4 +92,15 @@ public class TUserLeave {
     private String nickName;
     private String userId;
     private String delYn;
+
+    
+    public String getReason() {
+    	
+    	if ( this.reason != null ) {
+    		reason = HtmlUtils.htmlUnescape(reason);
+    	}
+    	
+    	return this.reason;
+    }
+    
 }

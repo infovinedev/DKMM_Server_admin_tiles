@@ -140,6 +140,7 @@ function fun_reset(type){
 	$("#txt_zombieYn").val("");            //달성이후누적
 	$("#txt_limitYn").val("");             //기간한정여부
 	$("#txt_unitTxt").val("");             //단위텍스트
+	$("#txt_dispOrder").val("");           //소팅순서
 }
 
 //업적관리 등록버튼
@@ -191,6 +192,7 @@ function fun_viewDetail(workSeq) {
 			var zombieYn           = tempResult.zombieYn == null ? "" : tempResult.zombieYn;                     //달성이후누적
 			var limitYn            = tempResult.limitYn == null ? "" : tempResult.limitYn;                       //기간한정여부
 			var unitTxt            = tempResult.unitTxt == null ? "" : tempResult.unitTxt;                       //단위텍스트 
+			var dispOrder			= tempResult.dispOrder == null ? "" : tempResult.dispOrder;
 			
 			if(workCondition == "SELF"){
 				workCnt = "-";
@@ -217,6 +219,8 @@ function fun_viewDetail(workSeq) {
 			$("#txt_zombieYn").val(zombieYn);
 			$("#txt_limitYn").val(limitYn);
 			$("#txt_unitTxt").val(unitTxt);
+			$("#txt_dispOrder").val(dispOrder);
+			
 		}
 	});
 }
@@ -233,13 +237,14 @@ function fun_setDefineListInfo() {
 			, {"data": "zombieYn" }    //달성이후누적 zombieYn
 			, {"data": "limitYn" }    //기간한정여부 limitYn
 			, {"data": "unitTxt" }    //단위텍스트    unitTxt
+			, {"data": "dispOrder" }    //정렬순서    dispOrder
 			, {"data": "add" }    //관리
 		]
 		, "paging": true            // Table Paging
 		, "info": false             // 'thisPage of allPage'
 		, "autoWidth": true
  		, "scrollXInner": "100%"
-		, "order": [[ 1, "desc" ]]
+		, "order": [[ 0, "asc" ]]
 		, "deferRender": true                // defer
 		, "lengthMenu": [10,20,50]           // Row Setting [-1], ["All"]
 		, "lengthChange": true
@@ -268,11 +273,15 @@ function fun_setDefineListInfo() {
 			}
 			 , {
 				"targets": [2]
-				, "class": "text-center"
+				, "class": "text-left"
 			}
 			, {
 				"targets": [3]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					var insertTr = row.workCnt + "회";
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [4]
@@ -296,6 +305,10 @@ function fun_setDefineListInfo() {
 			}
 			, {
 				"targets": [9]
+				, "class": "text-center"
+			}
+			, {
+				"targets": [10]
 				, "class": "text-center"
 				, "render": function (data, type, row) {
 					var msg = row.workSeq;
@@ -352,27 +365,35 @@ function fun_btnDefineinsert() {
 	var zombieYn = $("#sel_add_zombieYn").val();
 	var limitYn = $("#sel_add_limitYn").val();
 	var unitTxt = $("#txt_add_unitTxt").val();
+	var dispOrder = $("#txt_add_dispOrder").val();
 	
 	var result = confirm('업적 등록하시겠습니까?');
 	
 	var inputData = {"workSeq": workSeq, "workNm": workNm, "workCondition": workCondition,"workCnt": workCnt, "point": point, "workType": workType
 					 ,"nickSeq": nickSeq, "startDt": startDt, "endDt": endDt,"workConditionDesc": workConditionDesc, "exceptCondition": exceptCondition
-					 ,"zombieYn": zombieYn, "limitYn": limitYn, "unitTxt": unitTxt
+					 ,"zombieYn": zombieYn, "limitYn": limitYn, "unitTxt": unitTxt, "dispOrder" : dispOrder
 					}; 
 	if(result){
 		if($("#sel_add_workCondition").val() == ''){
-			alert("달성조건을 선택해주세요 ");
+			alert("달성조건을 선택해주세요. ");
 			$("#sel_add_workCondition").focus();
 			return ;
 		}else if($("#txt_add_workCnt").val() == ''){
-			alert("달성 상세요건을 입력해주세요 ");
+			alert("달성 상세요건을 입력해주세요. ");
 			$("#txt_add_workCnt").focus();
 			return ;
 		}else if($("#sel_add_workType").val() == ''){
-			alert("업적구분을 선택해주세요 ");
+			alert("업적구분을 선택해주세요. ");
 			$("#sel_add_workType").focus();
 			return ;
 		}
+		
+		if($("#txt_add_dispOrder").val() == ''){
+			alert("정렬 순서를 입력해주세요. ");
+			$("#txt_add_dispOrder").focus();
+			return ;
+		}
+		
 		fun_ajaxPostSend("/define/save/defineWorkinsert.do", inputData, true, function(msg){
 			if(msg.errorMessage !=null){
 				var message = msg.errorMessage;
@@ -489,12 +510,13 @@ function fun_btnDefineinsert() {
 	                                        <th class="text-center">번호</th>
 	                                        <th class="text-center">업적명</th>
 	                                       	<th class="text-center">달성조건</th>
-	                                        <th class="text-center">달성 상세요건</th>
+	                                        <th class="text-center">달성횟수</th>
 	                                        <th class="text-center">칭호</th>
 	                                        <th class="text-center">포인트</th>
 	                                        <th class="text-center">달성이후누적</th>
 	                                        <th class="text-center">기간한정여부</th>
 	                                        <th class="text-center">단위텍스트</th>
+	                                        <th class="text-center">정렬순서</th>
 	                                        <th class="text-center">관리</th>
                                         </tr>
                                     </thead>
@@ -535,7 +557,7 @@ function fun_btnDefineinsert() {
                                   <tr>
                                      <th>달성조건</th>
                                      <td><input class="form-control" type="text" id="txt_workCondition" readOnly/></td>
-                                     <th>달성 상세 요건</th>
+                                     <th>달성횟수</th>
                                      <td><input class="form-control" type="text" id="txt_workCnt" readOnly/></td>
                                   </tr>
                                   <tr>
@@ -579,7 +601,9 @@ function fun_btnDefineinsert() {
                                   </tr>
                                   <tr>
                                      <th>단위텍스트</th>
-                                     <td colspan="3"><input class="form-control" type="text" id="txt_unitTxt" readOnly/></td>
+                                     <td><input class="form-control" type="text" id="txt_unitTxt" readOnly/></td>
+                                     <th>정렬순서</th> 
+                                     <td><input class="form-control" type="text" id="txt_dispOrder" readOnly/></td>
                                   </tr>
                                </tbody>
                             </table>
@@ -621,8 +645,8 @@ function fun_btnDefineinsert() {
                                         <select class="form-control" id="sel_add_workCondition" name="operation_workCondition">
                                          </select>
                                     </td>
-                                    <th>달성 상세요건 <span class="text-red">*</span></th>
-                                     <td><input class="form-control" placeholder="달성 상세요건을 입력해주세요." type="text" id="txt_add_workCnt" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></td>
+                                    <th>달성횟수 <span class="text-red">*</span></th>
+                                     <td><input class="form-control" placeholder="달성 횟수을 입력해주세요.(숫자)" type="text" id="txt_add_workCnt" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></td>
                                   </tr>
                                   <tr>
                                      <th>포인트</th>
@@ -687,7 +711,10 @@ function fun_btnDefineinsert() {
                                   </tr>
                                   <tr>
                                      <th>단위텍스트</th>
-                                     <td colspan="3"><input class="form-control" placeholder="단위텍스트를 입력해주세요." type="text" id="txt_add_unitTxt" maxlength="2"/></td>
+                                     <td><input class="form-control" placeholder="단위텍스트를 입력해주세요." type="text" id="txt_add_unitTxt" maxlength="2"/></td>
+                                  	 <th>정렬순서</th>
+                                     <td><input class="form-control" placeholder="정렬순서를 입력해주세요.(숫자)" type="text" id="txt_add_dispOrder" maxlength="9" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" /></td>
+                                  
                                   </tr>
                                </tbody>
                             </table>
