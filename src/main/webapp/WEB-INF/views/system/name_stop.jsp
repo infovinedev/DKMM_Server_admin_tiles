@@ -24,20 +24,34 @@ $(document).ready(function () {
 		$("#nameStopInfo").DataTable().page.len(length).draw();
 	});
 	
-   $("#txt_searchText").on('keyup click', function () {
-	   if($('#chk_searchTable').is(':checked')){
+	$("#txt_searchText").on('keyup click', function () {
+		searchDataTable();	   
+	});
+	
+	$("#chk_searchTable").on('keyup click', function () {
+		searchDataTable();
+	});
+});
+
+function searchDataTable(){
+	 if($('#chk_searchTable').is(':checked')){
 	      $("#nameStopInfo").DataTable().search(
 	         $("#txt_searchText").val()
 	      ).draw();
 	   }
-   });
-});
+	else{
+		$("#nameStopInfo").DataTable().search("").draw();
+	}
+}
+
 
 function fun_search(){
-	var searchText = $("#txt_searchText").val();
+	var searchText = ""; //$("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	
+	$('#chk_searchTable').prop('checked', false);
+	searchDataTable();
 	
 	var inputData = {"searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
 	fun_ajaxPostSend("/system/select/nameStop.do", inputData, true, function(msg){

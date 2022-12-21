@@ -18,6 +18,7 @@
     <result column="upt_seq" jdbcType="BIGINT" property="uptSeq" />
     <result column="upt_dt" jdbcType="TIMESTAMP" property="uptDt" />
     <result column="file_uuid" jdbcType="VARCHAR" property="fileUuid" />
+    <result column="work_nm" jdbcType="VARCHAR" property="workNm" />
   </resultMap>
   <sql id="searchCondition_nick">
        <if test='searchStartDt neq null and !"".equals(searchStartDt)'>

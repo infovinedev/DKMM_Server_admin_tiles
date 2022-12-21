@@ -804,8 +804,8 @@ function changeNickNm(value) {
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary min-width-90px" id="close" data-dismiss="modal">닫기</button>
                             <button type="button" class="btn btn-primary min-width-90px" onclick="fun_updateDisplay();">수정</button>
+                            <button type="button" class="btn btn-secondary min-width-90px" id="close" data-dismiss="modal">닫기</button>
                           </div>
                         </div>
                     </section>
@@ -913,9 +913,9 @@ function changeNickNm(value) {
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary min-width-90px" id="close" data-dismiss="modal">취소</button>
                             <button type="button" class="btn btn-primary min-width-90px" onclick="fun_svae('U');">저장</button>
                             <button type="button" class="btn btn-danger min-width-90px" onclick="fun_svae('D');">삭제</button>
+                            <button type="button" class="btn btn-secondary min-width-90px" id="close" data-dismiss="modal">닫기</button>
                           </div>
                         </div>
                     </section>

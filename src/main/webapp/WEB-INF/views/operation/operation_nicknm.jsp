@@ -130,7 +130,7 @@ function fun_setNicknmListInfo() {
 			  {"data":  "listIndex"}
 			, {"data":  "nickSeq"}
 			, {"data":  "nickNm"}
-			, {"data": "nickSeq"}
+			, {"data": "workNm"}
 			, {"data": "fileUuid"}
 			, {"data": "nickComment"}
 			, {"data": "add" }
@@ -442,9 +442,8 @@ function fn_admin_file_callback(th, data, pageType){
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">닫기</button>
                             <button type="button" class="btn btn-primary" onclick="fun_update('edit');">수정</button>
-                            
+                            <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">닫기</button>
                           </div>
                         </div>
                     </section>
@@ -492,10 +491,10 @@ function fn_admin_file_callback(th, data, pageType){
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                             <button type="button" id="btn_insert" class="btn btn-primary" onclick="fun_save('I');">저장</button>
                             <button type="button" id="btn_update" class="btn btn-primary" onclick="fun_save('U');">저장</button>
                             <button type="button" id="btn_delete" class="btn btn-danger" onclick="fun_save('D');">삭제</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                             
                           </div>
                         </div>

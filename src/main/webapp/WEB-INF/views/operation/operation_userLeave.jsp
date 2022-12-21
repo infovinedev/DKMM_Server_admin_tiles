@@ -167,11 +167,11 @@ function fun_setStoreListInfo() {
 			}
 			, {
 				"targets": [3]
-				, "class": "text-center"
+				, "class": "text-left"
 			}
 			, {
 				"targets": [4]
-				, "class": "text-center"
+				, "class": "text-left"
 			}
 			, {
 				"targets": [5]
@@ -343,7 +343,9 @@ function fun_setStoreListInfo() {
                                   </tr>
                                   <tr>
                                      <th>내용</th>
-                                     <td colspan="3"><input class="form-control" type="text" id="txt_reason" readOnly/></td>
+                                     <td colspan="3">
+                                     	<textarea class="form-control" rows="7" id="txt_reason" readOnly> </textarea>
+                                     </td>
                                   </tr>
                                   <tr>
                                      <th>탈퇴완료여부</th>

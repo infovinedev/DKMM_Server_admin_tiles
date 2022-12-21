@@ -720,7 +720,7 @@ function fun_btnDefineinsert() {
                             </table>
                           </div>
                           <div class="modal-footer">
-                          	<button type="button" class="btn btn-danger" onclick="fun_btnDefineinsert()">저장</button>
+                          	<button type="button" class="btn btn-primary" onclick="fun_btnDefineinsert()">저장</button>
                             <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">닫기</button>
                           </div>
                         </div>

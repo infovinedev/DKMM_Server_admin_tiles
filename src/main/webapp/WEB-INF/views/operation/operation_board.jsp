@@ -24,20 +24,40 @@ $(document).ready(function () {
 		$("#boardListInfo").DataTable().page.len(length).draw();
 	});
 	
-   $("#txt_searchText").on('keyup click', function () {
-	   if($('#chk_searchTable').is(':checked')){
+	$("#txt_searchText").on('keyup click', function () {
+		searchDataTable();	   
+	});
+	
+	$("#chk_searchTable").on('keyup click', function () {
+		searchDataTable();
+	});
+	
+	$("#search_boardDiv").on('change', function () {
+		fun_search();
+	});
+	
+   
+});
+
+function searchDataTable(){
+	 if($('#chk_searchTable').is(':checked')){
 	      $("#boardListInfo").DataTable().search(
 	         $("#txt_searchText").val()
 	      ).draw();
 	   }
-   });
-});
+	else{
+		$("#boardListInfo").DataTable().search("").draw();
+	}
+}
 
 function fun_search(){
 	var boardDiv = $("#search_boardDiv").val();
-	var searchText = $("#txt_searchText").val();
+	var searchText = "";//$("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
+	
+	$('#chk_searchTable').prop('checked', false);
+	searchDataTable();
 	
 	var inputData = {"boardDiv": boardDiv, "searchText": searchText,"searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
 	fun_ajaxPostSend("/board/select/boardAllList.do", inputData, true, function(msg){
@@ -192,6 +212,8 @@ function fun_setboardListInfo() {
 			}
 		]
 	});
+	
+	fun_search();
 };
 
 //공지사항 등록,수정,삭제 저장 버튼
@@ -288,7 +310,7 @@ function fun_save(type){
                                     <tr>
                                         <th>구분</th>
                                         <td>
-                                            <select class="form-control" id="search_boardDiv">
+                                            <select class="form-control" id="search_boardDiv" style="width:80%;">
                                                 <option value="">선택</option>
                                                 <option value="INFO">공지사항</option>
                                                 <option value="UPDATE">업데이트</option>
@@ -298,7 +320,7 @@ function fun_save(type){
                                         <th>검색어</th>
                                         <td>
                                            <div class="row row-10 align-items-center">
-                                                  <input type="text" style="width:94%;" class="form-control" placeholder="제목,내용" name="searchText" onKeypress="" id="txt_searchText"/>
+                                                  <input type="text" style="width:90%;" class="form-control" placeholder="제목,내용" name="searchText" onKeypress="" id="txt_searchText"/>
                                                   <input type="checkbox" style="width:34px; margin-left: 1%;" class="form-control" id="chk_searchTable"  />
                                            </div>
                                         </td>
@@ -395,8 +417,8 @@ function fun_save(type){
                             </table>
                           </div>
                           <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" onclick="fun_update('edit');">수정</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                            <button type="button" class="btn btn-primary" onclick="fun_update('edit');">수정</button>
                           </div>
                         </div>
                     </section>
@@ -456,10 +478,10 @@ function fun_save(type){
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                             <button type="button" id="btn_insert" class="btn btn-primary" onclick="fun_save('I');">저장</button>
                             <button type="button" id="btn_update" class="btn btn-primary" onclick="fun_save('U');">저장</button>
                             <button type="button" id="btn_delete" class="btn btn-danger" onclick="fun_save('D');">삭제</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                           </div>
                         </div>
                     </section>
