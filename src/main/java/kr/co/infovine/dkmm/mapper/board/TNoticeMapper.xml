@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.infovine.dkmm.mapper.board.TNoticeMapper">
+  <resultMap id="BaseResultMap" type="kr.co.infovine.dkmm.db.model.board.TNotice">
+    <id column="notice_seq" jdbcType="BIGINT" property="noticeSeq" />
+    <result column="notice_desc" jdbcType="VARCHAR" property="noticeDesc" />
+    <result column="notice_file_path" jdbcType="VARCHAR" property="noticeFilePath" />
+    <result column="disp_yn" jdbcType="VARCHAR" property="dispYn" />
+    <result column="board_seq" jdbcType="BIGINT" property="boardSeq" />
+    <result column="ins_seq" jdbcType="BIGINT" property="insSeq" />
+    <result column="ins_dt" jdbcType="TIMESTAMP" property="insDt" />
+    <result column="upt_seq" jdbcType="BIGINT" property="uptSeq" />
+    <result column="upt_dt" jdbcType="TIMESTAMP" property="uptDt" />
+  </resultMap>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_notice
+    where notice_seq = #{noticeSeq,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.co.infovine.dkmm.db.model.board.TNotice">
+    insert into t_notice (
+              notice_desc, 					notice_file_path, 					disp_yn,					board_seq,
+              ins_seq, 						ins_dt, 							upt_seq, 					upt_dt
+              )
+    values (
+    		#{noticeDesc,jdbcType=VARCHAR}, #{noticeFilePath,jdbcType=VARCHAR}, #{dispYn,jdbcType=VARCHAR}, #{boardSeq,jdbcType=BIGINT}, 
+            #{insSeq,jdbcType=BIGINT}, 		now(), 								#{insSeq,jdbcType=BIGINT}, now() 
+            )
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="kr.co.infovine.dkmm.db.model.board.TNotice">
+    update t_notice
+    set		notice_desc 		= #{noticeDesc,jdbcType=VARCHAR},
+			notice_file_path 	= #{noticeFilePath,jdbcType=VARCHAR},
+			disp_yn 			= #{dispYn,jdbcType=VARCHAR},
+			board_seq 			= #{boardSeq,jdbcType=BIGINT},
+			upt_seq 			= #{uptSeq,jdbcType=BIGINT},
+			upt_dt 				= now() 
+    where 	notice_seq 			= #{noticeSeq,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateDispExclusion" parameterType="kr.co.infovine.dkmm.db.model.board.TNotice">
+  	<![CDATA[
+    update t_notice
+    set		disp_yn = 'N'
+    where 	notice_seq 	<> #{noticeSeq,jdbcType=INTEGER}
+    ]]>
+  </update>
+  
+  <select id="selecTNoticeAllList" parameterType="kr.co.infovine.dkmm.db.model.board.TNotice" resultMap="BaseResultMap">
+  /* 앱공지 selecTNoticeAllList */
+   SELECT
+         a.notice_seq
+        ,a.notice_desc 
+        ,a.notice_file_path
+        ,a.disp_yn
+        ,a.board_seq
+        ,a.ins_seq
+        ,a.ins_dt
+        ,a.upt_seq
+        ,a.upt_dt
+    FROM t_notice a
+    WHERE 1=1
+    <if test='searchStartDt neq null and !"".equals(searchStartDt)'>
+       AND TO_CHAR(a.ins_dt, 'YYYY-MM-DD') BETWEEN #{searchStartDt} AND #{searchEndDt}
+     </if>
+     <if test='searchText neq null and !"".equals(searchText)'>
+       AND a.notice_desc LIKE CONCAT('%', #{searchText}, '%')
+     </if>
+    ORDER BY a.disp_yn DESC, a.notice_seq DESC
+  </select>
+  
+  <select id="selecTNoticeDetail" parameterType="kr.co.infovine.dkmm.db.model.board.TNotice" resultMap="BaseResultMap">
+   SELECT
+         a.notice_seq
+        ,a.notice_desc
+        ,a.notice_file_path
+        ,a.disp_yn
+        ,a.board_seq
+        ,a.ins_seq
+        ,a.ins_dt
+        ,a.upt_seq
+        ,a.upt_dt
+    FROM t_notice a
+    WHERE 1=1
+    AND a.notice_seq = ${noticeSeq}
+  </select>
+</mapper>

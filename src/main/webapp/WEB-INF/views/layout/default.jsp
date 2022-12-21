@@ -59,6 +59,7 @@
 		 </div>
 		<tiles:insertAttribute name="footer" />
 	</div>
+	<iframe id="txtArea1" style="display:none"></iframe>
 	</body>
 	
 </html>

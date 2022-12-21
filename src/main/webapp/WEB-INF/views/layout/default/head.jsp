@@ -52,16 +52,23 @@
 	<!-- Datatable Script -->
 	<script src="../assets/js/dataTables/jquery.dataTables.js" type="text/javascript"></script>
 	<script src="../assets/js/dataTables/jquery.dataTables.bootstrap.js" type="text/javascript"></script>
-<!--삭제 <script src="../assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js" type="text/javascript"></script>
-	<script src="../assets/js/dataTables/extensions/ColVis/js/dataTables.colVis.js" type="text/javascript"></script>
-	<script src="../assets/js/jquery-datatable/json2.js" type="text/javascript"></script>
- 	<script src="../assets/js/jquery-datatable/jquery.table2excel.js" type="text/javascript"></script> 
-	<script src="../assets/js/jquery-datatable/jquery.tabletojson.js" type="text/javascript"></script>
-	<script src="../assets/js/jquery-datatable/jquery.dataTables.editable.js" type="text/javascript"></script>
-	<script src="../assets/js/jquery-datatable/jquery.jeditable.js" type="text/javascript"></script>
-	<script src="../assets/js/jquery-datatable/jquery.mask.min.js" type="text/javascript"></script>
-	<script src="../assets/js/jquery-datatable/jquery.validate.js" type="text/javascript"></script> -->
+<!--삭제 <script src="../assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js" type="text/javascript"></script>-->
+<!-- 	<script src="../assets/js/dataTables/extensions/ColVis/js/dataTables.colVis.js" type="text/javascript"></script> -->
+<!-- 	<script src="../assets/js/jquery-datatable/json2.js" type="text/javascript"></script>  -->
+<!--  	<script src="../assets/js/jquery-datatable/jquery.table2excel.js" type="text/javascript"></script>  -->
+<!-- 	<script src="../assets/js/jquery-datatable/jquery.tabletojson.js" type="text/javascript"></script> -->
+<!-- 	<script src="../assets/js/jquery-datatable/jquery.dataTables.editable.js" type="text/javascript"></script> -->
+<!-- 	<script src="../assets/js/jquery-datatable/jquery.jeditable.js" type="text/javascript"></script> -->
+<!-- 	<script src="../assets/js/jquery-datatable/jquery.mask.min.js" type="text/javascript"></script> -->
+<!-- 	<script src="../assets/js/jquery-datatable/jquery.validate.js" type="text/javascript"></script> -->
 	<!-- 삭제<script src="../assets/js/all.min.js" type="text/javascript"></script> -->
+	
+<!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script> -->
+<!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script> -->
+	
+	<script src="../assets/js/excel/xlsx.full.min.js"></script>
+	<script src="../assets/js/excel/FileSaver.min.js"></script>
+	
 	<script src="../assets/js/cryptoJs/sha512.js"></script>
 	<script src="../assets/js/module.js?version=0.1"></script>
 	<script src="../assets/js/blockUI.js?version=0.1"></script>

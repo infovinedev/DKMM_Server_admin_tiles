@@ -313,6 +313,9 @@ function fun_setNameStopListInfo() {
                             <div class="col-auto">
                             </div>
                             <div class="col-auto">
+                            	<a href="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js">asdf</a>
+                            	<a href="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js">zxcv</a>
+                            	
                             	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">금지어등록</button>
                                 <button type="button" class="btn btn-outline-success mr-1" onclick="fn_go_list_excel()">엑셀업로드</button>
                                 <a href="/filedownloadWebLink.do?fName=nick_sample.xlsx" class="btn btn-outline-primary mr-1" download="금지어샘플.xlsx">엑셀샘플</a>

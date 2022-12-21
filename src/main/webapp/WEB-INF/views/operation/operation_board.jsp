@@ -250,7 +250,6 @@ function fun_save(type){
 	}
 }
 </script>
-<body class="hold-transition sidebar-mini">
     <div class="wrapper">
           <div class="content-wrapper">
             <!-- 상단 title -->
@@ -492,5 +491,3 @@ function fun_save(type){
             </div>
         </div>
     </div>
-    </body>
-    

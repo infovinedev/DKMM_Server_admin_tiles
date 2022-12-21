@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,6 +29,23 @@ import lombok.extern.slf4j.Slf4j;
 public class MarketingController {
 	@Autowired
 	MarketingService marketingService;
+	
+	@RequestMapping(value ="/InflowStatistics.do")
+	public ModelAndView InflowStatistics(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("marketing/InflowStatistics");
+		model.addObject("leftPageUrl", "marketing/InflowStatistics");
+		return model;
+	}
+	
+	@RequestMapping(value ="/promotion.do")
+	public ModelAndView promotion(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("marketing/promotion");
+		model.addObject("leftPageUrl", "marketing/promotion");
+		return model;
+	}
+	
 	
 	@RequestMapping(value="/select/marketingMonthly.do", method = RequestMethod.POST
 			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )

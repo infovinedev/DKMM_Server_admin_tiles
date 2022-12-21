@@ -4,6 +4,8 @@
 var storeListInfo;
 var beforeCtgry;
 
+var wsData;
+
 $(document).ready(function () {
 	var ua = navigator.userAgent;
 	var checker = {
@@ -79,6 +81,7 @@ function fun_search(){
 				case "0001":
 			}
 			var tempResult = JSON.parse(msg.result);
+			wsData = tempResult;
 			fun_dataTableAddData("#storeListInfo", tempResult);
 		}
 	});
@@ -334,11 +337,75 @@ function fun_get_mapXY (address) {
 	
 }
 
+
+function s2ab(s) {
+    var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+    var view = new Uint8Array(buf);  //create uint8array as viewer
+    for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+    return buf;
+}
+
+function jsonToExcel() {
+	
+	// workbook 생성
+    var wb = XLSX.utils.book_new();
+
+    // 문서 속성세팅 ( 윈도우에서 엑셀 오른쪽 클릭 속성 -> 자세히에 있는 값들
+    // 필요 없으면 안써도 괜찮다.
+    wb.Props = {
+        Title: "title",
+        Subject: "subject",
+        Author: "programmer93",
+        Manager: "Manager",
+        Company: "Company",
+        Category: "Category",
+        Keywords: "Keywords",
+        Comments: "Comments",
+        LastAuthor: "programmer93",
+        CreatedDate: new Date(2021,01,13)
+    };
+    
+    // sheet명 생성 
+    wb.SheetNames.push("sheet 1");
+    // wb.SheetNames.push("sheet 2"); // 시트가 여러개인 경우
+
+    // 이중 배열 형태로 데이터가 들어간다.
+//     var wsData = [['A1' , 'A2', 'A3'],['B1','B2','B3'],['C1','C2']];
+	// var wsData2 = [['가1' , '가2', '가3'],['나1','나2','나3']];	// 시트가 여러개인 경우
+	
+	console.log(wsData);
+	
+	
+    // 배열 데이터로 시트 데이터 생성
+//     var ws = XLSX.utils.aoa_to_sheet(wsData);
+    var ws = XLSX.utils.json_to_sheet (wsData);
+	// var ws2 = XLSX.utils.aoa_to_sheet(wsData2); 	//시트가 여러개인 경우
+    
+    // 시트 데이터를 시트에 넣기 ( 시트 명이 없는 시트인경우 첫번째 시트에 데이터가 들어감 )
+    wb.Sheets["sheet 1"] = ws;
+    // wb.Sheets["sheet 2"] = ws2;	//시트가 여러개인 경우
+
+    // 엑셀 파일 쓰기
+    var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+
+    // 파일 다운로드
+    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), '엑셀_다운로드.xlsx');
+
+}
+
+function ReportToExcelConverter() {
+	$("#storeListInfo").table2excel({
+		exclude: ".noExl",
+		name: "Excel Document Name",
+		filename: "storeListInfo" +'.xls', //확장자를 여기서 붙여줘야한다.
+		fileext: ".xls",
+		exclude_img: true,
+		exclude_links: true,
+		exclude_inputs: true
+	});
+};
+
 </script>
-<head>
-	<title>관리자 운영 - 매장관리</title>
-</head>
-<body class="hold-transition sidebar-mini">
     <div class="wrapper">
           <div class="content-wrapper">
             <!-- 상단 title -->
@@ -457,7 +524,7 @@ function fun_get_mapXY (address) {
                             <div class="col-auto">
                             	<!-- <a href="javascript:;" class="btn btn-primary mr-1"  onclick="fun_viewDetail()">매장등록</a> -->
                             	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">매장등록</button>
-                                <button type="button" class="btn btn-outline-primary mr-1" onclick="fn_go_list_excel()">엑셀다운로드</button>
+                                <button type="button" class="btn btn-outline-primary mr-1" onclick="jsonToExcel()">엑셀다운로드</button>
                                 <select id="storeListLength" class="custom-select w-auto">
                                 	<option value="10">10</option>
                                 	<option value="20">20</option>
@@ -722,6 +789,3 @@ function fun_get_mapXY (address) {
             </div>
         </div>
     </div>
-    
-    </body>
-    
