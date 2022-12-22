@@ -902,7 +902,8 @@ class HugeUploader {
                 else this._eventTarget.dispatchEvent(new Event('finish'));
 
                 const percentProgress = Math.round((100 / this.totalChunks) * this.chunkCount);
-                this._eventTarget.dispatchEvent(new CustomEvent('progress', { detail: percentProgress }));
+                const responseData = res;
+                this._eventTarget.dispatchEvent(new CustomEvent('progress', { detail: { percent :percentProgress, responseData: responseData }}));
             }
 
             // errors that might be temporary, wait a bit then retry

@@ -62,7 +62,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 						response.sendError(403);
 						flag = false;
 					}
-					else {
+					else if(contentsType != null && contentsType.indexOf("multipart/form-data")==0) {
+
+					}
+					else{
 						response.sendRedirect("/admin/loginView.do?errorCode=session");
 					}
 				}

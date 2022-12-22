@@ -5,6 +5,7 @@
 	<script language="javascript" src="/assets/js/jquery-3.3.1.js"></script>
 	<!-- <script language="javascript" src="/assets/js/shim.js"></script> -->
 	<script language="javascript" src="/assets/js/huge-uploader.js"></script>
+	<script language="javascript" src="/assets/js/c21.js"></script>
 <!-- <script language="javascript" src="/assets/js/bundle.js"></script> -->
 <!-- <script language="javascript" src="https://unpkg.com/event-target-shim@6.0.2/umd.js"></script> -->
 
@@ -197,31 +198,116 @@ function fn_excel_upload(event, callback){
 		callback();
 	}
 
+	function generateUUID() {
+		var d = new Date().getTime();
+		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = (d + Math.random()*16)%16 | 0;
+			d = Math.floor(d/16);
+			return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+		});
+		return uuid;
+	};
+
 	function fn_testCallback(){
 
 	}
 
-	function fn_testUploader(event, callback){
+	function fn_testUploader(event, fileType, pageType, callback){
 		var input = event.target;
 		var fileObject = input.files[0];
+
+		if(fileObject==""){
+			alert("파일을 업로드 해주세요.");
+			return false;
+		}
+
+		var ext = name.split('.').pop().toLowerCase();
+		var fileArr = ['png','jpg','jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'hwp', 'avi', 'mp4', 'm4v', 'wmv', 'mkv', 'mov', 'bz2'];
+		if(fileType == "img"){
+			fileArr = ['png','jpg','jpeg', 'gif'];
+			if(fileArr.indexOf(ext) == -1) {
+				alert("이미지 파일을 업로드 해 주세요.");
+				return false;
+			}
+
+		}
+		else if(fileType == "txt"){
+			fileArr = ['pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'hwp'];
+			if(fileArr.indexOf(ext) == -1) {
+				alert("문서 파일을 업로드 해 주세요.");
+				return false;
+			}
+
+		}
+		else if(fileType == "imgTxt"){
+			fileArr = ['png','jpg','jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'hwp'];
+			if(fileArr.indexOf(ext) == -1) {
+				alert("문서 파일을 업로드 해 주세요.");
+				return false;
+			}
+			fileType = "file";
+
+		}
+		else if(fileType == "zip"){
+			if(fileType != ext) {
+				alert("파일 형식을 확인해 주세요.");
+				return false;
+			}
+		}
+		else if(fileType == "video"){
+			fileArr = ['avi','mp4','m4v','wmv','mkv','mov'];
+			if(fileArr.indexOf(ext) == -1) {
+				alert("영상 파일을 업로드 해 주세요.");
+				return false;
+			}
+
+		}
+		else{
+			if(fileArr.indexOf(ext) == -1) {
+				alert("업로드 불가 파일입니다.");
+				return false;
+			}
+		}
+
+
+
+		var headers = new Object();
+		headers.pageType = pageType;
+		headers.fileType = fileType;
+		headers.uniqueId = generateUUID();
+		headers.fileObjectName = fileObject.name;
+		headers.fileObjectSize = fileObject.size;
+		headers.fileObjectType = fileObject.type;
 		const HugeUploader = require('huge-uploader');
-		const uploader = new HugeUploader({ endpoint: '/test/upload.do', file: fileObject });
+		const uploader = new HugeUploader({ endpoint: '/file/upload.do', file: fileObject, headers:headers });
 		// subscribe to events
 		uploader.on('error', (err) => {
 			console.error('Something bad happened', err.detail);
 		});
 
 		uploader.on('progress', (progress) => {
-			//console.log('The upload is at ' + progress.detail);
-			$(".progress-bar").find("span.data-percent").html(progress.detail + "%");
+			//console.log('The upload is at ' + progress);
+			$(".progress-bar").find("span.data-percent").html(progress.detail.percent + "%");
 			
 			$(".progress-bar").animate({
-				width: progress.detail + "%"
+				width: progress.detail.percent + "%"
 			}, 800);
+			try {
+				progress.detail.responseData.json().then(body =>
+					console.log(body)
+				);
+			}
+			catch (e){
+				console.log("error responseData");
+			}
+		});
+
+		uploader.on('fileRetry', (msg) => {
+			console.log(msg);
 		});
 
 		uploader.on('finish', (body) => {
-			//console.log('yeahhh - last response body:', body);
+			console.log('yeahhh - last response body:', body);
 		});
 
 		//uploader.togglePause();
@@ -233,7 +319,8 @@ function fn_excel_upload(event, callback){
 	}
 </script>
 <body>
-	<input type="file" id="testUploader" onchange="fn_testUploader(event, fn_testUploaderCallback);">
+																		<!-- test하려고 video로 바꿈 img로 바꿀 것 -->
+	<input type="file" id="testUploader" onchange="fn_testUploader(event, 'video', 'doc', fn_testUploaderCallback);">
 	<div class='progress' style="width:600px;">
     <div class='progress-bar' data-width='0'>
         <div class='progress-bar-text'>
