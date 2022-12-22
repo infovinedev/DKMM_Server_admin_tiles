@@ -39,6 +39,8 @@ public class OperationStoreController {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("operation/operation_store");
 		model.addObject("leftPageUrl", "store/store");
+		TStoreInfoModel storeInfo = new TStoreInfoModel();
+		model.addObject("storeCount", operationStoreService.selectStoreCount(storeInfo) );
 		return model;
 	}
 
@@ -105,6 +107,25 @@ public class OperationStoreController {
 						  ) {
 		String addr = (String) param.get("addr");
 		String result = mapController.getMapXY(addr);
+		return result;
+	}
+	
+	
+	@RequestMapping(value = "/select/selectStoreExcel.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel selectStoreExcel(HttpServletRequest request, HttpServletResponse response 
+			,@RequestBody TStoreInfoModel storeInfo) {
+		ResponseModel result = new ResponseModel();
+		try {
+			List<TStoreInfoModel> model = operationStoreService.selectStoreExcel(storeInfo);
+			ObjectMapper mapper = new ObjectMapper();
+			String storeInfoList = mapper.writeValueAsString(model);
+			result.setCode("0000");
+			result.setResult(storeInfoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 	

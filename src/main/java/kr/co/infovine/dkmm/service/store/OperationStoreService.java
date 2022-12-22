@@ -8,4 +8,6 @@ public interface OperationStoreService {
     List<TStoreInfoModel> selectStoreInfo(TStoreInfoModel storeInfo);
     TStoreInfoModel selectStoreInfoDetail(TStoreInfoModel storeInfo);
     void insertStoreInfo(TStoreInfoModel storeInfo);
+    List<TStoreInfoModel> selectStoreExcel(TStoreInfoModel storeInfo);
+    int selectStoreCount(TStoreInfoModel storeInfo);
 }

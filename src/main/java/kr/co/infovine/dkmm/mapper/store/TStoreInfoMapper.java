@@ -75,4 +75,8 @@ public interface TStoreInfoMapper {
 	
 	int updateFailVworldByPrimaryKey(TStoreInfoModel storeInfo);
 	
+	List<TStoreInfoModel> selectStoreExcel(TStoreInfoModel storeInfo);
+	
+	int selectStoreCount(TStoreInfoModel storeInfo);
+	
 }

@@ -411,7 +411,50 @@
 		or UPPER(REPLACE(store_nm, ' ', '')) like '%TOPRESSO%'
 		or REPLACE(store_nm, ' ', '') like '%그라찌에%'
 		or REPLACE(store_nm, ' ', '') like '%전광수커피%'
-		or REPLACE(store_nm, ' ', '') like '%카페보니또%'
+		or REPLACE(store_nm, ' ', '') like '%카페보니또%';
+		
+		update t_store_info
+		set ctgry_nm = '아시안'
+		where ctgry_nm = '외국음식전문점(인도,태국등)';
 	]]>     
   </update>
+  
+  <select id="selectStoreExcel" parameterType="kr.co.infovine.dkmm.db.model.store.TStoreInfoModel" resultMap="BaseResultMap">
+	/* 상점 목록 조회 selectStoreExcel */
+				SELECT store_seq
+					 , store_nm
+					 , ctgry_nm
+					 , road_addr
+					 , del_yn
+					 , like_cnt
+					 , file_uuid
+					 , area_tot
+					 , max_cnt
+					 , last_wait_user_seq
+					 , last_wait_person_cnt
+					 , road_zip
+					 , latitude
+					 , longitude
+					 , store_open_time
+					 , store_end_time
+					 , ins_dt
+					 , last_wait_ins_dt
+			FROM t_store_info 
+		 WHERE 1 = 1
+		   AND use_yn = 'Y'
+		   AND del_yn = 'N'
+		 ORDER BY store_seq DESC
+		 LIMIT 100000 OFFSET ${pageCnt}
+	</select>
+	
+	<select id="selectStoreCount" parameterType="kr.co.infovine.dkmm.db.model.store.TStoreInfoModel" resultType="int">
+	/* 상점 목록 조회 selectStoreExcel */
+				SELECT count(1)
+			FROM t_store_info 
+		 WHERE 1 = 1
+		   AND use_yn = 'Y'
+		   AND del_yn = 'N'
+		   <include refid="searchCondition_store"></include>
+	</select>
+	
 </mapper>

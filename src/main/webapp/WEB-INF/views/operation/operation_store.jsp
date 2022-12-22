@@ -3,8 +3,7 @@
 <script>
 var storeListInfo;
 var beforeCtgry;
-
-var wsData;
+var storeCount = ${storeCount};
 
 $(document).ready(function () {
 	var ua = navigator.userAgent;
@@ -81,7 +80,6 @@ function fun_search(){
 				case "0001":
 			}
 			var tempResult = JSON.parse(msg.result);
-			wsData = tempResult;
 			fun_dataTableAddData("#storeListInfo", tempResult);
 		}
 	});
@@ -337,6 +335,68 @@ function fun_get_mapXY (address) {
 	
 }
 
+function fun_start_Excel(){
+	fun_startBlockUI();
+	setTimeout(() => fun_search_excel(), 2000);
+}
+
+function fun_search_excel(){
+	
+	console.log(storeCount/100000);
+	console.log(parseInt(storeCount/100000));
+	console.log(storeCount%100000);
+	
+	var count = parseInt(storeCount/100000);
+	if ( storeCount%100000 > 1 ){
+		count = count+1;
+	}
+	
+// 	return;
+	
+	console.log("search EXCEL START");
+	
+	var excelArray = new Array(count); 
+	
+	for (var i=0; i<count; i++){
+		
+		var pageCnt = i * 100000;
+		
+		var inputData = {"ctgryNm": "", "searchText": "", "searchStartDt" : "", "searchEndDt" : "", "pageCnt" : pageCnt};
+		fun_ajaxPostSendNoBlock("/store/select/selectStoreExcel.do", inputData, false, function(msg){
+			
+			console.log("search Start Number : " + pageCnt);
+			
+			if(msg!=null){
+				switch(msg.code){
+					case "0000":
+						break;
+					case "0001":
+				}
+				
+ 				var tempResult = JSON.parse(msg.result);
+ 				excelArray[i] = tempResult;
+ 				
+ 				console.log(i + "번째 배열 생성 완료");
+ 				
+//  				var bool = true;
+//  				for (var j=0; j<excelArray.length; j++){
+//  					 if ( excelArray[j] == undefined ){
+//  						bool = false;
+//  					 }
+//  				}
+ 				
+//  				if ( bool ){
+//  					fun_endBlockUI();
+//  					jsonToExcel(excelArray);
+//  				}
+			}
+		});
+		
+	}
+	
+	fun_endBlockUI();
+	jsonToExcel(excelArray);
+}
 
 function s2ab(s) {
     var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
@@ -345,65 +405,55 @@ function s2ab(s) {
     return buf;
 }
 
-function jsonToExcel() {
+function jsonToExcel(wsData) {
 	
-	// workbook 생성
-    var wb = XLSX.utils.book_new();
-
-    // 문서 속성세팅 ( 윈도우에서 엑셀 오른쪽 클릭 속성 -> 자세히에 있는 값들
-    // 필요 없으면 안써도 괜찮다.
-    wb.Props = {
-        Title: "title",
-        Subject: "subject",
-        Author: "programmer93",
-        Manager: "Manager",
-        Company: "Company",
-        Category: "Category",
-        Keywords: "Keywords",
-        Comments: "Comments",
-        LastAuthor: "programmer93",
-        CreatedDate: new Date(2021,01,13)
-    };
+	console.log("jsonToExcel");
     
-    // sheet명 생성 
-    wb.SheetNames.push("sheet 1");
-    // wb.SheetNames.push("sheet 2"); // 시트가 여러개인 경우
+    for (var i=0; i<wsData.length; i++){
+    	
+    	console.log(i + "번째 엑셀");
+    	
+    	// workbook 생성
+        var wb = XLSX.utils.book_new();
 
-    // 이중 배열 형태로 데이터가 들어간다.
-//     var wsData = [['A1' , 'A2', 'A3'],['B1','B2','B3'],['C1','C2']];
-	// var wsData2 = [['가1' , '가2', '가3'],['나1','나2','나3']];	// 시트가 여러개인 경우
-	
-	console.log(wsData);
-	
-	
-    // 배열 데이터로 시트 데이터 생성
-//     var ws = XLSX.utils.aoa_to_sheet(wsData);
-    var ws = XLSX.utils.json_to_sheet (wsData);
-	// var ws2 = XLSX.utils.aoa_to_sheet(wsData2); 	//시트가 여러개인 경우
-    
-    // 시트 데이터를 시트에 넣기 ( 시트 명이 없는 시트인경우 첫번째 시트에 데이터가 들어감 )
-    wb.Sheets["sheet 1"] = ws;
-    // wb.Sheets["sheet 2"] = ws2;	//시트가 여러개인 경우
+        // 문서 속성세팅 ( 윈도우에서 엑셀 오른쪽 클릭 속성 -> 자세히에 있는 값들
+        // 필요 없으면 안써도 괜찮다.
+        wb.Props = {
+            Title: "title",
+            Subject: "subject",
+            Author: "programmer93",
+            Manager: "Manager",
+            Company: "Company",
+            Category: "Category",
+            Keywords: "Keywords",
+            Comments: "Comments",
+            LastAuthor: "programmer93",
+            CreatedDate: new Date(2021,01,13)
+        };
+        
+    	// sheet명 생성 
+        wb.SheetNames.push("sheet " + i);	
+        // 배열 데이터로 시트 데이터 생성
+//         var ws = XLSX.utils.aoa_to_sheet(wsData);
+        var ws = XLSX.utils.json_to_sheet (wsData[i]);
+    	// var ws2 = XLSX.utils.aoa_to_sheet(wsData2); 	//시트가 여러개인 경우
+        
+        // 시트 데이터를 시트에 넣기 ( 시트 명이 없는 시트인경우 첫번째 시트에 데이터가 들어감 )
+        wb.Sheets["sheet "+i] = ws;
+        // wb.Sheets["sheet 2"] = ws2;	//시트가 여러개인 경우+
+        
+     // 엑셀 파일 쓰기
+        var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+    	
+        fun_endBlockUI();
+        
+        // 파일 다운로드
+        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), '엑셀_다운로드_' + i + '.xlsx');
+    }
 
-    // 엑셀 파일 쓰기
-    var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
-
-    // 파일 다운로드
-    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), '엑셀_다운로드.xlsx');
+    fun_endBlockUI();
 
 }
-
-function ReportToExcelConverter() {
-	$("#storeListInfo").table2excel({
-		exclude: ".noExl",
-		name: "Excel Document Name",
-		filename: "storeListInfo" +'.xls', //확장자를 여기서 붙여줘야한다.
-		fileext: ".xls",
-		exclude_img: true,
-		exclude_links: true,
-		exclude_inputs: true
-	});
-};
 
 </script>
     <div class="wrapper">
@@ -498,6 +548,22 @@ function ReportToExcelConverter() {
                                                 <option value="한식">한식</option>
                                                 <option value="호프/통닭">호프/통닭</option>
                                                 <option value="횟집">횟집</option>
+                                                
+                                                <option value="카페">카페</option>
+                                                <option value='고속도로'>고속도로</option>
+												<option value='공항'>공항</option>
+												<option value='과자점'>과자점</option>
+												<option value='관광호텔'>관광호텔</option>
+												<option value='극장'>극장</option>
+												<option value='단란주점'>단란주점</option>
+												<option value='떡카페'>떡카페</option>
+												<option value='백화점'>백화점</option>
+												<option value='아이스크림'>아이스크림</option>
+												<option value='유원지'>유원지</option>
+												<option value='일반조리판매'>일반조리판매</option>
+												<option value='철도역구내'>철도역구내</option>
+												<option value='편의점'>편의점</option>
+												<option value='푸드트럭'>푸드트럭</option>
                                             </select>
                                         </td>
                                         <th>검색어</th>
@@ -524,7 +590,7 @@ function ReportToExcelConverter() {
                             <div class="col-auto">
                             	<!-- <a href="javascript:;" class="btn btn-primary mr-1"  onclick="fun_viewDetail()">매장등록</a> -->
                             	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">매장등록</button>
-                                <button type="button" class="btn btn-outline-primary mr-1" onclick="jsonToExcel()">엑셀다운로드</button>
+                                <button type="button" class="btn btn-outline-primary mr-1" onclick="fun_start_Excel()">엑셀다운로드</button>
                                 <select id="storeListLength" class="custom-select w-auto">
                                 	<option value="10">10</option>
                                 	<option value="20">20</option>

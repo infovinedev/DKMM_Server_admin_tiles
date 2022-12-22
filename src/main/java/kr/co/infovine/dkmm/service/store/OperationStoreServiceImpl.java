@@ -31,4 +31,16 @@ public class OperationStoreServiceImpl implements OperationStoreService{
 	public void insertStoreInfo(TStoreInfoModel storeInfo) {
 		storeInfoMapper.insertStoreInfo(storeInfo);
 	}
+	
+	@Override
+	public List<TStoreInfoModel> selectStoreExcel(TStoreInfoModel storeInfo) {
+		return storeInfoMapper.selectStoreExcel(storeInfo);
+	}
+	 
+	@Override
+	public int selectStoreCount(TStoreInfoModel storeInfo) {
+		return storeInfoMapper.selectStoreCount(storeInfo);
+	}
+	
+	
 }

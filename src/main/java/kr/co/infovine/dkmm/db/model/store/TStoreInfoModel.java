@@ -179,4 +179,6 @@ public class TStoreInfoModel {
 	
 	private String vworldResponse;
 	private Date vworldProcDt;
+	
+	private String pageCnt;
 }

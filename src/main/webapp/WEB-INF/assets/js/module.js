@@ -377,6 +377,36 @@ function fun_endBlockUI(){
 	$.unblockUI();
 }
 
+
+// ajax post send - No BlockUI
+function fun_ajaxPostSendNoBlock(url, inputData, bAsync, callback) {
+	//console.log("fun_ajaxPostSend " + url);
+        
+	$.ajax({
+        type: 'POST'
+        , url: url
+        , async : bAsync
+        , contentType: 'application/json; charset=utf-8'
+        , data: JSON.stringify(inputData)
+        , dataType: "json"
+        , success: function (msg) {
+            callback(msg);
+        } // end success
+        , error: function (xhr, status, error) {
+			if(xhr.status==403){
+				alert("세션이 만료되었습니다");
+				location.href='/admin/loginView.do';
+			}
+			console.log("xhr statusText :" + xhr.status + "xhr statusText :" + xhr.statusText + "xhr responseText :" + xhr.responseText + ", status : " + status + ", error : " + error);
+			
+			var msg = null;
+			callback(msg);
+			//alert('서비스가 일시적으로 원활하지 않습니다.');
+			//history.go(-1);
+        } // end error
+    }); // end ajax
+} // end fun_ajaxPostSend
+
 // ajax post send
 function fun_ajaxPostSend(url, inputData, bAsync, callback) {
 	//console.log("fun_ajaxPostSend " + url);
