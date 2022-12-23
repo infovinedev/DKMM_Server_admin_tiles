@@ -319,4 +319,8 @@ function fun_draw_char2(){
 	});
 }//주간 가입자수 통계
 
+function fun_testPage(){
+	location.href="/test/testPage.do";
+}
+
 </script>

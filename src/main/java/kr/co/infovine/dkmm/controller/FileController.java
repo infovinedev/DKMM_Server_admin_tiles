@@ -1,6 +1,7 @@
 package kr.co.infovine.dkmm.controller;
 
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
+import kr.co.infovine.dkmm.api.model.base.SessionModel;
 import kr.co.infovine.dkmm.db.model.file.TFileModel;
 import kr.co.infovine.dkmm.db.model.file.TFileSubModel;
 import kr.co.infovine.dkmm.service.file.FileService;
@@ -47,9 +48,12 @@ public class FileController {
                                       //, @RequestBody TFileModel tFileModel
                                ) throws Exception {
         ResponseModel result = new ResponseModel();
-        String userSeq = (String) session.getAttribute("userSeq");
-        if(userSeq!=null){
-            int intUserSeq = Integer.valueOf(userSeq);
+        Object obj = session.getAttribute("userInfo");
+        int adminUserSeq = -1;
+        if(obj != null) {
+            SessionModel tempSessionModel = (SessionModel) obj;
+            adminUserSeq = tempSessionModel.getAdminUserSeq();
+            int intAdminUserSeq = Integer.valueOf(adminUserSeq);
             String pageType = request.getHeader("pageType");;
             String fileType = request.getHeader("fileType");;
             String uniqueId = request.getHeader("uniqueId");;
@@ -116,7 +120,7 @@ public class FileController {
                             TFileModel tFileModel = new TFileModel();
                             tFileModel.setFileUuid(uniqueId);
                             tFileModel.setUserIp(getClientIp(request));
-                            tFileModel.setInsSeq(intUserSeq);
+                            tFileModel.setInsSeq(intAdminUserSeq);
                             tFileModel.setPageType(pageType);
                             tFileModel.setDelYn("N");
 
@@ -126,7 +130,7 @@ public class FileController {
                             tFileSubModel.setFileSaveNm(fileSaveName);
                             tFileSubModel.setFileSize(fileObjectSize);
                             tFileSubModel.setDelYn("N");
-                            tFileSubModel.setInsSeq(intUserSeq);
+                            tFileSubModel.setInsSeq(intAdminUserSeq);
 
                             int insertResult = fileService.insertUploadFile(tFileModel, tFileSubModel);
                             if(insertResult==2){

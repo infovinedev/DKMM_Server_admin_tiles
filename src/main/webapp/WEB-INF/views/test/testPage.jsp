@@ -215,7 +215,7 @@ function fn_excel_upload(event, callback){
 	function fn_testUploader(event, fileType, pageType, callback){
 		var input = event.target;
 		var fileObject = input.files[0];
-
+		var name = fileObject.name;
 		if(fileObject==""){
 			alert("파일을 업로드 해주세요.");
 			return false;
@@ -287,18 +287,28 @@ function fn_excel_upload(event, callback){
 
 		uploader.on('progress', (progress) => {
 			//console.log('The upload is at ' + progress);
-			$(".progress-bar").find("span.data-percent").html(progress.detail.percent + "%");
-			
-			$(".progress-bar").animate({
-				width: progress.detail.percent + "%"
-			}, 800);
-			try {
-				progress.detail.responseData.json().then(body =>
-					console.log(body)
-				);
-			}
-			catch (e){
-				console.log("error responseData");
+			var data = progress.detail.responseData;
+			var code = data.code;
+			switch(code){
+				case "0000":
+				case "0004":
+					$(".progress-bar").find("span.data-percent").html(progress.detail.percent + "%");
+
+					$(".progress-bar").animate({
+						width: progress.detail.percent + "%"
+					}, 800);
+					break;
+				case "0001":
+					uploader.togglePause();
+					alert(data.result);
+					location.href="admin/loginView.do";
+					break;
+				case "0002":
+				case "0003":
+					uploader.togglePause();
+					alert(data.result);
+					break;
+
 			}
 		});
 
@@ -320,7 +330,7 @@ function fn_excel_upload(event, callback){
 </script>
 <body>
 																		<!-- test하려고 video로 바꿈 img로 바꿀 것 -->
-	<input type="file" id="testUploader" onchange="fn_testUploader(event, 'video', 'doc', fn_testUploaderCallback);">
+	<input type="file" id="testUploader" onchange="fn_testUploader(event, 'img', 'doc', fn_testUploaderCallback);">
 	<div class='progress' style="width:600px;">
     <div class='progress-bar' data-width='0'>
         <div class='progress-bar-text'>
