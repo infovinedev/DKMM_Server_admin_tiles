@@ -3,6 +3,8 @@ package kr.co.infovine.dkmm.service.admin;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+
+import kr.co.infovine.dkmm.db.model.admin.TbAdminDefaultPermissionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminPermissionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminProgramModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel;
@@ -20,6 +22,8 @@ public interface TAdminService {
 	
     int deleteByPrimaryKey(Integer adminUserSeq);
 
+    int selectChkIdDup(TbAdminUserModel record);
+    
     int insertAdminUser(TbAdminUserModel record);
     
     int updateByAdminUserBlock(TbAdminUserModel record);
@@ -62,4 +66,9 @@ public interface TAdminService {
 	//공통코드 삭제
 	int deleteByTCommonCodePrimaryKey(@Param("codeGroup") String codeGroup, @Param("codeValue") String codeValue);
 	
+	int deleteDefaultPermmissionByPrimaryKey(String roleNm);
+	
+	int insertDefaultPermmission(TbAdminDefaultPermissionModel record);
+	
+	List<TbAdminDefaultPermissionModel> selectAllDefaultPermmissionByRole(String roleNm);
 }

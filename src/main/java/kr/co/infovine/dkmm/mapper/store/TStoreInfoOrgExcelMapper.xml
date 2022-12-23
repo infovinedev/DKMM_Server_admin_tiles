@@ -217,4 +217,10 @@
 		,hompage            = excluded.hompage                                      
 		,process_yn         = 'N'                                                   
   </insert>
+  
+  <delete id="truncateStoreOrgExcel" >
+  	truncate table t_store_info_org_excel
+  </delete>
+  
+  
 </mapper>

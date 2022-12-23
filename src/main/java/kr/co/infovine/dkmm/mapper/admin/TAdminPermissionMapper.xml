@@ -132,7 +132,6 @@
     order by b.program_id,  b.program_sort
   </select>
   
-  
   <select id="selectAll" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated

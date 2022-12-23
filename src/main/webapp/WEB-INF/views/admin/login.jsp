@@ -144,7 +144,7 @@
                 </div>
                 <div class="login-body">
                     <div class="form-group">
-                        <input id="username" name="username" type="text" class="form-control form-control-lg" value="admin">
+                        <input id="username" name="username" type="text" class="form-control form-control-lg" value="infovine">
                     </div>
                     <div class="mb-1 check_text_div" style="display:none">
                         <p class="form-text text-danger">ⓘ 이메일(아이디)를 입력해주세요.</p>

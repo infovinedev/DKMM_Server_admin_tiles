@@ -127,7 +127,7 @@
   </select>
   
   <select id="selectCommonCode" parameterType="kr.co.infovine.dkmm.db.model.common.TCommonCodeModel" resultMap="BaseResultMap">
-  select code_group, code_value , code_name, code_description  from t_common_code
+  select code_group, code_value , code_name, code_description, ins_dt, disp_order  from t_common_code
   where code_group  = #{codeGroup,jdbcType=VARCHAR}
   <if test='"mng_type".equals(codeGroup)'>
 	  <if test='auth != null and !"ROLE_ADMIN".equals(auth)'>
@@ -136,4 +136,12 @@
   </if>
   order by disp_order
   </select>
+  
+  <select id="selectAuthCdNm"  resultType="String">
+  select code_name  
+  from t_common_code
+  where code_group  = 'mng_type'
+  AND code_description = #{userTypeCode,jdbcType=VARCHAR}
+  </select>
+  
 </mapper>

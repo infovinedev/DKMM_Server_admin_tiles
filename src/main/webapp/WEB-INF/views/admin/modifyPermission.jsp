@@ -186,7 +186,7 @@ function fun_setjdtListAdminUser(callback) {
 				, "class": "text-center"
 				, "render": function (data, type, row, meta) {
 					var insertTr = "";
-					if ( row.lastloginDate != "" ){
+					if ( row.lastloginDate != "" && row.lastloginDate != null){
 						insertTr = row.lastloginDate.substring(0,4) + "-" + row.lastloginDate.substring(4,6) + "-" + row.lastloginDate.substring(6,8);
 						insertTr = insertTr + " " +  row.lastloginDate.substring(8,10) + ":" + row.lastloginDate.substring(10,12) + ":" + row.lastloginDate.substring(12,14);
 					}
@@ -202,7 +202,7 @@ function fun_setjdtListAdminUser(callback) {
 				, "class": "text-center"
 				, "render": function (data, type, row, meta) {
 					var insertTr = "";
-					if ( row.regDate != "" ){
+					if ( row.regDate != "" && row.regDate != null ){
 						insertTr = row.regDate.substring(0,4) + "-" + row.regDate.substring(4,6) + "-" + row.regDate.substring(6,8);
 						insertTr = insertTr + " " +  row.regDate.substring(8,10) + ":" + row.regDate.substring(10,12) + ":" + row.regDate.substring(12,14);
 					}

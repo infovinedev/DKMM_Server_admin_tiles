@@ -73,4 +73,6 @@ public interface TAdminUserMapper {
     
     int updateByBlock(TbAdminUserModel record);
     
+    int selectChkIdDup(TbAdminUserModel record);
+    
 }

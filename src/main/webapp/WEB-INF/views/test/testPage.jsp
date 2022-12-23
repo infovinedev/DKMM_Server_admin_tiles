@@ -39,6 +39,9 @@ var data="";
 var test="";
 var arr = new Array();
 // excel upload 한 후에
+
+
+
 function fn_excel_upload(event, callback){
 	try{
 		var input = event.target;
@@ -211,10 +214,16 @@ function fn_excel_upload(event, callback){
 	function fn_testCallback(){
 
 	}
-
+	
+	
+	
 	function fn_testUploader(event, fileType, pageType, callback){
+// 	function fn_testUploader(fileType, pageType, callback){
 		var input = event.target;
+		
+// 		var input = $("#testUploader");
 		var fileObject = input.files[0];
+// 		var fileObject = input.prop('files')[0];	
 		var name = fileObject.name;
 		if(fileObject==""){
 			alert("파일을 업로드 해주세요.");
@@ -331,6 +340,8 @@ function fn_excel_upload(event, callback){
 <body>
 																		<!-- test하려고 video로 바꿈 img로 바꿀 것 -->
 	<input type="file" id="testUploader" onchange="fn_testUploader(event, 'img', 'doc', fn_testUploaderCallback);">
+<!-- 	<input type="file" id="testUploader" > -->
+	<a href="#" onclick="fn_testUploader('img', 'doc', fn_testUploaderCallback);">저장</a>
 	<div class='progress' style="width:600px;">
     <div class='progress-bar' data-width='0'>
         <div class='progress-bar-text'>

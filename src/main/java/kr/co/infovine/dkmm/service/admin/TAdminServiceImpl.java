@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.infovine.dkmm.db.model.admin.TbAdminDefaultPermissionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminPermissionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminProgramModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserModel;
 import kr.co.infovine.dkmm.db.model.common.TCommonCodeModel;
+import kr.co.infovine.dkmm.mapper.admin.TAdminDefaultPermissionMapper;
 import kr.co.infovine.dkmm.mapper.admin.TAdminPermissionMapper;
 import kr.co.infovine.dkmm.mapper.admin.TAdminProgramMapper;
 import kr.co.infovine.dkmm.mapper.admin.TAdminUserLogMapper;
@@ -32,6 +34,9 @@ public class TAdminServiceImpl implements TAdminService {
 	
 	@Autowired
 	TCommonCodeMapper tcommonCodeMapper;
+	
+	@Autowired
+	TAdminDefaultPermissionMapper tAdminDefaultPermissionMapper;
 	
 	@Override
 	public TbAdminUserModel selectByAdminUserIdAndPassword(TbAdminUserModel tbAdminUser) {
@@ -94,6 +99,11 @@ public class TAdminServiceImpl implements TAdminService {
 		return tbAdminUserMapper.deleteByPrimaryKey(adminUserSeq);
 	}
 
+	@Override
+	public int selectChkIdDup(TbAdminUserModel record) {
+		return tbAdminUserMapper.selectChkIdDup(record);
+	}
+	
 	@Override
 	public int insertAdminUser(TbAdminUserModel record) {
 		return tbAdminUserMapper.insert(record);
@@ -159,4 +169,21 @@ public class TAdminServiceImpl implements TAdminService {
 		return tcommonCodeMapper.deleteByPrimaryKey(codeGroup, codeValue);
 	}
 
+	
+	@Override
+	public int deleteDefaultPermmissionByPrimaryKey(String roleNm) {
+		return tAdminDefaultPermissionMapper.deleteByPrimaryKey(roleNm);
+	}
+	
+	@Override
+	public int insertDefaultPermmission(TbAdminDefaultPermissionModel record) {
+		return tAdminDefaultPermissionMapper.insert(record);
+	}
+	
+	@Override
+	public List<TbAdminDefaultPermissionModel> selectAllDefaultPermmissionByRole(String roleNm) {
+		return tAdminDefaultPermissionMapper.selectAll(roleNm);
+	}
+	
+	
 }

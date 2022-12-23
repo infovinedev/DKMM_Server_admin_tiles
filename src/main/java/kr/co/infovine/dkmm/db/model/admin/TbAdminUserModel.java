@@ -135,6 +135,9 @@ public class TbAdminUserModel {
     
     private String newPassword2;
     
+    private String authority;
+    private String userTypeCodeNm;
+    
   //조건
   	private String searchText;
   	private String searchStartDt;

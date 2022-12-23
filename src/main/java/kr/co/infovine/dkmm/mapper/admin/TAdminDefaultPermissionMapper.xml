@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.infovine.dkmm.mapper.admin.TAdminDefaultPermissionMapper">
+  <resultMap id="BaseResultMap" type="kr.co.infovine.dkmm.db.model.admin.TbAdminDefaultPermissionModel">
+    <id column="role_nm" jdbcType="VARCHAR" property="roleNm" />
+    <result column="admin_program_seq" jdbcType="INTEGER" property="adminProgramSeq" />
+    <result column="ins_dt" jdbcType="TIMESTAMP" property="insDt" />
+    <result column="upd_dt" jdbcType="TIMESTAMP" property="updDt" />
+  </resultMap>
+  
+  <resultMap id="JoinResultMap" type="kr.co.infovine.dkmm.db.model.admin.TbAdminDefaultPermissionModel" extends="BaseResultMap">
+    <id column="admin_program_seq" jdbcType="INTEGER" property="adminProgramSeq" />
+    <association property="adminProgram" column="admin_program_seq"
+			select="kr.co.infovine.dkmm.mapper.admin.TAdminProgramMapper.selectByPrimaryKey"/>
+  </resultMap>
+  
+  <select id="selectByRoleLeftMenu" parameterType="java.lang.String" resultMap="JoinResultMap">
+    select 	a.role_nm, a.admin_program_seq, a.block_yn, a.reg_date, 
+    		a.update_date
+    from t_admin_default_permission a join t_admin_program b
+    							on a.admin_program_seq = b.admin_program_seq
+    where a.role_nm = #{role_nm,jdbcType=VARCHAR}
+    order by b.program_id,  b.program_sort
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_admin_default_permission
+    where role_nm = #{roleNm,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="kr.co.infovine.dkmm.db.model.admin.TbAdminDefaultPermissionModel">
+    insert into t_admin_default_permission ( 
+    	role_nm,		 admin_program_seq, 		ins_dt,			upd_dt
+    	)
+    values (
+    	#{roleNm,jdbcType=VARCHAR},#{adminProgramSeq,jdbcType=INTEGER},now(),now()
+    	)
+  </insert>
+  
+  
+  <select id="selectAll" parameterType="java.lang.String" resultMap="JoinResultMap"> 
+    select role_nm,		 admin_program_seq, 		ins_dt,			upd_dt
+    from t_admin_default_permission
+    where role_nm = #{roleNm,jdbcType=VARCHAR}
+  </select>
+</mapper>

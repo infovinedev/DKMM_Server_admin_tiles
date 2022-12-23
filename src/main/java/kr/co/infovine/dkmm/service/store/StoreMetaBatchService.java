@@ -12,6 +12,7 @@ public interface StoreMetaBatchService {
 	int updateStoreOrgStatus02();
 	int updateCafeCtgry();
 	int updateCafeName();
+	int truncateStoreOrgExcel();
 	
 	void getCoordinatesToStoreInfo(); //store info
 	

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
 import kr.co.infovine.dkmm.api.model.base.SessionModel;
 import kr.co.infovine.dkmm.db.model.admin.PermissionOfAdminUser;
+import kr.co.infovine.dkmm.db.model.admin.TbAdminDefaultPermissionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminPermissionModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminProgramModel;
 import kr.co.infovine.dkmm.db.model.admin.TbAdminUserLogModel;
@@ -742,19 +743,31 @@ public class AdminController{
 				Calendar currentTime = Calendar.getInstance(Locale.KOREA);
 				String localDate = sdf.format(currentTime.getTime());
 				if(adminUserSeq == -1) {
-					tbAdminUserModel.setRegDate(localDate);
-					tbAdminService.insertAdminUser(tbAdminUserModel);
+					
+					int idChkCnt = tbAdminService.selectChkIdDup(tbAdminUserModel);
+					
+					if ( idChkCnt > 0) {
+						result.setCode("0001");
+						result.setErrorMessage("중복된 ID 입니다. 다시 입력해주세요");
+					}else {
+						tbAdminUserModel.setRegDate(localDate);
+						tbAdminService.insertAdminUser(tbAdminUserModel);
+						result.setCode("0000");
+					}
 				}
 				else {
 					tbAdminUserModel.setUpdateDate(localDate);
 					tbAdminService.updateByAdminUserPrimaryKey(tbAdminUserModel);
+					result.setCode("0000");
 				}
-				result.setCode("0000");
+				
 			}else {
 				result.setCode("0001");
+				result.setErrorMessage("로그인 비밀번호가 다릅니다.");
 			}
 		} catch (Exception e) {
 			result.setCode("0001");
+			result.setErrorMessage("등록중 에러가 발생하였습니다.");
 		}
 		return result;
 	}
@@ -1065,5 +1078,95 @@ public class AdminController{
 			}
 			return result;
 		}
+	// end region
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// region 설명: 권한 별 허용 메뉴 관리 페이지 불러오기 
+	@RequestMapping(value="/modifyDefaultPermission.do")
+	public ModelAndView viewModifyDefaultPermission(HttpServletRequest request, HttpServletResponse responsee, HttpSession session) {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("admin/modifyDefaultPermission");
+		model.addObject("leftPageUrl", "admin/modifyDefaultPermission");
+		return model;
+	}
+	// end region
+		
+		
+	// region 설명: 권한 별 허용 메뉴 불러오기
+	@RequestMapping(value="/select/permissionOfDefaultAdmin.do", method = RequestMethod.POST
+			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel selectPermissionOfDefaultAdmin(HttpServletRequest request, HttpServletResponse response, HttpSession session
+			, @RequestBody TbAdminDefaultPermissionModel tbAdminDefaultPermissionModel) {
+		ResponseModel result = new ResponseModel();
+		
+		String roleNm = tbAdminDefaultPermissionModel.getRoleNm();
+		
+		List<TbAdminDefaultPermissionModel> resultSet = tbAdminService.selectAllDefaultPermmissionByRole(roleNm);
+		
+		if(resultSet.size()>0) {
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				String strLeftMenu = mapper.writeValueAsString(resultSet);
+				result.setResult(strLeftMenu);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+		}
+		result.setCode("0000");
+		
+		return result;
+	}
+	// end region
+	
+	
+	// region 설명: 권한 별 허가 된 메뉴 저장하기
+	@RequestMapping(value="/insert/programPermissionOfDefaultAdmin.do", method = RequestMethod.POST
+			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel insertprogramPermissionOfDefaultAdmin(HttpServletRequest request, HttpServletResponse response, HttpSession session
+			, @RequestBody TbAdminDefaultPermissionModel permission) {
+		ResponseModel result = new ResponseModel();
+		try {
+			SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+			String userId = sessionModel.getUserId();
+			TbAdminUserModel tbAdminUser = new TbAdminUserModel();
+			tbAdminUser.setUserId(userId);
+			String password = permission.getPassword();
+			tbAdminUser.setPassword(password);
+			TbAdminUserModel resultSet = tbAdminService.selectByAdminUserIdAndPassword(tbAdminUser);
+			
+			if(resultSet!=null) {
+				//tbAdminService
+				List<TbAdminDefaultPermissionModel> tempPermission = permission.getTbAdminDefaultPermission();
+
+				int i=0;
+				for(TbAdminDefaultPermissionModel model : tempPermission) {
+					if(i==0) {		//먼저 전체 데이터를 삭제 한다
+						String roleNm = model.getRoleNm();
+						tbAdminService.deleteDefaultPermmissionByPrimaryKey(roleNm);
+					}
+					//그 뒤로부터 권한을 부여 합니다.
+					tbAdminService.insertDefaultPermmission(model);
+					i++;
+				}
+				result.setCode("0000");
+			}
+			else {
+				result.setCode("0001");
+			}
+		} catch (Exception e) {
+			result.setCode("0001");
+		}
+		return result;
+	}
 	// end region
 }

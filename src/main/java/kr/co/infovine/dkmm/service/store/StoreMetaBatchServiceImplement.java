@@ -163,6 +163,10 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
         log.info("	>>>>>> STEP 6 - UPDATE T_STORE_INFO - CAFE Name : RESULT_COUNT : " + updCafeNameCnt);
         log.info("	>>>>>> STEP 6 PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
         
+        int delStoreOrgExcelCnt = this.truncateStoreOrgExcel();
+        
+        log.info("	>>>>>> STEP 7 - TRUNCATE T_STORE_INFO_ORG_EXCEL : RESULT_COUNT : " + delStoreOrgExcelCnt);
+        log.info("	>>>>>> STEP 7 PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
         
         log.info("==================================================================================");
         log.info("============================== RESULT TOTAL ======================================");
@@ -175,10 +179,10 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
         log.info(" :::::: T_STORE_INFO - Cafe Category UPDATE COUNT : " + updCafeCtgryCnt );
         log.info(" :::::: T_STORE_INFO - Cafe Name UPDATE COUNT : " + updCafeNameCnt );
         log.info("");
+        log.info(" :::::: T_STORE_INFO_ORG - TOTAL TRUNCATE COUNT : " + delStoreOrgExcelCnt );
+        log.info("");
         log.info(" :::::: ALL STEP PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
         log.info("==================================================================================");
-		
-        
         
         
 	}
@@ -217,6 +221,12 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	@Override
 	public int updateCafeName() {
 		return tStoreInfoMapper.updateCafeName();
+	}
+	
+	/* STORE_INFO_ORG_EXCEL 데이터 삭제  */
+	@Override
+	public int truncateStoreOrgExcel() {
+		return tStoreInfoOrgExcelMapper.truncateStoreOrgExcel();
 	}
 	
 	

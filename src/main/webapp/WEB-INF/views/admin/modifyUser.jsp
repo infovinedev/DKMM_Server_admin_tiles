@@ -100,7 +100,7 @@ function fun_selectMngCode(callback){
 			
 			$("#sel_userTypeCode").append('<option value="-1">---선택---</option>');
 			for(var i=0; i<tempResult.length; i++){
-				$("#sel_userTypeCode").append('<option value="'+tempResult[i].codeValue+'">'+tempResult[i].codeName+'</option>');
+				$("#sel_userTypeCode").append('<option value="'+tempResult[i].codeDescription+'">'+tempResult[i].codeName+'</option>');
 			}
 			
 			callback();
@@ -119,6 +119,7 @@ function fun_setjdtListAdminUser(callback) {
 			, { "title": "아이디", "data": "userId"}
 			, { "title": "이름", "data": "userName"}
 			, { "title": "코드", "data": "userTypeCode"}
+			, { "title": "권한", "data": "userTypeCodeNm"}
 			, { "title": "패스워드오류", "data": "passwordErrorCount" }
 			, { "title": "마지막로그인", "data": "lastloginDate" }
 			, { "title": "블록", "data": "blockYn" }
@@ -170,17 +171,8 @@ function fun_setjdtListAdminUser(callback) {
 			}
 			, {
 				"targets": [3]
-				, "class": "text-center"
-				, "render": function (data, type, row, meta) {
-					var insertTr = "";
-					if ( row.userTypeCode == "00" ){
-						insertTr = "관리자";
-					}
-					else{
-						insertTr = "마케팅";
-					}
-					return insertTr;
-                }
+				, visible: false
+				, searchable: false
 			}
 			, {
 				"targets": [4]
@@ -188,6 +180,10 @@ function fun_setjdtListAdminUser(callback) {
 			}
 			, {
 				"targets": [5]
+				, "class": "text-center"
+			}
+			, {
+				"targets": [6]
 				, "class": "text-center"
 				, "render": function (data, type, row, meta) {
 					var insertTr = "";
@@ -200,11 +196,11 @@ function fun_setjdtListAdminUser(callback) {
                 }
 			}
 			, {
-				"targets": [6]
+				"targets": [7]
 				, "class": "text-center"
 			}
 			, {
-				"targets": [7]
+				"targets": [8]
 				, "class": "text-center"
 				, "render": function (data, type, row, meta) {
 					var insertTr = "";
@@ -216,7 +212,7 @@ function fun_setjdtListAdminUser(callback) {
                 }
 			}
 			, {
-				"targets": [8]
+				"targets": [9]
 				, "class": "text-center"
 				, "render": function (data, type, row, meta) {
 					var insertTr = "";
@@ -235,7 +231,6 @@ function fun_insert(){
 	$("#txt_userId").attr("disabled",false); 
 	$("#txt_userName").attr("disabled",false); 
 	$("#sel_userTypeCode").val("-1");
-	
 	
 	$("#section1_detail_view").removeAttr("style");
 	$("#btnBlockY").hide();
@@ -426,7 +421,7 @@ function fun_clickButtonInsertAdminUser(){
 		
 		if ( $("#sel_userTypeCode").val() == "-1" ){
 			$("#sel_userTypeCode").focus();
-			alert('유저타입을 선택해주세요.');
+			alert('유저권한을 선택해주세요.');
 			return;
 		}
 		
@@ -458,7 +453,10 @@ function fun_clickButtonInsertAdminUser(){
 				, contentType: 'application/json; charset=utf-8'
 				, dataType: 'json'
 				, success: function (msg) {
-					if(msg.code == 0){
+					
+					console.log(msg);
+					
+					if(msg.code == "0000"){
 						$("#hdf_adminUserSeq").val('-1');
 						fun_changeAfterinit();
 						alert("저장이 완료되었습니다");
@@ -468,7 +466,7 @@ function fun_clickButtonInsertAdminUser(){
 					else{
 						$("#txt_adminPassword").val('');
 						$("#txt_adminPassword").focus();
-						alert("비밀번호가 다릅니다.");
+						alert(msg.errorMessage);
 					}
 				}
 				, error: function (xhr, status, error) {
@@ -485,8 +483,6 @@ function fun_clickButtonInsertAdminUser(){
 
 
 </script>
-
-
 
 <form id="membership" method="post" enctype="multipart/form-data" action="">
 	<div class="wrapper">
@@ -582,7 +578,8 @@ function fun_clickButtonInsertAdminUser(){
 	                                	<th class="text-center">Seq</th> 
                                         <th class="text-center" width="15%">ID</th>
                                        	<th class="text-center">이름</th>
-                                        <th class="text-center" width="8%">코드</th>   
+                                       	<th class="text-center">권한코드</th>  
+                                        <th class="text-center" width="8%">권한</th>   
                                         <th class="text-center" width="10%">패스워드오류</th>   
                                         <th class="text-center" width="11%">마지막로그인</th>   
                                         <th class="text-center" width="10%">블록</th>   
