@@ -10,9 +10,8 @@
 	<head>
 		<tiles:insertAttribute name="head"/>
 	</head>
-	<tiles:insertAttribute name="header"/>
-	
 	<body class="no-skin">
+	<tiles:insertAttribute name="header"/>
 	<div class="main-container" id="main-container">
     
 	    <!--Top Menu-->

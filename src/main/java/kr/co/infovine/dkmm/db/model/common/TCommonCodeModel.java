@@ -83,4 +83,5 @@ public class TCommonCodeModel {
 	private String searchStartDt;
 	private String searchEndDt;
 	private String searchCodeGroup;
+	private String auth;
 }

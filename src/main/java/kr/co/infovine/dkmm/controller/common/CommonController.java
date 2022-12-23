@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
+import kr.co.infovine.dkmm.api.model.base.SessionModel;
 import kr.co.infovine.dkmm.db.model.common.TCommonCodeModel;
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
 import kr.co.infovine.dkmm.service.common.CommonCodeService;
+import kr.co.infovine.dkmm.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -34,6 +39,7 @@ public class CommonController {
 			,@RequestBody TCommonCodeModel tCommonCodeModel) {
 		ResponseModel result = new ResponseModel();
 		
+		tCommonCodeModel.setAuth(CommonUtil.getUpAuth());
 		List<TCommonCodeModel> resultSet = commonCodeService.selectCommonCode(tCommonCodeModel);
 		
 		try {

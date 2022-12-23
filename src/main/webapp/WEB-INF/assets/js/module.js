@@ -368,9 +368,12 @@ function fun_startBlockUI(){
 		            '-webkit-border-radius': '10px', 
 		            '-moz-border-radius': '10px', 
 		            opacity: .5, 
-		            color: '#fff' 
+		            color: '#fff' ,
+		            baseZ: 2000
 		            } 
 		       }); 
+		       
+	$.blockUI.defaults.baseZ = 4000;
 }
 
 function fun_endBlockUI(){

@@ -127,14 +127,13 @@
   </select>
   
   <select id="selectCommonCode" parameterType="kr.co.infovine.dkmm.db.model.common.TCommonCodeModel" resultMap="BaseResultMap">
-  select code_group, code_value , code_name  from t_common_code
+  select code_group, code_value , code_name, code_description  from t_common_code
   where code_group  = #{codeGroup,jdbcType=VARCHAR}
-  order by case  when code_value ='REGISTER'  then 0
-                 when code_value ='LIKE'      then 1
-                 when code_value ='GET'       then 2
-                 when code_value ='ACT'       then 3
-                 when code_value ='EMAIL'     then 4
-                 when code_value ='CUSTOM001' then 5
-                 end
+  <if test='"mng_type".equals(codeGroup)'>
+	  <if test='auth != null and !"ROLE_ADMIN".equals(auth)'>
+	  	<![CDATA[ AND code_value <> 'ROLE_ADMIN' ]]>   
+	  </if>
+  </if>
+  order by disp_order
   </select>
 </mapper>

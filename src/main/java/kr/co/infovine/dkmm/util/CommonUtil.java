@@ -2,6 +2,11 @@ package kr.co.infovine.dkmm.util;
 
 import java.util.Calendar;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+
 /**
  * 공통 유틸
  * 
@@ -10,7 +15,9 @@ import java.util.Calendar;
  * 2021-05-12 Made by Yunho, Kim
  */
 public class CommonUtil {
-
+	
+	String arrStringAuth = "";
+	
 	private CommonUtil() {}
 
 	// region 설명: 문자 채우기
@@ -79,5 +86,39 @@ public class CommonUtil {
 		return sb.toString();
 	}
 	// end region
-
+	
+	public static String getUpAuth() {
+		
+		String auth = "";
+		
+		Authentication authObj = SecurityContextHolder.getContext().getAuthentication();
+		User aUserInfo = (User) authObj.getPrincipal();
+		
+		CommonUtil cu = new CommonUtil();
+		
+		aUserInfo.getAuthorities().forEach((temp) -> {
+			SimpleGrantedAuthority strTemp  = (SimpleGrantedAuthority) temp;
+			cu.arrStringAuth = cu.arrStringAuth + strTemp.getAuthority()+ ",";
+		});
+		
+		if ( cu.arrStringAuth.indexOf("ROLE_ADMIN") > -1 ) {
+			auth = "ROLE_ADMIN";
+		}else {
+			if ( cu.arrStringAuth.indexOf("ROLE_OPERMNG") > -1 ) {
+				auth = "ROLE_OPERMNG";
+			}
+			else {
+				if ( cu.arrStringAuth.indexOf("ROLE_MNG") > -1 ) {
+					auth = "ROLE_MNG";
+				}
+				else {
+					auth = "ROLE_MARKETING";
+				}
+			}
+		}
+		
+		return auth;
+	}
+	
+	
 }

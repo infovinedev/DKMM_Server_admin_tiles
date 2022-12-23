@@ -98,6 +98,7 @@ function fun_selectMngCode(callback){
 			
 			$("#sel_userTypeCode option").remove();
 			
+			$("#sel_userTypeCode").append('<option value="-1">---선택---</option>');
 			for(var i=0; i<tempResult.length; i++){
 				$("#sel_userTypeCode").append('<option value="'+tempResult[i].codeValue+'">'+tempResult[i].codeName+'</option>');
 			}
@@ -642,9 +643,6 @@ function fun_clickButtonInsertAdminUser(){
                                      <th>유저타입</th>
                                      <td>
                                      	<select id="sel_userTypeCode" class="form-control" style="width:50%;">
-											<option value="-1">---선택---</option>
-											<option value="00">관리자</option>
-											<option value="01">마케팅</option>
                                         </select>
                                      </td>
                                   </tr>
