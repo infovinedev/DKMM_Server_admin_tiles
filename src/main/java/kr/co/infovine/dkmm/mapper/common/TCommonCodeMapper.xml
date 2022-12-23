@@ -127,7 +127,7 @@
   </select>
   
   <select id="selectCommonCode" parameterType="kr.co.infovine.dkmm.db.model.common.TCommonCodeModel" resultMap="BaseResultMap">
-  select code_value , code_name  from t_common_code
+  select code_group, code_value , code_name  from t_common_code
   where code_group  = #{codeGroup,jdbcType=VARCHAR}
   order by case  when code_value ='REGISTER'  then 0
                  when code_value ='LIKE'      then 1

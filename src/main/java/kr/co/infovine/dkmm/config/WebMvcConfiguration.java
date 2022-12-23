@@ -26,9 +26,17 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		excludeMapping.add("/batchStoreCoordinates.do");
 		excludeMapping.add("/batchStoreOrgBulkInsert.do");
 		excludeMapping.add("/filedownloadWebLink.do");
+//		excludeMapping.add("/upload/*");
 		
 		registry.addInterceptor(new AuthenticationInterceptor()).excludePathPatterns(excludeMapping);
 		
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
+	
+//	@Override
+//  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//      registry
+//        .addResourceHandler("/upload/**")
+//        .addResourceLocations("/upload/");	
+//  }
 }

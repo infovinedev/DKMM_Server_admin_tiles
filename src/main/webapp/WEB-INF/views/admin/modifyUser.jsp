@@ -43,7 +43,9 @@ $(document).ready(function () {
 	});
 	
 	$("#hdf_adminUserSeq").val('-1');
-
+	
+	fun_selectMngCode( function(){} );
+	
 });
 
 function searchDataTable(){
@@ -62,7 +64,6 @@ function fun_selectjdtListAdminUser(callback){
 	var searchEndDt = $("#search_endDt").val();
 	var inputData = {"searchText": "", "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
 	
-	
 	fun_ajaxPostSend("/admin/select/adminUser.do", inputData, true, function(msg){
 		if(msg!=null){
 			switch(msg.code){
@@ -72,6 +73,35 @@ function fun_selectjdtListAdminUser(callback){
 			}
 			var tempResult = JSON.parse(msg.result);
 			fun_dataTableAddData("#jdtListAdminUser", tempResult);
+			callback();
+		}
+		else{
+			//alert('서비스가 일시적으로 원활하지 않습니다.');
+		}
+	});
+}
+
+
+function fun_selectMngCode(callback){
+	var inputData = {"codeGroup": "mng_type"};
+	
+	fun_ajaxPostSend("/common/select/serviceCodeList.do", inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000": 
+					break;
+				case "0001":
+			}
+			var tempResult = JSON.parse(msg.result);
+			
+			console.log(tempResult)
+			
+			$("#sel_userTypeCode option").remove();
+			
+			for(var i=0; i<tempResult.length; i++){
+				$("#sel_userTypeCode").append('<option value="'+tempResult[i].codeValue+'">'+tempResult[i].codeName+'</option>');
+			}
+			
 			callback();
 		}
 		else{
