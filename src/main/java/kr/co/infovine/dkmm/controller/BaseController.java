@@ -189,4 +189,27 @@ public class BaseController {
 			throw e;
 		}
 	}
+
+	// region 설명: 로드벨런싱 체크
+	/**
+	 * 2022-12-26 Made by Duhyun, Kim
+	 * @param args
+	 * return : ResponseModel
+	 */
+	@RequestMapping(value="/checkHealth.do", method = RequestMethod.POST
+			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
+	@ResponseBody
+	public ResponseModel checkHealth(HttpServletRequest request, HttpServletResponse response
+			, @RequestBody String admin
+	) {
+		ResponseModel result = new ResponseModel();
+		try {
+			result.setCode("0000");
+		}
+		catch (Exception e) {
+			result.setCode("0001");
+		}
+		return result;
+	}
+	// end region
 }
