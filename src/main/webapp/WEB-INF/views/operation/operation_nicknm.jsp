@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<head>
+<script language="javascript" src="/assets/js/huge-uploader.js"></script>
+</head>
 <script>
 var nicknmListInfo;
 
@@ -252,37 +255,120 @@ function fun_save(type){
 		});
 	}
 }
+//파일업로드
+var data="";
+var test="";
+var arr = new Array();
 
-//파일 업로드 return 받기
-function fn_admin_file_callback(th, data, pageType){
-	if(data.result){
-     	var fileNm = data.data.fileNm;
-     	var fileUuid = data.data.fileUuid;
-     	var fileSaveNm = data.data.fileSaveNm;
-     	var fileSubSeq = data.data.fileSubSeq;
+	function fn_test(event, callback){
+		try{
+			var input = event.target;
+			var file = input.files[0];
+			var formData = new FormData();
 
-     	console.log("==fn_modal_file_callback=="+pageType+"|"+fileNm+"/"+fileUuid+"/"+fileSaveNm+"/"+fileSubSeq+"/"+$(th).closest("file").find(".fileArea").length);
+			formData.append("testfile", file);
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "/test/upload.do", false);
+			xhr.onload=function(e){
+			};
+			xhr.setRequestHeader("FILENAME", file.name);
+			console.log("file.name : " + file.name);
+			xhr.send(formData);
+		}
+		catch(e){
 
-     	var obj = $(th).closest("file");
-     	var html="";
-      	html +='<file_del>';
-      	html +='<input type="hidden" class="fileSaveNm" name="fileSaveNm" value="'+fileSaveNm+'"/>';
-      	html +='<input type="hidden" class="fileNm" name="fileNm" value="'+fileNm+'"/>';
-      	html +='<input type="hidden" class="fileUuid" name="fileUuid" value="'+fileUuid+'"/>';
-      	html +='<a href="'+ckuMainUrl+'/upload/'+pageType+'/'+fileSaveNm+'" download="'+fileNm+'">'+fileNm+'</a>&nbsp;';
-      	html +='<button type="button" class="btn btn-outline-primary btn-sm no-print-page ml-2" onclick="fn_admin_file_remove(this)">삭제</button>';
-      	html +='</file_del>';
-      	obj.find(".fileArea").html(html);
-      	obj.find(".file_upload_btn").css("display", "none");
+		}
 
-      	if(obj.find(".fileArea_preview").length > 0){
-      		var img = '<img src="'+ckuMainUrl+'/upload/'+pageType+'/'+fileSaveNm+'" style="width:50%"/>';
-      		obj.find(".fileArea_preview").html(img);
-      	}
-   	}else{
-   		alert(data.message);
-   	}
-}
+		callback();
+	}
+
+
+	function generateUUID() {
+		var d = new Date().getTime();
+		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = (d + Math.random()*16)%16 | 0;
+			d = Math.floor(d/16);
+			return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+		});
+		return uuid;
+	};
+	
+	
+	function fn_testUploader(event, fileType, pageType, callback){
+		/* var input = event.target;
+		var fileObject = input.files[0]; */
+		var input = $("#testUploader");
+		var fileObject = input.prop('files')[0];
+		
+		var name = fileObject.name;
+		if(fileObject==""){
+			alert("파일을 업로드 해주세요.");
+			return false;
+		}
+
+		var ext = name.split('.').pop().toLowerCase();
+		var fileArr = ['png','jpg','jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'hwp', 'avi', 'mp4', 'm4v', 'wmv', 'mkv', 'mov', 'bz2'];
+		if(fileType == "img"){
+			fileArr = ['png','jpg','jpeg', 'gif'];
+			if(fileArr.indexOf(ext) == -1) {
+				alert("이미지 파일을 업로드 해 주세요.");
+				return false;
+			}
+
+		}
+		var headers = new Object();
+		headers.pageType = pageType;
+		headers.fileType = fileType;
+		headers.uniqueId = generateUUID();
+		headers.fileObjectName = fileObject.name;
+		headers.fileObjectSize = fileObject.size;
+		headers.fileObjectType = fileObject.type;
+		const HugeUploader = require('huge-uploader');
+		const uploader = new HugeUploader({ endpoint: '/file/upload.do', file: fileObject, headers:headers });
+		// subscribe to events
+		uploader.on('error', (err) => {
+			console.error('Something bad happened', err.detail);
+		});
+
+		uploader.on('progress', (progress) => {
+			var data = progress.detail.responseData;
+			var code = data.code;
+			switch(code){
+				case "0000":
+				case "0004":
+					$(".progress-bar").find("span.data-percent").html(progress.detail.percent + "%");
+
+					$(".progress-bar").animate({
+						width: progress.detail.percent + "%"
+					}, 800);
+					break;
+				case "0001":
+					uploader.togglePause();
+					alert(data.result);
+					location.href="admin/loginView.do";
+					break;
+				case "0002":
+				case "0003":
+					uploader.togglePause();
+					alert(data.result);
+					break;
+
+			}
+		});
+
+		uploader.on('fileRetry', (msg) => {
+			console.log(msg);
+		});
+
+		uploader.on('finish', (body) => {
+			console.log('yeahhh - last response body:', body);
+		});
+		callback();
+	}
+	
+	function fn_testUploaderCallback(e){
+	}
+	
 </script>
 <head>
 	<title>관리자 운영 - 칭호관리</title>
@@ -330,7 +416,7 @@ function fn_admin_file_callback(th, data, pageType){
                                                 </div>
                                                 <div class="col">
                                                     <div class="btn-group" role="group">
-                                                    	<button type="button" class="btn btn-outline-secondary active" day="all">전체</button>
+                                                        <button type="button" class="btn btn-outline-secondary active" day="all">전체</button>
                                                         <button type="button" class="btn btn-outline-secondary" day="0">오늘</button>
                                                         <button type="button" class="btn btn-outline-secondary" day="1">어제</button>
                                                         <button type="button" class="btn btn-outline-secondary" day="3">3일</button>
@@ -473,11 +559,23 @@ function fn_admin_file_callback(th, data, pageType){
                                         <input class="form-control" type="hidden" id="hidden_up_nickSeq"/>
                                      </td>
                                   </tr>
+                                  
+                                  
                                   <tr>
                                     <th>칭호이미지 <span class="text-red">*</span></th>
-                                    <td colspan="3"> 추후작업
-                                    </td>
+                                    <td colspan="3"> 
+                                    <input type="file" id="testUploader" onchange="fn_testUploader(testUploader, 'img', 'doc', fn_testUploaderCallback);">
+                                      <div class='progress' style="width:600px; display:none;">
+                                        <div class='progress-bar' data-width='0'>
+                                          <div class='progress-bar-text'>
+                                            Progress: <span class='data-percent'></span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                     </td>
                                   </tr>
+                                  
+                                  
                                   <tr>
                                     <th>연결업적</th>
                                     <td colspan="3"><input class="form-control" type="text" id="txt_up_workNm" readOnly/></td>
