@@ -39,7 +39,7 @@ public class Batch1Controller {
         	JobDetail jobDetail = buildJobDetail(Batch1Service.class, "batch1", "t_batch1", map);
 //			scheduler.scheduleJob(jobDetail, buildJobTrigger("0 0 1 * * ?"));
 			
-			//02. 상점 정보 등록
+			//02. 상점 정보 등록 및 갱신 EXCEL_ORG >> STORE
         	JobDetail jobDetailStoreOrg = buildJobDetail(BatchStoreOrgToInfoService.class, "batchStoreOrg", "t_batchStoreOrg", map);
 //			scheduler.scheduleJob(jobDetailStoreOrg, buildJobTrigger("0 21 17 * * ?"));
 			
@@ -47,7 +47,7 @@ public class Batch1Controller {
         	JobDetail jobDetailStoreCoordinates = buildJobDetail(BatchCoordinatesToStoreService.class, "batchStoreCoordinates", "t_batchStoreCoordinates", map);
 //        	scheduler.scheduleJob(jobDetailStoreCoordinates, buildJobTrigger("0 0 1 * * ?"));
 			
-        	//03. 상점 위치 정보 갱신
+        	//04. 인허가 상점 정보 EXCEL 업로드
         	JobDetail jobDetailStoreOrgExcelUpload = buildJobDetail(BatchStoreOrgExcelUploadService.class, "BatchStoreOrgExcelUpload", "t_batchStoreOrgExcelUpload", map);
 //        	scheduler.scheduleJob(jobDetailStoreOrgExcelUpload, buildJobTrigger("0 23 17 * * ?"));
         	

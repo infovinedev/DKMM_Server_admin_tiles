@@ -85,6 +85,8 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	@Value("${server.store.excel.backup.directory}")
 	private String storeExcelBackDir;
 	
+	@Value("${batch.flag}")
+	private boolean batchFlag;
 	
 	@Autowired
 	HttpClient httpClient;
@@ -101,6 +103,8 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	@Override
 	public void batchStoreInfo() {
 		
+		if ( this.batchFlag != true ) return;
+		 
 		long start = System.currentTimeMillis();
 		
 		log.info("===================================================================================");
@@ -238,6 +242,9 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	 */
 	@Override
 	public void getCoordinatesToStoreInfo() {
+		
+		if ( this.batchFlag != true ) return;
+		
 		try {
 			
 			List<TCommonCodeModel> tCodeArray = tCommonCodeMapper.selectByCodeGroup("vworld");
@@ -890,6 +897,8 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	 */
 	@Override
 	public void batchStoreOrgBulkInsertToExcelStreaming() {
+		
+		if ( this.batchFlag != true ) return;
 		
 		log.info( "==========  batchStoreOrgBulkInsertToExcelStreaming : STORE META DATA Bulk INSERT - MyBatis =============" );
 		

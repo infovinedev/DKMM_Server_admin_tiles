@@ -39,31 +39,31 @@ $(document).ready(function () {
 	});
 	
    $("#endDt_check").on("click", function(){
-	     	var today = c21.date_today("yyyy-MM-dd");
-	     	if($(this).is(":checked")){
-	     		$("#sel_add_limitYn").val("N").prop("selected", true);
-	     		$("#txt_add_limitYn").val("미사용");
-	     		
-	     		/** 기간 무제한 체크 시 시작일 오늘날짜로 설정 */
-	     		$("#txt_add_startDt").val(today);
-	     		$("#txt_add_startDt").attr("readonly",true);
-	     		$("#txt_add_startDt").datepicker("disable");
-	     		/** 기간 무제한 체크 시 종료일 29991231 설정 */
-	     		$("#txt_add_endDt").val('2999-12-31');
-	     		$("#txt_add_endDt").attr("readonly",true);
-	     		$("#txt_add_endDt").datepicker("disable");
-	     	}else{
-	     		$("#sel_add_limitYn").val("Y").prop("selected", true);
-	     		$("#txt_add_limitYn").val("사용");
-	     		
-	     		$("#txt_add_startDt").val('');
-	     		$("#txt_add_startDt").removeAttr("readonly");
-	     		$("#txt_add_startDt").datepicker("enable");
-	     		$("#txt_add_endDt").val('');
-	     		$("#txt_add_endDt").removeAttr("readonly");
-	     		$("#txt_add_endDt").datepicker("enable");
-	     	}
-	   });
+     	var today = c21.date_today("yyyy-MM-dd");
+     	if($(this).is(":checked")){
+     		$("#sel_add_limitYn").val("N").prop("selected", true);
+     		$("#txt_add_limitYn").val("미사용");
+     		
+     		/** 기간 무제한 체크 시 시작일 오늘날짜로 설정 */
+     		$("#txt_add_startDt").val(today);
+     		$("#txt_add_startDt").attr("readonly",true);
+     		$("#txt_add_startDt").datepicker("disable");
+     		/** 기간 무제한 체크 시 종료일 29991231 설정 */
+     		$("#txt_add_endDt").val('2999-12-31');
+     		$("#txt_add_endDt").attr("readonly",true);
+     		$("#txt_add_endDt").datepicker("disable");
+     	}else{
+     		$("#sel_add_limitYn").val("Y").prop("selected", true);
+     		$("#txt_add_limitYn").val("사용");
+     		
+     		$("#txt_add_startDt").val('');
+     		$("#txt_add_startDt").removeAttr("readonly");
+     		$("#txt_add_startDt").datepicker("enable");
+     		$("#txt_add_endDt").val('');
+     		$("#txt_add_endDt").removeAttr("readonly");
+     		$("#txt_add_endDt").datepicker("enable");
+     	}
+   });
 });
 
 function searchDataTable(){

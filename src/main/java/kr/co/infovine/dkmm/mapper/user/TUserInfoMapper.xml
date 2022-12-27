@@ -190,6 +190,7 @@
 			,a.gender
 			,ins_dt
 			,a.os_type
+			,'0' as point
 		FROM t_user_info a
 		WHERE 1=1
 		AND a.del_yn = 'N'
@@ -200,8 +201,8 @@
 	<resultMap id="JoinResultMap" type="kr.co.infovine.dkmm.db.model.user.TUserInfo" extends="BaseResultMap">
 		<id column="user_seq" jdbcType="VARCHAR" property="userSeq" />
 		<association property="waitCnt" column="{userSeq=user_seq}" select="kr.co.infovine.dkmm.mapper.user.TUserInfoMapper.selectWaitCnt"/>
-		<association property="point" column="{userSeq=user_seq}" select="kr.co.infovine.dkmm.mapper.user.TUserInfoMapper.selectPoint"/>
 		<association property="likeCnt" column="{userSeq=user_seq}" select="kr.co.infovine.dkmm.mapper.user.TUserInfoMapper.selectLikeCnt"/>
+<!-- 		<association property="point" column="{userSeq=user_seq}" select="kr.co.infovine.dkmm.mapper.user.TUserInfoMapper.selectPoint"/> -->
 	</resultMap>
 	
 	<select id="selectWaitCnt" parameterType="kr.co.infovine.dkmm.db.model.user.TUserInfo" resultType="int">

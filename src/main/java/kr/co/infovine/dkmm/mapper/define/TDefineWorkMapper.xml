@@ -153,7 +153,7 @@
 	        ,a.work_cnt
 	        ,a.work_text
 	        ,a.nick_seq
-	        ,CONCAT(a.point , 'P') as point
+	        ,a.point
 	        ,a.except_condition
 	        ,a.start_dt
 	        ,a.end_dt
@@ -167,9 +167,9 @@
 	        ,a.unit_txt
 	      FROM t_define_work a
 	      WHERE 1=1
-	        AND a.del_yn = 'N'
-	        AND a.approval_yn = 'Y'
-	        AND a.use_yn = 'Y'
+<!-- 	        AND a.del_yn = 'N' -->
+<!-- 	        AND a.approval_yn = 'Y' -->
+<!-- 	        AND a.use_yn = 'Y' -->
 	      <include refid="searchCondition_history"></include>
 	  ) a
       ORDER BY a.sortOrder1, a.disp_order, a.sortOrder2, work_seq DESC

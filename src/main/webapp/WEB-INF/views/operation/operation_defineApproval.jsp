@@ -34,31 +34,58 @@ $(document).ready(function () {
 	});
 	
    $("#endDt_check").on("click", function(){
-	     	var today = c21.date_today("yyyy-MM-dd");
-	     	if($(this).is(":checked")){
-	     		$("#sel_up_limitYn").val("N").prop("selected", true);
-	     		$("#txt_up_limitYn").val("미사용");
-	     		
-	     		/** 기간 무제한 체크 시 시작일 오늘날짜로 설정 */
-	     		$("#txt_up_startDt").val(today);
-	     		$("#txt_up_startDt").attr("readonly",true);
-	     		$("#txt_up_startDt").datepicker("disable");
-	     		/** 기간 무제한 체크 시 종료일 29991231 설정 */
-	     		$("#txt_up_endDt").val('2999-12-31');
-	     		$("#txt_up_endDt").attr("readonly",true);
-	     		$("#txt_up_endDt").datepicker("disable");
-	     	}else{
-	     		$("#sel_up_limitYn").val("Y").prop("selected", true);
-	     		$("#txt_up_limitYn").val("사용");
-	     		
-	     		$("#txt_up_startDt").val('');
-	     		$("#txt_up_startDt").removeAttr("readonly");
-	     		$("#txt_up_startDt").datepicker("enable");
-	     		$("#txt_up_endDt").val('');
-	     		$("#txt_up_endDt").removeAttr("readonly");
-	     		$("#txt_up_endDt").datepicker("enable");
-	     	}
-	   });
+     	var today = c21.date_today("yyyy-MM-dd");
+     	if($(this).is(":checked")){
+     		$("#sel_up_limitYn").val("N").prop("selected", true);
+     		$("#txt_up_limitYn").val("미사용");
+     		
+     		/** 기간 무제한 체크 시 시작일 오늘날짜로 설정 */
+     		$("#txt_up_startDt").val(today);
+     		$("#txt_up_startDt").attr("readonly",true);
+     		$("#txt_up_startDt").datepicker("disable");
+     		/** 기간 무제한 체크 시 종료일 29991231 설정 */
+     		$("#txt_up_endDt").val('2999-12-31');
+     		$("#txt_up_endDt").attr("readonly",true);
+     		$("#txt_up_endDt").datepicker("disable");
+     	}else{
+     		$("#sel_up_limitYn").val("Y").prop("selected", true);
+     		$("#txt_up_limitYn").val("사용");
+     		
+     		$("#txt_up_startDt").val('');
+     		$("#txt_up_startDt").removeAttr("readonly");
+     		$("#txt_up_startDt").datepicker("enable");
+     		$("#txt_up_endDt").val('');
+     		$("#txt_up_endDt").removeAttr("readonly");
+     		$("#txt_up_endDt").datepicker("enable");
+     	}
+   });
+   
+   $("#endDt_check_add").on("click", function(){
+    	var today = c21.date_today("yyyy-MM-dd");
+    	if($(this).is(":checked")){
+    		$("#sel_add_limitYn").val("N").prop("selected", true);
+    		$("#txt_add_limitYn").val("미사용");
+    		
+    		/** 기간 무제한 체크 시 시작일 오늘날짜로 설정 */
+    		$("#txt_add_startDt").val(today);
+    		$("#txt_add_startDt").attr("readonly",true);
+    		$("#txt_add_startDt").datepicker("disable");
+    		/** 기간 무제한 체크 시 종료일 29991231 설정 */
+    		$("#txt_add_endDt").val('2999-12-31');
+    		$("#txt_add_endDt").attr("readonly",true);
+    		$("#txt_add_endDt").datepicker("disable");
+    	}else{
+    		$("#sel_add_limitYn").val("Y").prop("selected", true);
+    		$("#txt_add_limitYn").val("사용");
+    		
+    		$("#txt_add_startDt").val('');
+    		$("#txt_add_startDt").removeAttr("readonly");
+    		$("#txt_add_startDt").datepicker("enable");
+    		$("#txt_add_endDt").val('');
+    		$("#txt_add_endDt").removeAttr("readonly");
+    		$("#txt_add_endDt").datepicker("enable");
+    	}
+  });
    
    	$("#txt_searchText").on('keyup click', function () {
 		searchDataTable();	   
@@ -94,10 +121,12 @@ function fun_selectCommonCode(){
 		if(msg!=null){
 			var tempResult = JSON.parse(msg.result);
 			$('#sel_workCond').append($('<option></option>').val("").html("선택")); //main화면 달성조건
-			$('#sel_up_workCond').append($('<option></option>').val("").html("선택")); //등록화면 달성조건
+			$('#sel_up_workCond').append($('<option></option>').val("").html("선택")); //수정화면 달성조건
+			$('#sel_add_workCondition').append($('<option></option>').val("").html("선택")); //등록화면 달성조건
 			$.each(tempResult, function (key, value) {
 				$('#sel_workCond').append($('<option></option>').val(value.codeValue).html(value.codeName));
 				$('#sel_up_workCond').append($('<option></option>').val(value.codeValue).html(value.codeName));
+				$('#sel_add_workCondition').append($('<option></option>').val(value.codeValue).html(value.codeName));
 			});
 		}
 	});
@@ -166,6 +195,7 @@ function fun_reset(type){
 //상세보기
 function fun_viewDetail(workSeq) {
 	fun_reset();
+	$("#section1_inser_view").hide();
 	$("#section1_update_view").css("display", "none");
 	$("#section1_detail_view").removeAttr("style");
 	var inputData = {"workSeq": workSeq};
@@ -567,6 +597,97 @@ function changeNickNm(value) {
 	}
 }
 
+//업적관리 등록버튼
+function fun_btnInsert() {
+	
+	$("#section1_update_view").hide();
+	$("#section1_detail_view").hide();
+	
+	$("#sel_add_limitYn").val("Y").prop("selected", true);
+	$("#txt_add_limitYn").val("사용");
+	//업적관리에 칭호가 등록되지 않은 칭호들을 selectBox에 보여주기 위함
+	var inputData = {};
+	fun_ajaxPostSend("/define/select/defineWorkGetNicknm.do", inputData, true, function(msg){
+		if(msg!=null){
+			var tempResult = JSON.parse(msg.result);
+			var seqString = tempResult[0].seqString;
+			$("select#sel_add_nickSeq option").remove();
+			$('#sel_add_nickSeq').append($('<option></option>').val("").html("선택"));
+			for(var i=0; i<tempResult.length; i++){
+				var nickSeq = tempResult[i].nickSeq;
+				if(nickSeq != null || nickSeq != " "){
+						var nickNm = tempResult[i].nickNm;
+						$('#sel_add_nickSeq').append($('<option></option>').val(nickSeq).html(nickNm));
+				}
+			}
+		}
+	});
+	$("#section1_detail_view").css("display", "none");
+	$("#section1_inser_view").removeAttr("style");
+}
+
+//업적관리 등록
+function fun_btnDefineinsert() {
+	var workSeq = $("#txt_add_workSeq").val();
+	var workNm = $("#txt_add_workNm").val();
+	var workCondition = $("#sel_add_workCondition").val();
+	var workCnt = $("#txt_add_workCnt").val();
+	var point = $("#txt_add_point").val();
+	var workType = $("#sel_add_workType").val();
+	var nickSeq = $("#sel_add_nickSeq").val();
+	var startDt = $("#txt_add_startDt").val();
+	var endDt = $("#txt_add_endDt").val();
+	var startDt = $("#txt_add_startDt").val() == null ? "" : $("#txt_add_startDt").val().replaceAll("-", "");
+	var endDt   = $("#txt_add_startDt").val() == null ? "" : $("#txt_add_endDt").val().replaceAll("-", "");
+	var workConditionDesc = $("#txt_add_workConditionDesc").val();
+	var exceptCondition = $("#txt_add_exceptCondition").val();
+	var zombieYn = $("#sel_add_zombieYn").val();
+	var limitYn = $("#sel_add_limitYn").val();
+	var unitTxt = $("#txt_add_unitTxt").val();
+	var dispOrder = $("#txt_add_dispOrder").val();
+	
+	var result = confirm('업적 등록하시겠습니까?');
+	
+	var inputData = {"workSeq": workSeq, "workNm": workNm, "workCondition": workCondition,"workCnt": workCnt, "point": point, "workType": workType
+					 ,"nickSeq": nickSeq, "startDt": startDt, "endDt": endDt,"workConditionDesc": workConditionDesc, "exceptCondition": exceptCondition
+					 ,"zombieYn": zombieYn, "limitYn": limitYn, "unitTxt": unitTxt, "dispOrder" : dispOrder
+					}; 
+	if(result){
+		if($("#sel_add_workCondition").val() == ''){
+			alert("달성조건을 선택해주세요. ");
+			$("#sel_add_workCondition").focus();
+			return ;
+		}else if($("#txt_add_workCnt").val() == ''){
+			alert("달성 상세요건을 입력해주세요. ");
+			$("#txt_add_workCnt").focus();
+			return ;
+		}else if($("#sel_add_workType").val() == ''){
+			alert("업적구분을 선택해주세요. ");
+			$("#sel_add_workType").focus();
+			return ;
+		}
+		
+		if($("#txt_add_dispOrder").val() == ''){
+			alert("정렬 순서를 입력해주세요. ");
+			$("#txt_add_dispOrder").focus();
+			return ;
+		}
+		
+		fun_ajaxPostSend("/define/save/defineWorkinsert.do", inputData, true, function(msg){
+			if(msg.errorMessage !=null){
+				var message = msg.errorMessage;
+				if(message == "success"){
+					alert("정상적으로 처리되었습니다.");
+					$("#exampleModalScrollable").modal('hide');
+					fun_search();
+				}else if(message == "error"){
+					alert("정상적으로 처리되지 않았습니다.");
+				}
+			}
+		});
+	}
+}
+
 </script>
 <head>
 	<title>관리자 운영 - 업적관리</title>
@@ -654,6 +775,7 @@ function changeNickNm(value) {
                         <div class="row justify-content-between align-items-end mb-3">
                                 <div class="col-auto"></div>
                                 <div class="col-auto">
+                                	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_btnInsert()">업적등록</button>
                                     <select id="userListLength" class="custom-select w-auto">
                                     	<option value="10">10</option>
                                     	<option value="20">20</option>
@@ -920,6 +1042,117 @@ function changeNickNm(value) {
                         </div>
                     </section>
                     <!-- 수정화면 모달창 end  -->
+                    <!-- 등록 모달창 -->
+                    <section id="section1_inser_view" style="display:none;">
+                        <div class="modal-content" id="insertModal" style="width: 1320px;">
+                         <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">업적등록</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <table class="table table-bordered" >
+                               <colgroup>
+                                  <col style="width:15%">
+                                  <col style="width:35%">
+                                  <col style="width:15%">
+                                  <col style="width:35%">
+                               </colgroup>
+                               <tbody>
+                                  <tr>
+                                     <th>업적번호</th>
+                                     <td>-</td>
+                                     <th>업적명</th>
+                                     <td><input class="form-control" type="text" id="txt_add_workNm"/></td>
+                                  </tr>
+                                  <tr>
+                                     <th>달성조건 <span class="text-red">*</span></th>
+                                     <td>
+                                        <select class="form-control" id="sel_add_workCondition" name="operation_workCondition">
+                                         </select>
+                                    </td>
+                                    <th>달성횟수 <span class="text-red">*</span></th>
+                                     <td><input class="form-control" placeholder="달성 횟수을 입력해주세요.(숫자)" type="text" id="txt_add_workCnt" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></td>
+                                  </tr>
+                                  <tr>
+                                     <th>포인트</th>
+                                     <td><input class="form-control" placeholder="포인트 금액을 입력해 주세요." type="text" id="txt_add_point" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></td>
+                                     <th>업적구분 <span class="text-red">*</span></th>
+                                     <td>
+                                        <select class="form-control" id="sel_add_workType" name="operation_workType">
+	                                        <option value="">선택</option>
+	                                        <option value="NORMAL" th:selected="${bean.workType eq 'NORMAL'}">일반</option>
+	                                        <option value="PROMOTION" th:selected="${bean.workType eq 'PROMOTION'}">프로모션</option>
+	                                   	</select>
+                                     </td>
+                                  </tr>
+                                  <tr>
+                                     <th>칭호</th>
+                                     <td>
+                                     <!-- <input class="form-control" type="text" id="txt_add_nickSeq"/> -->
+                                     <select class="form-control" id="sel_add_nickSeq"></select>
+                                     </td>
+                                     <th>기간 설정</th>
+                                     <td>
+                                        <div class="row row-10 align-items-center">
+                                             <div class="col-auto">
+                                                 <input type="text" class="form-control form-datepicker" placeholder="0000-00-00" id="txt_add_startDt">
+                                             </div>
+                                             <div class="col-auto">~</div>
+                                             <div class="col-auto">
+                                                 <input type="text" class="form-control form-datepicker endDt" placeholder="0000-00-00" id="txt_add_endDt">
+                                             </div>
+                                             <!-- 기간 무제한 설정 checkbox -->
+	                                        <div class="col-auto" style="top:6px;">
+	                                            <label for="endDt_check_add">
+	                                            <input type="checkbox" id="endDt_check_add" name="endDt_check_add"/> 기간무제한
+	                                            </label>
+	                                        </div>
+                                        </div>
+                                     </td>
+                                  </tr>
+                                  <tr>
+                                     <th>업적 간략설명</th>
+                                     <td>
+                                     <textarea class="form-control" rows="3" id="txt_add_workConditionDesc"></textarea>
+                                     <th>업적제외조건<br>(앱내 상세설명)</th>
+                                     <td>
+                                     <textarea class="form-control" rows="3" id="txt_add_exceptCondition"></textarea>
+                                  </tr>
+                                  <tr>
+                                     <th>달성이후누적</th>
+                                     <td>
+                                        <select class="form-control" id="sel_add_zombieYn">
+	                                        <option value="N">미사용</option>
+	                                        <option value="Y">사용</option>
+	                                   	</select>
+                                     </td>
+                                     <th>기간한정여부</th>
+                                     <td>
+                                         <select class="form-control" id="sel_add_limitYn" hidden="hidden">
+	                                        <option value="N">미사용</option>
+	                                        <option value="Y">사용</option>
+	                                    </select> 
+	                                    <input class="form-control" type="text" id="txt_add_limitYn" readOnly/>
+                                  </tr>
+                                  <tr>
+                                     <th>단위텍스트</th>
+                                     <td><input class="form-control" placeholder="단위텍스트를 입력해주세요." type="text" id="txt_add_unitTxt" maxlength="2"/></td>
+                                  	 <th>정렬순서</th>
+                                     <td><input class="form-control" placeholder="정렬순서를 입력해주세요.(숫자)" type="text" id="txt_add_dispOrder" maxlength="9" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" /></td>
+                                  
+                                  </tr>
+                               </tbody>
+                            </table>
+                          </div>
+                          <div class="modal-footer">
+                          	<button type="button" class="btn btn-primary" onclick="fun_btnDefineinsert()">저장</button>
+                            <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">닫기</button>
+                          </div>
+                        </div>
+                    </section>
+                    <!-- 등록 모달창 end -->
                   </div>
                 </div>
             </div>
