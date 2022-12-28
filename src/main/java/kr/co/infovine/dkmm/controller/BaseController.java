@@ -196,12 +196,10 @@ public class BaseController {
 	 * @param args
 	 * return : ResponseModel
 	 */
-	@RequestMapping(value="/checkHealth.do", method = RequestMethod.POST
-			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
+	@RequestMapping(value="/checkHealth.do", method = RequestMethod.GET
+			, produces = "application/json; charset=utf8" )
 	@ResponseBody
-	public ResponseModel checkHealth(HttpServletRequest request, HttpServletResponse response
-			, @RequestBody String admin
-	) {
+	public ResponseModel checkHealth(HttpServletRequest request, HttpServletResponse response) {
 		ResponseModel result = new ResponseModel();
 		try {
 			result.setCode("0000");
