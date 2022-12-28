@@ -113,12 +113,21 @@ public class OperationDefineApprovalController {
 	@ResponseBody 
 	public ResponseModel savaDefineWorkApproval(HttpServletRequest request, HttpServletResponse response 
 			,@RequestBody TDefineWork defineWork) {
-	ResponseModel result = new ResponseModel();
+		ResponseModel result = new ResponseModel();
 		try {
-			operationDefineApprovalService.upDateApproval(defineWork);
-			result.setErrorMessage("success"); 
+			if ( "ROLE_ADMIN".equals(CommonUtil.getUpAuth()) || "ROLE_MNG".equals(CommonUtil.getUpAuth()) ){
+				operationDefineApprovalService.upDateApproval(defineWork);
+				result.setCode("0000"); 
+				result.setErrorMessage("success"); 
+			}
+			else {
+				result.setCode("0001"); 
+				result.setErrorMessage("해당기능을 실행 할 권한이 없습니다"); 
+			}
 		} catch (Exception e) {
-			result.setErrorMessage("error"); e.printStackTrace(); 
+			e.printStackTrace(); 
+			result.setCode("0001"); 
+			result.setErrorMessage("error");
 		} 
 		return result;
 	}
@@ -131,8 +140,15 @@ public class OperationDefineApprovalController {
 			,@RequestBody TDefineWork defineWork) {
 		ResponseModel result = new ResponseModel();
 		try {
-			operationDefineApprovalService.upDateUseYn(defineWork);
-			result.setErrorMessage("success");
+			if ( "ROLE_ADMIN".equals(CommonUtil.getUpAuth()) || "ROLE_MNG".equals(CommonUtil.getUpAuth()) ){
+				operationDefineApprovalService.upDateUseYn(defineWork);
+				result.setCode("0000"); 
+				result.setErrorMessage("success"); 
+			}
+			else {
+				result.setCode("0001"); 
+				result.setErrorMessage("해당기능을 실행 할 권한이 없습니다"); 
+			}
 		} catch (Exception e) {
 			result.setErrorMessage("error");
 			e.printStackTrace();

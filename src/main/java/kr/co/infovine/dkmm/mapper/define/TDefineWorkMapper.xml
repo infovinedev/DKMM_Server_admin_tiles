@@ -30,6 +30,7 @@
     <result column="limit_yn" jdbcType="VARCHAR" property="limitYn" />
     <result column="unit_txt" jdbcType="VARCHAR" property="unitTxt" />
     <result column="disp_order" jdbcType="VARCHAR" property="dispOrder" />
+    <result column="work_grp" jdbcType="VARCHAR" property="workGrp" />
   </resultMap>
   
 	<sql id="searchCondition_history">
@@ -165,6 +166,7 @@
 	        ,a.zombie_yn
 	        ,a.limit_yn
 	        ,a.unit_txt
+	        ,a.work_grp
 	      FROM t_define_work a
 	      WHERE 1=1
 <!-- 	        AND a.del_yn = 'N' -->
@@ -207,6 +209,7 @@
         ,a.limit_yn
         ,a.unit_txt
         ,a.disp_order
+        ,a.work_grp
       FROM t_define_work a
       WHERE 1=1
       AND work_seq = ${workSeq}
@@ -263,6 +266,7 @@
         ,limit_yn
         ,unit_txt
         ,disp_order
+        ,work_grp
       )
       VALUES
       (
@@ -283,6 +287,7 @@
         ,#{limitYn ,jdbcType=VARCHAR}
         ,#{unitTxt ,jdbcType=VARCHAR}
         ,#{dispOrder ,jdbcType=BIGINT}
+        ,#{workGrp ,jdbcType=VARCHAR}
       )
     </insert>
     <!--                                                                      업적등록 end                                                                      -->
@@ -322,6 +327,7 @@
 	        ,a.zombie_yn
 	        ,a.limit_yn
 	        ,a.unit_txt
+	        ,a.work_grp
 	      FROM t_define_work a
 	      WHERE 1=1
 	        AND a.del_yn = 'N'
@@ -361,6 +367,8 @@
         ,a.zombie_yn
         ,a.limit_yn
         ,a.unit_txt
+        ,a.disp_order
+        ,a.work_grp
       FROM t_define_work a
       WHERE 1=1
       AND work_seq = ${workSeq}
@@ -385,6 +393,7 @@
                 ,limit_yn				= #{limitYn ,jdbcType=VARCHAR}
                 ,unit_txt				= #{unitTxt ,jdbcType=VARCHAR}
                 ,disp_order				= #{dispOrder ,jdbcType=BIGINT}
+                ,work_grp				= #{workGrp ,jdbcType=VARCHAR}
               WHERE 1=1
               AND work_seq = ${workSeq}
     </update>

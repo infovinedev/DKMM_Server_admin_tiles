@@ -229,5 +229,6 @@ public class TDefineWork {
     private String nickComment;
     
     private int dispOrder;
+    private String workGrp;
 
 }

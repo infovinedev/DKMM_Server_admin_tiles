@@ -102,6 +102,13 @@ $(document).ready(function () {
 	$("#sel_workCond").on('change', function () {
 		fun_search();
 	});
+	
+	if ( auth == "ROLE_ADMIN" || auth == "ROLE_OPERMNG" ){
+		$("#trAuthFn").show();
+	}else{
+		$("#trAuthFn").show();
+	}
+	
 });
 
 function searchDataTable(){
@@ -188,6 +195,7 @@ function fun_reset(type){
 	$("#sel_approvalYn").val("");          //승인여부
 	$("#sel_useYn").val("");               //사용여부
 	$("#txt_dispOrder").val("");           //소팅순서
+	$("#txt_workGrp").val("");           //소팅순서
 	
 	$("#hidden_workCondition").val(); //달성조건 value
 	$("#hidden_nickSeq").val(); //칭호 value
@@ -231,6 +239,7 @@ function fun_viewDetail(workSeq) {
 			var approvalYn         = tempResult.approvalYn == null ? "" : tempResult.approvalYn;                 //승인여부
 			var useYn              = tempResult.useYn == null ? "" : tempResult.useYn;                           //사용여부
 			var dispOrder			= tempResult.dispOrder == null ? "" : tempResult.dispOrder;
+			var workGrp				= tempResult.workGrp == null ? "" : tempResult.workGrp;
 			
  			if(codeValue == "SELF"){
 				workCnt = "-";
@@ -242,6 +251,12 @@ function fun_viewDetail(workSeq) {
 				workCnt = workCnt + "회";
 			}
 			
+ 			if ( approvalYn == "Y" && useYn == "Y" ){
+ 				$("#btnDtlUpd").hide();
+ 			}else{
+ 				$("#btnDtlUpd").show();
+ 			}
+ 			
 			$("#txt_workSeq").val(workSeq);
 			$("#txt_workNm").val(workNm);
 			$("#txt_workCondition").val(workCondition);
@@ -262,6 +277,7 @@ function fun_viewDetail(workSeq) {
 			$("#txt_limitYn").val(limitYn);
 			$("#txt_unitTxt").val(unitTxt);
 			$("#txt_dispOrder").val(dispOrder);
+			$("#txt_workGrp").val(workGrp);
 			
 			$("#sel_approvalYn").val(approvalYn);
 			$("#sel_useYn").val(useYn);
@@ -284,6 +300,7 @@ function fun_setdefineApprovalListInfo() {
 			, {"data": "limitYn" }
 			, {"data": "unitTxt" }
 			, {"data": "dispOrder" }    //정렬순서    dispOrder
+			, {"data": "workGrp" }    //정렬순서    dispOrder
 			, {"data": "add" }
 		]
 		, "paging": true            // Table Paging
@@ -372,6 +389,10 @@ function fun_setdefineApprovalListInfo() {
 			, {
 				"targets": [12]
 				, "class": "text-center"
+			}
+			, {
+				"targets": [13]
+				, "class": "text-center"
 				, "render": function (data, type, row) {
 					var msg = row.workSeq;
 					var insertTr = "";
@@ -402,14 +423,15 @@ function fun_defineHiding(type,value){
 		var inputData = {"upWorkSeq": upWorkSeq, "approvalYn": approval};
 		if(result){
 			fun_ajaxPostSend("/approval/save/defineWorkapproval.do", inputData, true, function(msg){
-				if(msg.errorMessage !=null){
+				if(msg.code !=null){
+					var code = msg.code;
 					var message = msg.errorMessage;
-					if(message == "success"){
+					if(code == "0000"){
 						alert("정상적으로 처리되었습니다.");
 						$("#exampleModalScrollable").modal('hide'); //모달 종료
 						fun_search();
-					}else if(message == "error"){
-						alert("정상적으로 처리되지 않았습니다.");
+					}else{
+						alert(message);
 					}
 				}
 			});
@@ -430,14 +452,15 @@ function fun_defineHiding(type,value){
 		var inputData = {"upWorkSeq": upWorkSeq,"useYn": useYn};
 		if(result){
 			fun_ajaxPostSend("/approval/save/defineWorkUseYn.do", inputData, true, function(msg){
-				if(msg.errorMessage !=null){
+				if(msg.code !=null){
+					var code = msg.code;
 					var message = msg.errorMessage;
-					if(message == "success"){
+					if(code == "0000"){
 						alert("정상적으로 처리되었습니다.");
 						$("#exampleModalScrollable").modal('hide'); //모달 종료
 						fun_search();
-					}else if(message == "error"){
-						alert("정상적으로 처리되지 않았습니다.");
+					}else{
+						alert(message);
 					}
 				}
 			});
@@ -499,6 +522,7 @@ function fun_updateDisplay() {
 	var limitYn = $("#txt_limitYn").val();
 	var unitTxt = $("#txt_unitTxt").val();
 	var dispOrder = $("#txt_dispOrder").val();
+	var workGrp = $("#txt_workGrp").val();
 	
 	$("#txt_up_workSeq").val(workSeq);
 	$("#txt_up_workNm").val(workNm);
@@ -518,6 +542,8 @@ function fun_updateDisplay() {
 	$("#sel_up_limitYn").val(limitYn);
 	$("#txt_up_unitTxt").val(unitTxt);
 	$("#txt_up_dispOrder").val(dispOrder);
+	$("#txt_up_workGrp").val(workGrp);
+	
 	
 }
 
@@ -539,11 +565,12 @@ function fun_svae(type) {
 	var nickSeq           =	$("#sel_up_nickSeq").val();
 	var limitYn           =	$("#sel_up_limitYn").val();
 	var unitTxt           =	$("#txt_up_unitTxt").val();
-	var dispOrder           =	$("#txt_up_dispOrder").val();
+	var dispOrder         =	$("#txt_up_dispOrder").val();
+	var workGrp           =	$("#txt_up_workGrp").val();
 	
 	var inputData = {"workSeq": workSeq,"workNm": workNm,"workCondition": workCondition, "workCnt": workCnt, "point": point,"workType": workType,"startDt": startDt,"endDt": endDt
 					,"workConditionDesc": workConditionDesc,"exceptCondition": exceptCondition,"zombieYn": zombieYn,"nickSeq": nickSeq,"limitYn": limitYn,"unitTxt": unitTxt
-					,"dispOrder" : dispOrder
+					,"dispOrder" : dispOrder, "workGrp" : workGrp
 					};
 	if(type == "U"){
 		var result = confirm('업적 수정하시겠습니까?');
@@ -649,12 +676,13 @@ function fun_btnDefineinsert() {
 	var limitYn = $("#sel_add_limitYn").val();
 	var unitTxt = $("#txt_add_unitTxt").val();
 	var dispOrder = $("#txt_add_dispOrder").val();
+	var workGrp = $("#txt_add_workGrp").val();
 	
 	var result = confirm('업적 등록하시겠습니까?');
 	
 	var inputData = {"workSeq": workSeq, "workNm": workNm, "workCondition": workCondition,"workCnt": workCnt, "point": point, "workType": workType
 					 ,"nickSeq": nickSeq, "startDt": startDt, "endDt": endDt,"workConditionDesc": workConditionDesc, "exceptCondition": exceptCondition
-					 ,"zombieYn": zombieYn, "limitYn": limitYn, "unitTxt": unitTxt, "dispOrder" : dispOrder
+					 ,"zombieYn": zombieYn, "limitYn": limitYn, "unitTxt": unitTxt, "dispOrder" : dispOrder, "workGrp" : workGrp
 					}; 
 	if(result){
 		if($("#sel_add_workCondition").val() == ''){
@@ -674,6 +702,12 @@ function fun_btnDefineinsert() {
 		if($("#txt_add_dispOrder").val() == ''){
 			alert("정렬 순서를 입력해주세요. ");
 			$("#txt_add_dispOrder").focus();
+			return ;
+		}
+		
+		if($("#txt_add_workGrp").val() == ''){
+			alert("업적 그룹을 입력해주세요. ");
+			$("#txt_add_workGrp").focus();
 			return ;
 		}
 		
@@ -791,20 +825,21 @@ function fun_btnDefineinsert() {
                                 <table id="defineApprovalListInfo" class="table table-bordered">
                                     <thead>
                                     	<tr>
-	                                        <th class="text-center">번호</th>
+	                                        <th class="text-center" width="5%">번호</th>
 	                                        <th class="text-center">업적명</th>
-	                                       	<th class="text-center">달성조건</th>
-	                                        <th class="text-center">달성횟수</th>
-	                                        <th class="text-center">칭호</th>
-	                                        <th class="text-center">포인트</th>
+	                                       	<th class="text-center">달성<br/>조건</th>
+	                                        <th class="text-center" width="5%">달성<br/>횟수</th>
+	                                        <th class="text-center" width="10%">칭호</th>
+	                                        <th class="text-center" width="5%">포인트</th>
 	                                        
-	                                        <th class="text-center">승인여부</th>
-	                                        <th class="text-center">사용여부</th>
+	                                        <th class="text-center" width="5%">승인<br/>여부</th>
+	                                        <th class="text-center" width="5%">사용<br/>여부</th>
 	                                        
-	                                        <th class="text-center">달성이후누적</th>
-	                                        <th class="text-center">기간한정여부</th>
-	                                        <th class="text-center">단위텍스트</th>
-	                                        <th class="text-center">정렬순서</th>
+	                                        <th class="text-center">달성이후<br/>누적</th>
+	                                        <th class="text-center">기간한정<br/>여부</th>
+	                                        <th class="text-center">단위<br/>텍스트</th>
+	                                        <th class="text-center" width="5%">정렬<br/>순서</th>
+	                                        <th class="text-center">업적<br/>그룹</th>
 	                                        <th class="text-center" width="7%">관리</th>
                                         </tr>
                                     </thead>
@@ -906,6 +941,10 @@ function fun_btnDefineinsert() {
                                      <td><input class="form-control" type="text" id="txt_dispOrder" readOnly/></td>
                                   </tr>
                                   <tr>
+                                     <th>업적그룹</th>
+                                     <td colspan="3"><input class="form-control" placeholder="업적 그룹을 입력해주세요." type="text" id="txt_workGrp" maxlength="20" readOnly /></td>
+                                  </tr>
+                                  <tr id="trAuthFn" style="display:none;">
                                      <th>승인처리</th>
                                      <!-- <td><input class="form-control" type="text" id="txt_unitTxt" readOnly/></td> -->
                                       <td>
@@ -930,7 +969,7 @@ function fun_btnDefineinsert() {
                             </table>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-primary min-width-90px" onclick="fun_updateDisplay();">수정</button>
+                            <button type="button" id="btnDtlUpd" class="btn btn-primary min-width-90px" onclick="fun_updateDisplay();">수정</button>
                             <button type="button" class="btn btn-secondary min-width-90px" id="close" data-dismiss="modal">닫기</button>
                           </div>
                         </div>
@@ -1034,6 +1073,10 @@ function fun_btnDefineinsert() {
                                      <td><input class="form-control" type="text" id="txt_up_unitTxt"/></td>
                                      <th>정렬순서</th>
                                      <td><input class="form-control" type="text" id="txt_up_dispOrder" maxlength="9" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" /></td>
+                                  </tr>
+                                  <tr>
+                                     <th>업적그룹</th>
+                                     <td colspan="3"><input class="form-control" placeholder="업적 그룹을 입력해주세요." type="text" id="txt_up_workGrp" maxlength="20"/></td>
                                   </tr>
                                </tbody>
                             </table>
@@ -1145,7 +1188,10 @@ function fun_btnDefineinsert() {
                                      <td><input class="form-control" placeholder="단위텍스트를 입력해주세요." type="text" id="txt_add_unitTxt" maxlength="2"/></td>
                                   	 <th>정렬순서</th>
                                      <td><input class="form-control" placeholder="정렬순서를 입력해주세요.(숫자)" type="text" id="txt_add_dispOrder" maxlength="9" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" /></td>
-                                  
+                                  </tr>
+                                  <tr>
+                                     <th>업적그룹</th>
+                                     <td colspan="3"><input class="form-control" placeholder="업적 그룹을 입력해주세요." type="text" id="txt_add_workGrp" maxlength="20"/></td>
                                   </tr>
                                </tbody>
                             </table>
