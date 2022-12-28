@@ -50,5 +50,7 @@ public interface TUserLeaveMapper {
     List<TUserLeave> selectAllUserLeave(TUserLeave userLeave);
    //탈퇴회원정보 상세보기
     TUserLeave selectUserLeaveDetail(TUserLeave userLeave);
+    
+    int updateRollbackLeave(TUserLeave userLeave);
 
 }

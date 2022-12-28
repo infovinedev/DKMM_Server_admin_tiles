@@ -96,7 +96,7 @@ public class BaseController {
 			String str = json.getString("admin");
 			if(str.equals("kdh")) {
 //				storeMetaBatchService.batchStoreInfoTest();
-				storeMetaBatchService.batchStoreInfo();
+				storeMetaBatchService.batchStoreInfo("WEB");
 				result.setCode("0000");
 			}
 		}
@@ -119,7 +119,7 @@ public class BaseController {
 			String str = json.getString("admin");
 			if(str.equals("kdh")) {
 //				storeMetaBatchService.getCoordinatesToStoreInfoTest();
-				storeMetaBatchService.getCoordinatesToStoreInfo();
+				storeMetaBatchService.getCoordinatesToStoreInfo("WEB");
 				result.setCode("0000");
 			}
 		}
@@ -143,7 +143,7 @@ public class BaseController {
 			if(str.equals("kdh")) {
 //				storeMetaBatchService.batchStoreOrgPstmtInsert();
 //				storeMetaBatchService.batchStoreOrgBulkInsert();
-				storeMetaBatchService.batchStoreOrgBulkInsertToExcelStreaming();
+				storeMetaBatchService.batchStoreOrgBulkInsertToExcelStreaming("WEB");
 				result.setCode("0000");
 			}
 		}

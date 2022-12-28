@@ -20,6 +20,7 @@ import kr.co.infovine.dkmm.db.model.user.TUserInfo;
 import kr.co.infovine.dkmm.db.model.userLeave.TUserLeave;
 import kr.co.infovine.dkmm.service.user.OperationUserService;
 import kr.co.infovine.dkmm.service.userLeave.OperationUserLeaveService;
+import kr.co.infovine.dkmm.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -34,6 +35,7 @@ public class OperationUserLeaveController {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("operation/operation_userLeave");
 		model.addObject("leftPageUrl", "userLeave/userLeave");
+		model.addObject("auth", CommonUtil.getUpAuth());
 		return model;
 	}
 
@@ -50,26 +52,63 @@ public class OperationUserLeaveController {
 			result.setCode("0000");
 			result.setResult(userLeaveInfoList);
 		} catch (Exception e) {
+			result.setCode("0001");
+			result.setErrorMessage(e.getMessage());
 			e.printStackTrace();
 		}
 		return result;
 	}
 	
 	@RequestMapping(value = "/select/userInfoDetail.do", method = RequestMethod.POST
-		, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
-		@ResponseBody
-		public ResponseModel selectRealestateParcelInfoDetail(HttpServletRequest request, HttpServletResponse response 
-				,@RequestBody TUserLeave userLeave) {
-			ResponseModel result = new ResponseModel();
-			try {
-				TUserLeave model = operationUserLeaveService.selectUserLeaveDetail(userLeave);
-				ObjectMapper mapper = new ObjectMapper();
-				String userLeaveDetailList = mapper.writeValueAsString(model);
-				result.setCode("0000");
-				result.setResult(userLeaveDetailList);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel selectRealestateParcelInfoDetail(HttpServletRequest request, HttpServletResponse response 
+			,@RequestBody TUserLeave userLeave) {
+		ResponseModel result = new ResponseModel();
+		try {
+			TUserLeave model = operationUserLeaveService.selectUserLeaveDetail(userLeave);
+			ObjectMapper mapper = new ObjectMapper();
+			String userLeaveDetailList = mapper.writeValueAsString(model);
+			result.setCode("0000");
+			result.setResult(userLeaveDetailList);
+		} catch (Exception e) {
+			result.setCode("0001");
+			result.setErrorMessage(e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/save/leaveRollBack.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel leaveRollBack(HttpServletRequest request, HttpServletResponse response 
+			,@RequestBody TUserLeave userLeave) {
+		
+		ResponseModel result = new ResponseModel();
+		
+		if ( !"ROLE_ADMIN".equals(CommonUtil.getUpAuth()) ) {
+			result.setCode("9999");
+			result.setErrorMessage("해당 기능을 사용할 권한이 없습니다.");
 			return result;
 		}
+		
+		try {
+			int rtnCnt = operationUserLeaveService.updateRollbackLeave(userLeave);
+			
+			if ( rtnCnt == 9999) {
+				result.setCode("0001");
+				result.setErrorMessage("탈퇴한 사용자의 휴대폰 번호로 재가입된 고객이 있습니다. 탈퇴 철회를 할 수 없습니다.");
+			}
+			else {
+				result.setCode("0000");
+			}
+			
+		} catch (Exception e) {
+//			e.printStackTrace();
+			result.setCode("0001");
+			result.setErrorMessage(e.getMessage());
+		}
+		return result;
+	}
 }

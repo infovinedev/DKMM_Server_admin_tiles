@@ -9,12 +9,9 @@
     -->
     <id column="leave_seq" jdbcType="INTEGER" property="leaveSeq" />
     <result column="user_seq" jdbcType="BIGINT" property="userSeq" />
-    
     <result column="nick_name" jdbcType="BIGINT" property="nickName" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="del_yn" jdbcType="BIGINT" property="delYn" />
-    
-    
     <result column="reason" jdbcType="VARCHAR" property="reason" />
     <result column="ins_dt" jdbcType="TIMESTAMP" property="insDt" />
     <result column="approval_yn" jdbcType="VARCHAR" property="approvalYn" />
@@ -100,9 +97,10 @@
         ,(SELECT user_id FROM t_user_info WHERE user_seq = a.user_seq) as user_id
         ,(SELECT nick_name FROM t_user_info WHERE user_seq = a.user_seq) as nick_name
         ,a.reason
-        ,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
+        ,a.ins_dt
         ,a.approval_yn
         ,(SELECT del_yn FROM t_user_info WHERE user_seq = a.user_seq) as del_yn
+        ,a.user_seq
       FROM t_user_leave a
       WHERE 1=1
      <include refid="searchCondition_leave"></include>
@@ -114,13 +112,25 @@
       ,(SELECT user_id FROM t_user_info WHERE user_seq = a.user_seq) as user_id
       ,a.reason
       ,(SELECT nick_name FROM t_user_info WHERE user_seq = a.user_seq) as nick_name
-      ,TO_CHAR(a.ins_dt, 'YYYY-MM-DD HH:MI') as ins_dt
-      ,TO_CHAR(a.upt_dt, 'YYYY-MM-DD HH:MI') as upt_dt
+      ,a.ins_dt as ins_dt
+      ,a.upt_dt as upt_dt
       ,a.approval_yn
       ,(SELECT del_yn FROM t_user_info WHERE user_seq = a.user_seq) as del_yn
+      ,a.user_seq
       FROM t_user_leave a
     WHERE 1=1
-    AND a.leave_seq = ${leaveSeq}
+    AND a.leave_seq = #{leaveSeq,jdbcType=INTEGER}
   </select>
+  
+  <update id="updateRollbackLeave" parameterType="kr.co.infovine.dkmm.db.model.userLeave.TUserLeave" >
+    DELETE FROM t_user_leave
+    WHERE leave_seq = #{leaveSeq,jdbcType=INTEGER};
+    
+    UPDATE t_user_info
+    SET		del_yn = 'N'
+    		,upt_seq = null
+    		,upt_dt = null
+   	WHERE user_seq = #{userSeq,jdbcType=INTEGER};
+  </update>
   
 </mapper>

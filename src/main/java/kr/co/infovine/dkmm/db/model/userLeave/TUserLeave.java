@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.web.util.HtmlUtils;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 @Getter
@@ -16,7 +18,7 @@ public class TUserLeave {
      *
      * @mbg.generated Mon Dec 05 09:42:32 KST 2022
      */
-    private Integer leaveSeq;
+    private int leaveSeq;
 
     /**
      *
@@ -25,7 +27,7 @@ public class TUserLeave {
      *
      * @mbg.generated Mon Dec 05 09:42:32 KST 2022
      */
-    private Long userSeq;
+    private int userSeq;
 
     /**
      *
@@ -43,7 +45,8 @@ public class TUserLeave {
      *
      * @mbg.generated Mon Dec 05 09:42:32 KST 2022
      */
-    private String insDt;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private Date insDt;
 
     /**
      *
@@ -61,7 +64,7 @@ public class TUserLeave {
      *
      * @mbg.generated Mon Dec 05 09:42:32 KST 2022
      */
-    private Long uptSeq;
+    private int uptSeq;
 
     /**
      *
@@ -70,6 +73,7 @@ public class TUserLeave {
      *
      * @mbg.generated Mon Dec 05 09:42:32 KST 2022
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Date uptDt;
 
     /**
@@ -79,13 +83,12 @@ public class TUserLeave {
      *
      * @mbg.generated Mon Dec 05 09:42:32 KST 2022
      */
-    private Long insSeq;
+    private int insSeq;
     
     //조건
 	private String searchText;
 	private String searchStartDt;
 	private String searchEndDt;
-
     
     //추가
     private String rowNum;

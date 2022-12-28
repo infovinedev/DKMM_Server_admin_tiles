@@ -238,4 +238,14 @@
 		FROM t_user_info a
 		WHERE a.user_seq = #{userSeq}
 	</select>
+	
+	<select id="selectLivePhoneUserCnt" parameterType="kr.co.infovine.dkmm.db.model.user.TUserInfo" resultType="int">
+	/* 폰번호 - 사용 회원 카운트 selectLivePhoneUserCnt */
+		SELECT COUNT(1) 
+		FROM t_user_info
+		WHERE phone = ( SELECT phone FROM t_user_info WHERE user_seq = #{userSeq} )
+		AND del_yn = 'N'
+	</select>
+	
+	
 </mapper>

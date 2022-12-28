@@ -79,14 +79,11 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	@Value("${spring.datasource.hikari.password}")
 	private String dbpass;
 	
-	@Value("${server.store.excel.directory}")
-	private String storeExcelDir;
-	
-	@Value("${server.store.excel.backup.directory}")
-	private String storeExcelBackDir;
-	
 	@Value("${batch.flag}")
 	private boolean batchFlag;
+	
+	@Value("${file.upload}")
+	private String WEB_UPLOAD_PATH;
 	
 	@Autowired
 	HttpClient httpClient;
@@ -101,9 +98,11 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	TCommonCodeMapper tCommonCodeMapper;
 	
 	@Override
-	public void batchStoreInfo() {
+	public void batchStoreInfo(String flag) {
 		
-		if ( this.batchFlag != true ) return;
+		if ( !"WEB".equals(flag) ) {
+			if ( this.batchFlag != true ) return;
+		}
 		 
 		long start = System.currentTimeMillis();
 		
@@ -117,7 +116,7 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
         
         if ( procCnt == 0 ) {
         	log.info("============================== RESULT TOTAL ======================================");
-            log.info(" :::::: T_STORE_INFO_ORG - PROCESS DATA COUNT : " + procCnt );
+            log.info(" :::::: T_STORE_INFO_ORG - PROCESS DATA COUNT : 0" );
             log.info(" :::::: BATCH PROCESS END" );
             log.info(" :::::: ALL STEP PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
             log.info("==================================================================================");
@@ -169,7 +168,7 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
         
         int delStoreOrgExcelCnt = this.truncateStoreOrgExcel();
         
-        log.info("	>>>>>> STEP 7 - TRUNCATE T_STORE_INFO_ORG_EXCEL : RESULT_COUNT : " + delStoreOrgExcelCnt);
+        log.info("	>>>>>> STEP 7 - TRUNCATE T_STORE_INFO_ORG_EXCEL SUCESS.");
         log.info("	>>>>>> STEP 7 PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
         
         log.info("==================================================================================");
@@ -183,7 +182,7 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
         log.info(" :::::: T_STORE_INFO - Cafe Category UPDATE COUNT : " + updCafeCtgryCnt );
         log.info(" :::::: T_STORE_INFO - Cafe Name UPDATE COUNT : " + updCafeNameCnt );
         log.info("");
-        log.info(" :::::: T_STORE_INFO_ORG - TOTAL TRUNCATE COUNT : " + delStoreOrgExcelCnt );
+        log.info(" :::::: T_STORE_INFO_ORG -  TRUNCATE SUCESS " );
         log.info("");
         log.info(" :::::: ALL STEP PROC TIME : " + ( System.currentTimeMillis() - start)/1000  + "초" );
         log.info("==================================================================================");
@@ -241,9 +240,11 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	 * return : ResponseModel
 	 */
 	@Override
-	public void getCoordinatesToStoreInfo() {
+	public void getCoordinatesToStoreInfo(String flag) {
 		
-		if ( this.batchFlag != true ) return;
+		if ( !"WEB".equals(flag) ) {
+			if ( this.batchFlag != true ) return;
+		}
 		
 		try {
 			
@@ -479,7 +480,8 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 		
 		log.info( "==========  batchStoreOrgBulkInsert : STORE META DATA Bulk INSERT - MyBatis =============" );
 		
-//		storeExcelDir = "D:\\excel";
+		String storeExcelDir = WEB_UPLOAD_PATH + File.separator + "excelOrg";
+		String storeExcelBackDir = WEB_UPLOAD_PATH + File.separator + "excelBackup";
 		
 		try {
 			
@@ -738,6 +740,9 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
         
 		log.info( "===============  STORE META DATA Merge ==========================" );
 		
+		String storeExcelDir = WEB_UPLOAD_PATH + File.separator + "excelOrg";
+		String storeExcelBackDir = WEB_UPLOAD_PATH + File.separator + "excelBackup";
+		
 		try {
 			
 			Class.forName(driverClass);
@@ -896,13 +901,17 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	 *  전체 등록 상점 건수 : 2548326 등록시 3012초(50분)
 	 */
 	@Override
-	public void batchStoreOrgBulkInsertToExcelStreaming() {
+	public void batchStoreOrgBulkInsertToExcelStreaming(String flag) {
 		
-		if ( this.batchFlag != true ) return;
+		if ( !"WEB".equals(flag) ) {
+			if ( this.batchFlag != true ) return;
+		}
 		
 		log.info( "==========  batchStoreOrgBulkInsertToExcelStreaming : STORE META DATA Bulk INSERT - MyBatis =============" );
 		
 		InputStream is = null;
+		String storeExcelDir = WEB_UPLOAD_PATH + File.separator + "excelOrg";
+		String storeExcelBackDir = WEB_UPLOAD_PATH + File.separator + "excelBackup";
 		
 		try {
 			
@@ -1054,6 +1063,13 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 			log.info(" :::::: ALL STEP PROC TIME(초): " + ( System.currentTimeMillis() - start)/1000  + "초" );
 			log.info(" :::::: ALL STEP PROC TIME(분) : " + ( System.currentTimeMillis() - start)/1000/60  + "분" );
 			
+			try {
+				if (is != null ) is.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			//Step2 기존 백업 디렉토리의 모든 파일을 삭제하고 작업이 끝난 파일들을 백업 디렉토리로 이동
 			log.info(" :::::: File Backup Thread START " );
 			FileBackupThread thread = new FileBackupThread(storeExcelDir, storeExcelBackDir);
@@ -1068,10 +1084,10 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 			
 		}finally {
 			try {
-				is.close();
+				if (is != null ) is.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-//				e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 		
