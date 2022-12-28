@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!--로그 파일 저장 위치-->
-    <property name="LOGS_PATH" value="D:/WebLog/bladmin.infovine.co.kr"/>
+    <property name="LOGS_PATH" value="/home/ubuntu/spring/logs/real/dkmm_admin_tiles"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -44,10 +44,10 @@
 	<logger name="jdbc.resultsettable" level="OFF"/>
     <!--//log4jdbc -->
 
-    <logger name="kr.co.infovine.BillletterAdminApplication" level="WARN">
+    <logger name="kr.co.infovine.dkmm.DkmmAdminApplication" level="WARN">
         <appender-ref ref="SAMPLE" />
     </logger>
-    <logger name="kr.co.infovine" level="WARN">
+    <logger name="kr.co.infovine.dkmm" level="WARN">
         <appender-ref ref="DAILY_ROLLING_FILE_APPENDER" />
     </logger>
     <root level="WARN">
