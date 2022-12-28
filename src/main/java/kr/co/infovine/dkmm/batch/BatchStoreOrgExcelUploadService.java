@@ -33,7 +33,7 @@ public class BatchStoreOrgExcelUploadService extends QuartzJobBean implements In
 		log.info("========= 상점 ORG EXCEL UPLOAD Batch =====");
 		try {
 //			storeMetaBatchService.batchStoreOrgBulkInsert();
-			storeMetaBatchService.batchStoreOrgBulkInsertToExcelStreaming();
+			storeMetaBatchService.batchStoreOrgBulkInsertToExcelStreaming("BATCH");
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

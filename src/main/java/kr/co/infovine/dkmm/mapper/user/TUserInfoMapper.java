@@ -50,5 +50,6 @@ public interface TUserInfoMapper {
     List<TUserInfo> selectUserInfo(TUserInfo userInfo);
     //회원정보 상세보기
     TUserInfo selectDetail(TUserInfo userInfo);
-
+    
+    int selectLivePhoneUserCnt(TUserInfo userInfo);
 }

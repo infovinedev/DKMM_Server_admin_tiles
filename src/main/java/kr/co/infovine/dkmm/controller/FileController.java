@@ -106,7 +106,7 @@ public class FileController {
                     if (!item.isFormField()) {
                         log.info("!isFormField();");
                         stream = item.getInputStream();
-                        FileOutputStream out = new FileOutputStream(fileSaveName, true);
+                        FileOutputStream out = new FileOutputStream(uploadFilePath + File.separator + fileSaveName, true);
                         byte[] buf = new byte[1024 * 1024];
                         int len = 0;
                         while ((len = stream.read(buf)) > 0) {
@@ -147,6 +147,7 @@ public class FileController {
                 return result;
             }
             catch (Exception ex) {
+            	ex.printStackTrace();
                 log.error(ex.getMessage());
                 //response.setStatus(500);
                 result.setCode("0002");

@@ -21,6 +21,7 @@ import kr.co.infovine.dkmm.db.model.user.TUserInfo;
 import kr.co.infovine.dkmm.service.define.OperationDefineService;
 import kr.co.infovine.dkmm.service.defineApproval.OperationDefineApprovalService;
 import kr.co.infovine.dkmm.service.user.OperationUserService;
+import kr.co.infovine.dkmm.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -35,6 +36,7 @@ public class OperationDefineApprovalController {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("operation/operation_defineApproval");
 		model.addObject("leftPageUrl", "approval/defineApproval");
+		model.addObject("auth", CommonUtil.getUpAuth());
 		return model;
 	}
 

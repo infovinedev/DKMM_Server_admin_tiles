@@ -18,6 +18,9 @@ public class OperationUserLeaveServiceImpl implements OperationUserLeaveService{
 	@Autowired
 	TUserLeaveMapper userLeaveMapper;
 	
+	@Autowired
+	TUserInfoMapper tUserInfoMapper;
+	
 	@Override
 	public List<TUserLeave> selectAllUserLeave(TUserLeave userLeave) {
 		return userLeaveMapper.selectAllUserLeave(userLeave);
@@ -27,4 +30,19 @@ public class OperationUserLeaveServiceImpl implements OperationUserLeaveService{
 	public TUserLeave selectUserLeaveDetail(TUserLeave userLeave) {
 		return userLeaveMapper.selectUserLeaveDetail(userLeave);
 	}
+	
+	@Override
+	public int updateRollbackLeave(TUserLeave userLeave) {
+		TUserInfo userInfo = new TUserInfo();
+		userInfo.setUserSeq(userLeave.getUserSeq());
+		
+		int liveCnt = tUserInfoMapper.selectLivePhoneUserCnt(userInfo);
+		
+		if ( liveCnt > 0 ) {
+			return 9999;
+		}else {
+			return userLeaveMapper.updateRollbackLeave(userLeave);
+		}
+	}
+	
 }

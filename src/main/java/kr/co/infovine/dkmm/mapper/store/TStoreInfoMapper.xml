@@ -284,6 +284,8 @@
     	,old_addr = excluded.old_addr       
     	,old_zip = excluded.old_zip  
     	,area_tot = excluded.area_tot   
+    	,upt_seq = 1
+    	,upt_dt = now()
     	,latitude = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.latitude ELSE NULL END)
     	,longitude = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.longitude ELSE NULL END) 
     	,vworld_response = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.vworld_response ELSE NULL END)

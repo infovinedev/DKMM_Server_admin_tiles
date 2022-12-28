@@ -2,6 +2,7 @@
  -->
 <script>
 var userLeaveListInfo;
+var auth = "${auth}";
 
 $(document).ready(function () {
 	var ua = navigator.userAgent;
@@ -15,7 +16,6 @@ $(document).ready(function () {
 		if (checker.android == null || checker.android == "" || checker.android == "null") {
 		}
 	});
-	
 	
 	fun_setStoreListInfo();
 	
@@ -35,7 +35,48 @@ $(document).ready(function () {
 	$("#sel_workCond").on('change', function () {
 		fun_search();
 	});
+	
+	if ( auth == "ROLE_ADMIN"){
+		$("#btnCancel").show();
+		
+		$("#btnCancel").on('click', function () {
+			fun_leaveRollBack();
+		});
+	}
+	
+	
 });
+
+//FAQ 등록,수정,삭제 저장 버튼
+function fun_leaveRollBack(){
+	
+	if ( auth != "ROLE_ADMIN"){
+		return;
+	}
+	
+	var leaveSeq         = $("#txt_leaveSeq").val();
+	var userSeq          = $("#txt_userSeq").val();
+
+	var inputData = {"leaveSeq": leaveSeq , "userSeq": userSeq };
+	
+	var result = confirm('탈퇴를 되돌리시겠습니까? 탈퇴정보는 삭제 되고 기존 회원은 로그인이 가능합니다.');
+	
+	if(result){
+		fun_ajaxPostSend("/userLeave/save/leaveRollBack.do", inputData, true, function(msg){
+			if(msg.code != null){
+				var code = msg.code;
+				if(code == "0000"){
+					alert("정상적으로 처리되었습니다.");
+					$("#exampleModalScrollable").modal('hide');
+					fun_search();
+				}
+				else{
+					alert("정상적으로 처리되지 않았습니다. [ " + msg.errorMessage + " ]");
+				}
+			}
+		});
+	}
+}
 
 function searchDataTable(){
 	 if($('#chk_searchTable').is(':checked')){
@@ -62,14 +103,19 @@ function fun_search(){
 		if(msg!=null){
 			switch(msg.code){
 				case "0000":
+					
+					var tempResult = JSON.parse(msg.result);
+					for (let i = 0; i < tempResult.length; i++) {
+						tempResult[i].listIndex = i + 1
+					}
+					fun_dataTableAddData("#userLeaveListInfo", tempResult);
+					
 					break;
 				case "0001":
+					
+					alert(msg.errorMessage);
+					break;
 			}
-			var tempResult = JSON.parse(msg.result);
-			for (let i = 0; i < tempResult.length; i++) {
-				tempResult[i].listIndex = i + 1
-			}
-			fun_dataTableAddData("#userLeaveListInfo", tempResult);
 		}
 	});
 }
@@ -107,6 +153,7 @@ function fun_viewDetail(leaveSeq) {
 			var reason     = tempResult.reason == null ? "" : tempResult.reason;                 //내용 
 			var delYn      = tempResult.delYn == null ? "" : tempResult.delYn;                   //탈퇴완료여부
 			var insDt      = tempResult.insDt == null ? "" : tempResult.insDt;                   //탈퇴일
+			var userSeq    = tempResult.userSeq == null ? "" : tempResult.userSeq;                   //탈퇴일
 			
 			$("#txt_leaveSeq").val(leaveSeq);
 			$("#txt_nickName").val(nickName);
@@ -114,6 +161,8 @@ function fun_viewDetail(leaveSeq) {
 			$("#txt_reason").val(reason);
 			$("#txt_delYn").val(delYn);
 			$("#txt_insDt").val(insDt);
+			$("#txt_userSeq").val(userSeq);
+			
 		}
 	});
 }
@@ -335,7 +384,9 @@ function fun_setStoreListInfo() {
                                <tbody>
                                   <tr>
                                      <th>탈퇴번호</th>
-                                     <td><input class="form-control" type="text" id="txt_leaveSeq" readOnly/></td>
+                                     <td><input class="form-control" type="text" id="txt_leaveSeq" readOnly/>
+                                     	 <input type="hidden" id="txt_userSeq" readOnly/>
+                                     </td>
                                      <th>닉네임</th>
                                      <td><input class="form-control-finance" type="text" id="txt_nickName" readOnly/>
                                          <span id="span_nickName" style="color:blue"></span>
@@ -357,6 +408,7 @@ function fun_setStoreListInfo() {
                             </table>
                           </div>
                           <div class="modal-footer">
+                          	<button type="button" id="btnCancel" style="display:none;" class="btn btn-danger">탈퇴철회</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                           </div>
                         </div>

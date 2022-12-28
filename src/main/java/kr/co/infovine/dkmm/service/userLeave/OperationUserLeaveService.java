@@ -9,4 +9,5 @@ import kr.co.infovine.dkmm.db.model.userLeave.TUserLeave;
 public interface OperationUserLeaveService {
     List<TUserLeave> selectAllUserLeave(TUserLeave userLeave);
     TUserLeave selectUserLeaveDetail(TUserLeave userLeave);
+    int updateRollbackLeave(TUserLeave userLeave);
 }
