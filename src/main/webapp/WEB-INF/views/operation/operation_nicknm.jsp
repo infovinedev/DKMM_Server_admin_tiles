@@ -220,155 +220,174 @@ function fun_update(type) {
 	$("#section1_detail_edit").removeAttr("style");
 }
 
+function fun_preview(obj, fileType){
+    var input = $("#fileUploader");
+    var fileObject = input.prop('files')[0];
+
+    var name = fileObject.name;
+    if(fileObject==""){
+        alert("파일을 업로드 해주세요.");
+        return false;
+    }
+
+    var ext = name.split('.').pop().toLowerCase();
+    var fileArr = ['png','jpg','jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'hwp', 'avi', 'mp4', 'm4v', 'wmv', 'mkv', 'mov', 'bz2'];
+    if(fileType == "img"){
+        fileArr = ['png','jpg','jpeg', 'gif'];
+        if(fileArr.indexOf(ext) == -1) {
+            alert("이미지 파일을 업로드 해 주세요.");
+            return false;
+        }
+
+    }
+
+    var data = "";
+    switch(ext){
+        case "gif":
+            data = "data:image/gif;base64,";
+            break;
+        case "jpg":
+        case "jpeg":
+            data = "data:image/jpeg;base64,";
+            break;
+        case "png":
+            data = "data:image/png;base64,";
+            break;
+    }
+
+    var reader = new FileReader();
+
+    reader.onloadend = function() {
+        $("#img_preview").attr("src", reader.result);
+        $("#tr_preview").show();
+    }
+    reader.readAsDataURL(fileObject);
+
+
+
+
+}
+
 
 
 //칭호 등록,수정,삭제 저장 버튼
 function fun_save(type){
-	var nickSeq          = $("#hidden_up_nickSeq").val();
-	var nickNm           = $("#txt_up_nickNm").val();
-	var fileUuid         = $("#txt_up_fileUuid").val();
-	var workNm           = $("#txt_up_workNm").val();
-	var nickComment      = $("#txt_up_nickComment").val();
+    fun_fileUploader('img', 'doc', function(headers){
+        var nickSeq          = $("#hidden_up_nickSeq").val();
+        var nickNm           = $("#txt_up_nickNm").val();
+        var fileUuid         = headers.uniqueId;            //$("#txt_up_fileUuid").val();
+        var workNm           = $("#txt_up_workNm").val();
+        var nickComment      = $("#txt_up_nickComment").val();
 
-	
-	var inputData = {"nickSeq": nickSeq , "nickNm": nickNm , "fileUuid": fileUuid , "workNm": workNm, "nickComment": nickComment};
-	if(type == "I"){
-		var result = confirm('추가 하시겠습니까?');
-	}else if(type == "U"){
-		var result = confirm('수정 하시겠습니까?');
-	}else{
-		var result = confirm('삭제하시겠습니까?');
-	}
-	
-	if(result){
-		fun_ajaxPostSend("/nicknm/save/nickNmSave.do", inputData, true, function(msg){
-			if(msg.errorMessage !=null){
-				var message = msg.errorMessage;
-				if(message == "success"){
-					alert("정상적으로 처리되었습니다.");
-					$("#exampleModalScrollable").modal('hide');
-					fun_search();
-				}else if(message == "error"){
-					alert("정상적으로 처리되지 않았습니다.");
-				}
-			}
-		});
-	}
+
+        var inputData = {"nickSeq": nickSeq , "nickNm": nickNm , "fileUuid": fileUuid , "workNm": workNm, "nickComment": nickComment};
+        if(type == "I"){
+            var result = confirm('추가 하시겠습니까?');
+        }else if(type == "U"){
+            var result = confirm('수정 하시겠습니까?');
+        }else{
+            var result = confirm('삭제하시겠습니까?');
+        }
+
+        if(result){
+            fun_ajaxPostSend("/nicknm/save/nickNmSave.do", inputData, true, function(msg){
+                if(msg.errorMessage !=null){
+                    var message = msg.errorMessage;
+                    if(message == "success"){
+                        alert("정상적으로 처리되었습니다.");
+                        $("#exampleModalScrollable").modal('hide');
+                        fun_search();
+                    }else if(message == "error"){
+                        alert("정상적으로 처리되지 않았습니다.");
+                    }
+                }
+            });
+        }
+    });
 }
 //파일업로드
-var data="";
-var test="";
-var arr = new Array();
-
-	function fn_test(event, callback){
-		try{
-			var input = event.target;
-			var file = input.files[0];
-			var formData = new FormData();
-
-			formData.append("testfile", file);
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST", "/test/upload.do", false);
-			xhr.onload=function(e){
-			};
-			xhr.setRequestHeader("FILENAME", file.name);
-			console.log("file.name : " + file.name);
-			xhr.send(formData);
-		}
-		catch(e){
-
-		}
-
-		callback();
-	}
+function generateUUID() {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+};
 
 
-	function generateUUID() {
-		var d = new Date().getTime();
-		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-			var r = (d + Math.random()*16)%16 | 0;
-			d = Math.floor(d/16);
-			return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-		});
-		return uuid;
-	};
-	
-	
-	function fn_testUploader(event, fileType, pageType, callback){
-		/* var input = event.target;
-		var fileObject = input.files[0]; */
-		var input = $("#testUploader");
-		var fileObject = input.prop('files')[0];
-		
-		var name = fileObject.name;
-		if(fileObject==""){
-			alert("파일을 업로드 해주세요.");
-			return false;
-		}
+function fun_fileUploader(fileType, pageType, callback){
+    /* var input = event.target;
+    var fileObject = input.files[0]; */
+    var input = $("#fileUploader");
+    var fileObject = input.prop('files')[0];
 
-		var ext = name.split('.').pop().toLowerCase();
-		var fileArr = ['png','jpg','jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'hwp', 'avi', 'mp4', 'm4v', 'wmv', 'mkv', 'mov', 'bz2'];
-		if(fileType == "img"){
-			fileArr = ['png','jpg','jpeg', 'gif'];
-			if(fileArr.indexOf(ext) == -1) {
-				alert("이미지 파일을 업로드 해 주세요.");
-				return false;
-			}
+    var name = fileObject.name;
+    if(fileObject==""){
+        alert("파일을 업로드 해주세요.");
+        return false;
+    }
 
-		}
-		var headers = new Object();
-		headers.pageType = pageType;
-		headers.fileType = fileType;
-		headers.uniqueId = generateUUID();
-		headers.fileObjectName = fileObject.name;
-		headers.fileObjectSize = fileObject.size;
-		headers.fileObjectType = fileObject.type;
-		const HugeUploader = require('huge-uploader');
-		const uploader = new HugeUploader({ endpoint: '/file/upload.do', file: fileObject, headers:headers });
-		// subscribe to events
-		uploader.on('error', (err) => {
-			console.error('Something bad happened', err.detail);
-		});
+    var ext = name.split('.').pop().toLowerCase();
+    var fileArr = ['png','jpg','jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'hwp', 'avi', 'mp4', 'm4v', 'wmv', 'mkv', 'mov', 'bz2'];
+    if(fileType == "img"){
+        fileArr = ['png','jpg','jpeg', 'gif'];
+        if(fileArr.indexOf(ext) == -1) {
+            alert("이미지 파일을 업로드 해 주세요.");
+            return false;
+        }
 
-		uploader.on('progress', (progress) => {
-			var data = progress.detail.responseData;
-			var code = data.code;
-			switch(code){
-				case "0000":
-				case "0004":
-					$(".progress-bar").find("span.data-percent").html(progress.detail.percent + "%");
+    }
+    var headers = new Object();
+    headers.pageType = pageType;
+    headers.fileType = fileType;
+    headers.uniqueId = generateUUID();
+    headers.fileObjectName = fileObject.name;
+    headers.fileObjectSize = fileObject.size;
+    headers.fileObjectType = fileObject.type;
+    const HugeUploader = require('huge-uploader');
+    const uploader = new HugeUploader({ endpoint: '/file/upload.do', file: fileObject, headers:headers });
+    // subscribe to events
+    uploader.on('error', (err) => {
+        console.error('Something bad happened', err.detail);
+    });
 
-					$(".progress-bar").animate({
-						width: progress.detail.percent + "%"
-					}, 800);
-					break;
-				case "0001":
-					uploader.togglePause();
-					alert(data.result);
-					location.href="admin/loginView.do";
-					break;
-				case "0002":
-				case "0003":
-					uploader.togglePause();
-					alert(data.result);
-					break;
+    uploader.on('progress', (progress) => {
+        var data = progress.detail.responseData;
+        var code = data.code;
+        switch(code){
+            case "0000":
+            case "0004":
+                $(".progress-bar").find("span.data-percent").html(progress.detail.percent + "%");
 
-			}
-		});
+                $(".progress-bar").animate({
+                    width: progress.detail.percent + "%"
+                }, 800);
+                callback(headers);
+                break;
+            case "0001":
+                uploader.togglePause();
+                alert(data.result);
+                location.href="admin/loginView.do";
+                break;
+            case "0002":
+            case "0003":
+                uploader.togglePause();
+                alert(data.result);
+                break;
 
-		uploader.on('fileRetry', (msg) => {
-			console.log(msg);
-		});
+        }
+    });
 
-		uploader.on('finish', (body) => {
-			console.log('yeahhh - last response body:', body);
-		});
-		callback();
-	}
-	
-	function fn_testUploaderCallback(e){
-	}
-	
+    uploader.on('fileRetry', (msg) => {
+        console.log(msg);
+    });
+
+    uploader.on('finish', (body) => {
+        console.log('yeahhh - last response body:', body);
+    });
+}
 </script>
 <head>
 	<title>관리자 운영 - 칭호관리</title>
@@ -563,19 +582,26 @@ var arr = new Array();
                                   
                                   <tr>
                                     <th>칭호이미지 <span class="text-red">*</span></th>
-                                    <td colspan="3"> 
-                                    <input type="file" id="testUploader" onchange="fn_testUploader(testUploader, 'img', 'doc', fn_testUploaderCallback);">
-                                      <div class='progress' style="width:600px; display:none;">
-                                        <div class='progress-bar' data-width='0'>
-                                          <div class='progress-bar-text'>
-                                            Progress: <span class='data-percent'></span>
+                                    <td colspan="3">
+                                        <input type="file" class="btn btn-secondary btn-sm" id="fileUploader" onchange="fun_preview(this, 'img');">
+                                        <!-- onchange="fun_fileUploader(fileUploader, 'img', 'doc', fun_fileUploaderCallback);" -->
+                                        <div class='progress' style="width:600px; display:none;">
+                                          <div class='progress-bar' data-width='0'>
+                                            <div class='progress-bar-text'>
+                                              Progress: <span class='data-percent'></span>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
                                      </td>
                                   </tr>
-                                  
-                                  
+
+                                  <tr style="display:none" id="tr_preview">
+                                      <th>미리보기</th>
+                                      <td colspan="3">
+                                          <img src="" style="" id="img_preview">
+                                      </td>
+                                  </tr>
+
                                   <tr>
                                     <th>연결업적</th>
                                     <td colspan="3"><input class="form-control" type="text" id="txt_up_workNm" readOnly/></td>
