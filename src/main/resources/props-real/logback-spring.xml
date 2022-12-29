@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!--로그 파일 저장 위치-->
-    <property name="LOGS_PATH" value="/home/ubuntu/spring/logs/real/dkmm_admin_tiles"/>
+    <property name="LOGS_PATH" value="/home/ubuntu/spring/logs/real/dkmm_admin"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
