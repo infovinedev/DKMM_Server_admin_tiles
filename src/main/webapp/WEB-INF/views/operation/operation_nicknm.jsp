@@ -216,6 +216,8 @@ function fun_update(type) {
 	}else{
 		$("#btn_insert").hide();
 	}
+    $("#img_preview").attr("src", "");
+    $("#tr_preview").hide();
 	$("#section1_detail_view").css("display", "none");
 	$("#section1_detail_edit").removeAttr("style");
 }
