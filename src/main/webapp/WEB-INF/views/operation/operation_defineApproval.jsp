@@ -106,7 +106,7 @@ $(document).ready(function () {
 	if ( auth == "ROLE_ADMIN" || auth == "ROLE_OPERMNG" ){
 		$("#trAuthFn").show();
 	}else{
-		$("#trAuthFn").show();
+		$("#trAuthFn").hide();
 	}
 	
 });

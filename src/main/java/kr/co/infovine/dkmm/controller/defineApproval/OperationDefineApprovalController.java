@@ -115,7 +115,7 @@ public class OperationDefineApprovalController {
 			,@RequestBody TDefineWork defineWork) {
 		ResponseModel result = new ResponseModel();
 		try {
-			if ( "ROLE_ADMIN".equals(CommonUtil.getUpAuth()) || "ROLE_MNG".equals(CommonUtil.getUpAuth()) ){
+			if ( "ROLE_ADMIN".equals(CommonUtil.getUpAuth()) || "ROLE_OPERMNG".equals(CommonUtil.getUpAuth()) ){
 				operationDefineApprovalService.upDateApproval(defineWork);
 				result.setCode("0000"); 
 				result.setErrorMessage("success"); 
@@ -140,7 +140,7 @@ public class OperationDefineApprovalController {
 			,@RequestBody TDefineWork defineWork) {
 		ResponseModel result = new ResponseModel();
 		try {
-			if ( "ROLE_ADMIN".equals(CommonUtil.getUpAuth()) || "ROLE_MNG".equals(CommonUtil.getUpAuth()) ){
+			if ( "ROLE_ADMIN".equals(CommonUtil.getUpAuth()) || "ROLE_OPERMNG".equals(CommonUtil.getUpAuth()) ){
 				operationDefineApprovalService.upDateUseYn(defineWork);
 				result.setCode("0000"); 
 				result.setErrorMessage("success"); 
