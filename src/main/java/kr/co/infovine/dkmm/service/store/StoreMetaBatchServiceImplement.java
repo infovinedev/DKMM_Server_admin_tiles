@@ -80,7 +80,7 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	private String dbpass;
 	
 	//@Value("${batch.flag}")
-	private boolean batchFlag = false;
+	private boolean batchFlag = false;  
 	
 	@Value("${file.upload}")
 	private String WEB_UPLOAD_PATH;
