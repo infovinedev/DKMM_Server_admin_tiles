@@ -279,6 +279,9 @@ function fun_save(type){
 	
 	if(!result) return;
 	 
+	
+	
+	
     fun_fileUploader('img', 'doc', function(headers){
         var nickSeq          = $("#hidden_up_nickSeq").val();
         var nickNm           = $("#txt_up_nickNm").val();
