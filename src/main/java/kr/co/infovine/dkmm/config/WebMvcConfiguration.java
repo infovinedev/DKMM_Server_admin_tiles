@@ -3,6 +3,7 @@ package kr.co.infovine.dkmm.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -12,7 +13,10 @@ import kr.co.infovine.dkmm.interceptor.AuthenticationInterceptor;
 
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
-
+	
+	@Value("${file.upload}")
+    private String UPLOAD_PATH;
+	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		List<String> excludeMapping = new ArrayList<String>();
@@ -27,7 +31,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		excludeMapping.add("/batchStoreCoordinates.do");
 		excludeMapping.add("/batchStoreOrgBulkInsert.do");
 		excludeMapping.add("/filedownloadWebLink.do");
-		excludeMapping.add("/upload/*");
+		excludeMapping.add("/upload/**");
 		
 		registry.addInterceptor(new AuthenticationInterceptor()).excludePathPatterns(excludeMapping);
 		
@@ -36,8 +40,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-      registry
-        .addResourceHandler("/upload/**")
-        .addResourceLocations("/upload/");	
+		 registry.addResourceHandler("/upload/**").addResourceLocations("file:" + UPLOAD_PATH+"/");
 	}
 }
