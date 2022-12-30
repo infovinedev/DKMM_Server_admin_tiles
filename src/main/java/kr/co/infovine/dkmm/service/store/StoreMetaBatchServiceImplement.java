@@ -79,8 +79,8 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	@Value("${spring.datasource.hikari.password}")
 	private String dbpass;
 	
-	@Value("${batch.flag}")
-	private boolean batchFlag;
+	//@Value("${batch.flag}")
+	private boolean batchFlag = false;
 	
 	@Value("${file.upload}")
 	private String WEB_UPLOAD_PATH;
