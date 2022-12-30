@@ -16,7 +16,7 @@ public class TDefineNicknm {
      *
      * @mbg.generated Fri Nov 25 11:29:08 KST 2022
      */
-    private Integer nickSeq;
+    private int nickSeq;
 
     /**
      *
@@ -43,7 +43,7 @@ public class TDefineNicknm {
      *
      * @mbg.generated Fri Nov 25 11:29:08 KST 2022
      */
-    private Long workSeq;
+    private int workSeq;
 
     /**
      *

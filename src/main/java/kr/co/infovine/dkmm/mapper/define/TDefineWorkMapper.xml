@@ -31,7 +31,31 @@
     <result column="unit_txt" jdbcType="VARCHAR" property="unitTxt" />
     <result column="disp_order" jdbcType="VARCHAR" property="dispOrder" />
     <result column="work_grp" jdbcType="VARCHAR" property="workGrp" />
+    <result column="join_cnt" jdbcType="VARCHAR" property="joinCnt" />
+    <result column="complete_cnt" jdbcType="VARCHAR" property="completeCnt" />
   </resultMap>
+  
+  <resultMap id="JoinResultMap" type="kr.co.infovine.dkmm.db.model.define.TDefineWork" extends="BaseResultMap">
+  	<id column="work_seq" jdbcType="INTEGER" property="workSeq" />
+    <id column="nick_seq" jdbcType="INTEGER" property="nickSeq" />
+    <id column="work_condition" jdbcType="VARCHAR" property="workCondition" />
+    <association property="nickNm" column="nick_seq"
+			select="kr.co.infovine.dkmm.mapper.nicknm.TDefineNicknmMapper.selectNickNm"/>
+	<association property="nickComment" column="nick_seq"
+			select="kr.co.infovine.dkmm.mapper.nicknm.TDefineNicknmMapper.selectNickComment"/>
+	<association property="workConditionNm" column="work_condition"
+			select="kr.co.infovine.dkmm.mapper.common.TCommonCodeMapper.selectCdNm"/>
+	<association property="joinCnt" column="work_seq" select="selectUserWorkJoinCnt"/>
+	<association property="completeCnt" column="work_seq" select="selectUserWorkCompleteCnt"/>
+  </resultMap>
+  
+  <select id="selectUserWorkJoinCnt" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultType="int">
+  	SELECT COUNT(1) FROM t_user_work_stat WHERE work_seq = #{workSeq,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectUserWorkCompleteCnt" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultType="int">
+  	SELECT COUNT(1) FROM t_user_work_stat WHERE work_seq = #{workSeq,jdbcType=INTEGER} AND complete_yn = 'Y'
+  </select>
   
 	<sql id="searchCondition_history">
 		<if test='searchStartDt neq null and !"".equals(searchStartDt)'>
@@ -131,7 +155,7 @@
     from t_define_work
   </select>
   
-    <select id="selectAlldefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
+    <select id="selectAlldefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="JoinResultMap">
     /* 업적목록 조회하기 selectAlldefineWork */
       SELECT
          ROW_NUMBER() OVER() AS rowNum
@@ -148,9 +172,8 @@
 				 WHEN a.work_condition = 'GET' THEN 4
 			ELSE 1 END AS sortOrder2
 	        ,a.work_seq
-	        ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
 	        ,a.work_nm
-	        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
+	        ,a.work_condition
 	        ,a.work_cnt
 	        ,a.work_text
 	        ,a.nick_seq
@@ -169,22 +192,22 @@
 	        ,a.work_grp
 	      FROM t_define_work a
 	      WHERE 1=1
-<!-- 	        AND a.del_yn = 'N' -->
-<!-- 	        AND a.approval_yn = 'Y' -->
-<!-- 	        AND a.use_yn = 'Y' -->
+	        AND a.del_yn = 'N'
+	        AND a.approval_yn = 'Y'
+	        AND a.use_yn = 'Y'
 	      <include refid="searchCondition_history"></include>
 	  ) a
       ORDER BY a.sortOrder1, a.disp_order, a.sortOrder2, work_seq DESC
     </select>
     
-    <select id="selectdefineWorkDetail" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
+    
+    <select id="selectdefineWorkDetail" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="JoinResultMap">
     /* 업적목록상세 조회하기 selectdefineWorkDetail */
      SELECT
         a.work_seq
-        ,(select code_name  from t_common_code where code_value = a.work_condition) AS work_condition
-        ,(select code_value  from t_common_code where code_value = a.work_condition) AS workConditionCode
         ,a.work_nm
         ,a.work_cnt
+        ,a.work_condition
         ,a.work_text
         ,a.nick_seq
         ,CONCAT(a.point , 'P') as point
@@ -199,8 +222,6 @@
             ELSE '-'
             END
             ) AS work_type 
-        ,(SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickNm
-        ,(SELECT nick_comment FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = a.nick_seq) as nickComment
         ,a.approval_yn
         ,a.use_yn
         ,a.work_condition_desc

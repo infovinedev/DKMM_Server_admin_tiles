@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import kr.co.infovine.dkmm.interceptor.AuthenticationInterceptor;
@@ -26,17 +27,17 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 		excludeMapping.add("/batchStoreCoordinates.do");
 		excludeMapping.add("/batchStoreOrgBulkInsert.do");
 		excludeMapping.add("/filedownloadWebLink.do");
-//		excludeMapping.add("/upload/*");
+		excludeMapping.add("/upload/*");
 		
 		registry.addInterceptor(new AuthenticationInterceptor()).excludePathPatterns(excludeMapping);
 		
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
 	
-//	@Override
-//  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//      registry
-//        .addResourceHandler("/upload/**")
-//        .addResourceLocations("/upload/");	
-//  }
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+      registry
+        .addResourceHandler("/upload/**")
+        .addResourceLocations("/upload/");	
+	}
 }

@@ -144,4 +144,13 @@
   AND code_description = #{userTypeCode,jdbcType=VARCHAR}
   </select>
   
+  <select id="selectCdNm"  resultType="String">
+  	select code_name  from t_common_code where code_value = #{workCondition,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectCdDesc"  resultType="String">
+  	select code_description  from t_common_code where code_value = #{workCondition,jdbcType=VARCHAR}
+  </select>
+  
+  
 </mapper>

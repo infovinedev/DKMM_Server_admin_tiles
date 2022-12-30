@@ -213,6 +213,7 @@ public class TDefineWork {
     private String rowNum;
     private String workConditionCode;
     private String codeValue;
+    private String workConditionNm;
     
     //조건
   	private String searchText;
@@ -230,5 +231,7 @@ public class TDefineWork {
     
     private int dispOrder;
     private String workGrp;
-
+    
+    private int joinCnt;
+    private int completeCnt;
 }

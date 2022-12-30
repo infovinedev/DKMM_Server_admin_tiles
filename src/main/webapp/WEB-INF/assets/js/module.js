@@ -222,46 +222,46 @@ function getTotalDate(year, month){
 	}
 }
 
-    function fun_getToday(){
-    	var msg;
-        var now = new Date();
-        var mil = now.getMilliseconds;
-        var sec = now.getSeconds();
-        var min = now.getMinutes();
-        var hour = now.getHours();
+function fun_getToday(){
+	var msg;
+    var now = new Date();
+    var mil = now.getMilliseconds();
+    var sec = now.getSeconds();
+    var min = now.getMinutes();
+    var hour = now.getHours();
 
-    	var dd = now.getDate();
-    	var mm = now.getMonth()+1;
-    	var yyyy = now.getFullYear();
-    	if(dd<10) {
-    	    dd='0'+dd;
-    	}
-    	if(mm<10) {
-    	    mm='0'+mm;
-        }
-
-        if(sec<10){
-            sec='0'+sec;
-        }
-        if(min<10){
-            min='0'+min;
-        }
-        if(hour<10){
-            hour='0'+hour;
-        }
-
-        var nowDateRemoveSplit = String(yyyy) + String(mm) + String(dd);
-        var nowTimeRemoveSplit = String(hour) + String(min) + String(sec);
-
-    	var nowDate = yyyy + '-' + mm + '-' + dd;
-        var nowTime = hour + ":" + min + ":" + sec;
-        var fullDateTime = nowDate + " " + nowTime;
-        var fullDateTimeMil = nowDate + " " + nowTime + ":" + mil;
-        msg = {"yyyy" : yyyy, "mm" : mm, "dd" : dd, "hour" :hour, "min" : min, "sec":sec, "mil":mil
-            , "date" : nowDate, "time" : nowTime, "fullDateTime" : fullDateTime, "fullDateTimeMil" : fullDateTimeMil
-            , "nowDateRemoveSplit" : nowDateRemoveSplit , "nowTimeRemoveSplit" : nowTimeRemoveSplit};
-    	return msg;
+	var dd = now.getDate();
+	var mm = now.getMonth()+1;
+	var yyyy = now.getFullYear();
+	if(dd<10) {
+	    dd='0'+dd;
+	}
+	if(mm<10) {
+	    mm='0'+mm;
     }
+
+    if(sec<10){
+        sec='0'+sec;
+    }
+    if(min<10){
+        min='0'+min;
+    }
+    if(hour<10){
+        hour='0'+hour;
+    }
+
+    var nowDateRemoveSplit = String(yyyy) + String(mm) + String(dd);
+    var nowTimeRemoveSplit = String(hour) + String(min) + String(sec);
+
+	var nowDate = yyyy + '-' + mm + '-' + dd;
+    var nowTime = hour + ":" + min + ":" + sec;
+    var fullDateTime = nowDate + " " + nowTime;
+    var fullDateTimeMil = nowDate + " " + nowTime + ":" + mil;
+    msg = {"yyyy" : yyyy, "mm" : mm, "dd" : dd, "hour" :hour, "min" : min, "sec":sec, "mil":mil
+        , "date" : nowDate, "time" : nowTime, "fullDateTime" : fullDateTime, "fullDateTimeMil" : fullDateTimeMil
+        , "nowDateRemoveSplit" : nowDateRemoveSplit , "nowTimeRemoveSplit" : nowTimeRemoveSplit};
+	return msg;
+}
 
 function getDateFormat(month) {
 	if(month < 10) return "0" + month;
@@ -879,3 +879,57 @@ function fun_encryptMdn(strMdn){
 	mdn = encryptMdn.ciphertext.toString(CryptoJS.enc.Base64);
 	return {"mdn":mdn, "iv":iv};
 }
+
+function jsonToExcel(wsData, fileName) {
+	
+	console.log("jsonToExcel");
+    
+    var curTime = fun_getToday().yyyy + "" + fun_getToday().mm + "" + fun_getToday().dd + "" + fun_getToday().hour + "" + fun_getToday().min + "" + fun_getToday().sec + "" + fun_getToday().mil;
+    
+    for (var i=0; i<wsData.length; i++){
+    	
+    	console.log(i + "번째 엑셀");
+    	
+    	// workbook 생성
+        var wb = XLSX.utils.book_new();
+
+        // 문서 속성세팅 ( 윈도우에서 엑셀 오른쪽 클릭 속성 -> 자세히에 있는 값들
+        // 필요 없으면 안써도 괜찮다.
+        wb.Props = {
+            Title: "title",
+            Subject: "subject",
+            Author: "programmer93",
+            Manager: "Manager",
+            Company: "Company",
+            Category: "Category",
+            Keywords: "Keywords",
+            Comments: "Comments",
+            LastAuthor: "programmer93",
+            CreatedDate: new Date(2021,01,13)
+        };
+        
+    	// sheet명 생성 
+        wb.SheetNames.push("sheet " + i);	
+        // 배열 데이터로 시트 데이터 생성
+//         var ws = XLSX.utils.aoa_to_sheet(wsData);
+        var ws = XLSX.utils.json_to_sheet (wsData[i]);
+    	// var ws2 = XLSX.utils.aoa_to_sheet(wsData2); 	//시트가 여러개인 경우
+        
+        // 시트 데이터를 시트에 넣기 ( 시트 명이 없는 시트인경우 첫번째 시트에 데이터가 들어감 )
+        wb.Sheets["sheet "+i] = ws;
+        // wb.Sheets["sheet 2"] = ws2;	//시트가 여러개인 경우+
+        
+     // 엑셀 파일 쓰기
+        var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+    	
+        fun_endBlockUI();
+        
+        // 파일 다운로드
+        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), fileName + '_' + curTime + '_' + i + '.xlsx');
+    }
+
+    fun_endBlockUI();
+
+}
+
+

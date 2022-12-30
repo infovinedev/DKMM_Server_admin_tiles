@@ -136,4 +136,12 @@
         AND nick_seq = ${nickSeq}
   </select>
   
+  <select id="selectNickNm"  resultType="String">
+  	SELECT nick_nm FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = #{nickSeq,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectNickComment"  resultType="String">
+  	SELECT nick_comment FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = #{nickSeq,jdbcType=INTEGER}
+  </select>
+  
 </mapper>

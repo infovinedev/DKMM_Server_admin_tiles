@@ -64,6 +64,7 @@ $(document).ready(function () {
      		$("#txt_add_endDt").datepicker("enable");
      	}
    });
+   
 });
 
 function searchDataTable(){
@@ -118,6 +119,9 @@ function fun_search(){
 			for (let i = 0; i < tempResult.length; i++) {
 				tempResult[i].listIndex = i + 1
 			}
+			
+			console.log(tempResult);
+			
 			fun_dataTableAddData("#defineListInfo", tempResult);
 		}
 	});
@@ -230,14 +234,14 @@ function fun_setDefineListInfo() {
 		"columns": [
 			  {"data":  "listIndex"}
 			, {"data":  "workNm"}   //업적명
-			, {"data": "workCondition"}    //달성조건    workCondition
+			, {"data": "workConditionNm"}    //달성조건    workCondition
 			, {"data": "workCnt"}    //달성상세요건 workCnt
 			, {"data": "nickNm"}    //칭호       nickNm
 			, {"data": "point"}    //포인트     point
 			, {"data": "zombieYn" }    //달성이후누적 zombieYn
 			, {"data": "limitYn" }    //기간한정여부 limitYn
-			, {"data": "unitTxt" }    //단위텍스트    unitTxt
-			, {"data": "dispOrder" }    //정렬순서    dispOrder
+			, {"data": "joinCnt" }    //참여인원    joinCnt
+			, {"data": "completeCnt" }    //완료인원    completeCnt
 			, {"data": "add" }    //관리
 		]
 		, "paging": true            // Table Paging
@@ -408,6 +412,52 @@ function fun_btnDefineinsert() {
 		});
 	}
 }
+
+
+function fun_start_Excel(argFlag, workSeq, workNm){
+	fun_startBlockUI();
+	setTimeout(() => fun_search_excel(argFlag, workSeq), 2000);
+}
+
+function fun_search_excel(argFlag, workSeq){
+	
+	console.log("search EXCEL START");
+	
+	var excelArray = new Array(1); 
+	var fileName = "";
+	var url = "";
+	
+	if ( argFlag == "join" ){
+		fileName = "참여인원_" + workNm;
+	}else if ( argFlag == "complete" ){
+		fileName = "완료인원_" + workNm;
+	}else if ( argFlag == "promotion1" ){
+		fileName = "프로모션달성인원_" + workNm;
+	}else if ( argFlag == "promotion2" ){
+		fileName = "프로모션참가인원_" + workNm;
+	}
+	
+	
+	var inputData = {"workSeq": workSeq};
+	fun_ajaxPostSendNoBlock("", inputData, false, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					var tempResult = JSON.parse(msg.result);
+					excelArray[1] = tempResult;
+					jsonToExcel(excelArray);
+					break;
+				case "0001":
+					alert("ERROR");
+					break;
+			}
+			
+		}
+	});
+	
+	
+}
+
 </script>
 <head>
 	<title>관리자 운영 - 업적관리</title>
@@ -507,17 +557,17 @@ function fun_btnDefineinsert() {
                                 <table id="defineListInfo" class="table table-bordered">
                                     <thead>
                                     	<tr>
-	                                        <th class="text-center">번호</th>
+	                                        <th class="text-center" width="3%">번호</th>
 	                                        <th class="text-center">업적명</th>
-	                                       	<th class="text-center">달성조건</th>
-	                                        <th class="text-center">달성횟수</th>
+	                                       	<th class="text-center">달성<br/>조건</th>
+	                                        <th class="text-center">달성<br/>횟수</th>
 	                                        <th class="text-center">칭호</th>
 	                                        <th class="text-center">포인트</th>
-	                                        <th class="text-center">달성이후누적</th>
-	                                        <th class="text-center">기간한정여부</th>
-	                                        <th class="text-center">단위텍스트</th>
-	                                        <th class="text-center">정렬순서</th>
-	                                        <th class="text-center">관리</th>
+	                                        <th class="text-center">달성이후<br/>누적</th>
+	                                        <th class="text-center">기간한정<br/>여부</th>
+	                                        <th class="text-center" width="10%">참여<br/>인원</th>
+	                                        <th class="text-center" width="10%">완료<br/>인원</th>
+	                                        <th class="text-center" width="7%">관리</th>
                                         </tr>
                                     </thead>
                                     <tbody>

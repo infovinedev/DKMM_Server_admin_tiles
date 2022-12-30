@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.infovine.dkmm.mapper.user.TUserWorkStatMapper">
+  <resultMap id="BaseResultMap" type="kr.co.infovine.dkmm.db.model.user.TUserWorkStat">
+    <id column="user_seq" jdbcType="BIGINT" property="userSeq" />
+    <id column="work_seq" jdbcType="BIGINT" property="workSeq" />
+    <result column="user_action_cnt" jdbcType="VARCHAR" property="userActionCnt" />
+    <result column="complete_yn" jdbcType="VARCHAR" property="completeYn" />
+    <result column="ins_seq" jdbcType="BIGINT" property="insSeq" />
+    <result column="ins_dt" jdbcType="TIMESTAMP" property="insDt" />
+    <result column="upt_seq" jdbcType="BIGINT" property="uptSeq" />
+    <result column="upt_dt" jdbcType="TIMESTAMP" property="uptDt" />
+    <result column="complete_dt" jdbcType="TIMESTAMP" property="completeDt" />
+  </resultMap>
+  
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+  
+  </select>
+  
+
+  
+</mapper>

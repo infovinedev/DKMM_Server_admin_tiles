@@ -79,21 +79,14 @@ function fun_search(){
 
 //text값 공백처리
 function fun_reset(type){
-	$("#txt_nickSeq").val("");             //업적번호
-	$("#txt_nickSeq").val("");              //업적명
-	$("#txt_workCondition").val(""); 	  //달성조건
-	$("#txt_workCnt").val("");             //달성 상세 요건
-	$("#txt_point").val("");               //포인트
-	$("#txt_workType").val("");            //업적구분
-	$("#txt_nickSeq").val("");             //칭호
-	$("#txt_nickComment").val("");         //칭호코멘트
-	$("#txt_startDt").val("");             //기간 설정
-	$("#txt_endDt").val("");               //기간 설정
-	$("#txt_workConditionDesc").val("");   //업적설명
-	$("#txt_exceptCondition").val("");     //업적제외조건
-	$("#txt_zombieYn").val("");            //달성이후누적
-	$("#txt_limitYn").val("");             //기간한정여부
-	$("#txt_unitTxt").val("");             //단위텍스트
+	$("#txt_up_nickNm").val("");             //업적번호
+	$("#hidden_up_nickSeq").val("");              //업적명
+	$("#fileUploader").val(""); 	  //달성조건
+	//img_preview
+	$("#img_preview").attr("src", "");
+	$("#txt_up_workNm").val("");             //달성 상세 요건
+	$("#txt_up_nickComment").val("");               //포인트
+	
 }
 //상세보기
 function fun_viewDetail(nickSeq) {
@@ -209,10 +202,9 @@ function fun_update(type) {
 	if(type == "insert"){
 		$("#btn_update").hide();
 		$("#btn_delete").hide();
-		$("#txt_up_nickNm").val("");
-		$("#txt_up_fileUuid").val("");
-		$("#txt_up_workNm").val("-");
-		$("#txt_up_nickComment").val("");
+		
+		fun_reset("I");
+
 	}else{
 		$("#btn_insert").hide();
 	}
@@ -274,6 +266,19 @@ function fun_preview(obj, fileType){
 
 //칭호 등록,수정,삭제 저장 버튼
 function fun_save(type){
+	
+	var result = false;
+	
+	if(type == "I"){
+		result	= confirm('추가 하시겠습니까?');
+    }else if(type == "U"){
+       result = confirm('수정 하시겠습니까?');
+    }else{
+       result = confirm('삭제하시겠습니까?');
+    }
+	
+	if(!result) return;
+	 
     fun_fileUploader('img', 'doc', function(headers){
         var nickSeq          = $("#hidden_up_nickSeq").val();
         var nickNm           = $("#txt_up_nickNm").val();
@@ -282,14 +287,8 @@ function fun_save(type){
         var nickComment      = $("#txt_up_nickComment").val();
 
 
-        var inputData = {"nickSeq": nickSeq , "nickNm": nickNm , "fileUuid": fileUuid , "workNm": workNm, "nickComment": nickComment};
-        if(type == "I"){
-            var result = confirm('추가 하시겠습니까?');
-        }else if(type == "U"){
-            var result = confirm('수정 하시겠습니까?');
-        }else{
-            var result = confirm('삭제하시겠습니까?');
-        }
+        var inputData = {"nickSeq": nickSeq , "nickNm": nickNm , "fileUuid": fileUuid , "workNm": workNm, "nickComment": nickComment, "type" : type};
+       
 
         if(result){
             fun_ajaxPostSend("/nicknm/save/nickNmSave.do", inputData, true, function(msg){
