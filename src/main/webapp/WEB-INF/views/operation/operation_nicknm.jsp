@@ -312,24 +312,19 @@ function fun_save(type){
 		}
 		
 		if ( type == "U"){
-			
 			if ( $("#fileUploader").val() == "" ){
 				fun_saveNoFile(type);
 			}else{
 				fun_saveWithFile(type);
 			}
-			
 		}else{ 
-			
 			if ( $("#fileUploader").val() == "" ){
 				alert("칭호 이미지를 등록해주세요");
 				return;
 			}
-			
 			fun_saveWithFile(type);
 		}
 	}
-    
 }
 
 function fun_saveWithFile(type){
