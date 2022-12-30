@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping(value = "/nicknm")
 public class OperationNicknmController {
+	
+	@Value("${url.mainUrl}")
+    private String MAIN_URL;
+	
 	@Autowired
 	OperationNicknmService nicknmService;
 	
@@ -47,8 +52,7 @@ public class OperationNicknmController {
 		ResponseModel result = new ResponseModel();
 		try {
 			
-			System.out.println( "defineNicknm.getSearchType() =>>" + defineNicknm.getSearchType());
-			
+			defineNicknm.setMainUrl(MAIN_URL);
 			List<TDefineNicknm> model = nicknmService.selectAlldefineNicknm(defineNicknm);
 			ObjectMapper mapper = new ObjectMapper();
 			String nickNmWorkList = mapper.writeValueAsString(model);
@@ -67,6 +71,8 @@ public class OperationNicknmController {
 					,@RequestBody TDefineNicknm defineNicknm) {
 				ResponseModel result = new ResponseModel();
 				try {
+					
+					defineNicknm.setMainUrl(MAIN_URL);
 					TDefineNicknm model = nicknmService.selectNicknmDetail(defineNicknm);
 					ObjectMapper mapper = new ObjectMapper();
 					String nickNmDetailListInfo = mapper.writeValueAsString(model);
@@ -90,16 +96,21 @@ public class OperationNicknmController {
 			
 			if ( defineNicknm.getType() == null ) {
 				int nickSeq = defineNicknm.getNickSeq();
-				nicknmService.deleteFaq(nickSeq);
+				nicknmService.delete(nickSeq);
 			}
 			else {
 				if(defineNicknm.getType().equals("I")) {
 					defineNicknm.setInsSeq(sessionModel.getAdminUserSeq());
-					nicknmService.insertFaq(defineNicknm);
+					nicknmService.insert(defineNicknm);
 					
-				}else if(defineNicknm.getType().equals("U")) {
+				}
+				else if(defineNicknm.getType().equals("U")) {
 					defineNicknm.setUptSeq(sessionModel.getAdminUserSeq());
-					nicknmService.updateFaq(defineNicknm);
+					nicknmService.update(defineNicknm);
+				}
+				else if(defineNicknm.getType().equals("D")) {
+					int nickSeq = defineNicknm.getNickSeq();
+					nicknmService.delete(nickSeq);
 				}
 			}
 			result.setErrorMessage("success"); 

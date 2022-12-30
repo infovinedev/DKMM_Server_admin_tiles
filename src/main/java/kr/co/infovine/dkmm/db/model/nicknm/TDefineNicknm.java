@@ -116,10 +116,13 @@ public class TDefineNicknm {
     private String fileNm;
     private String fileSaveNm;
     private String type;
-
+    private String mainUrl;
+    private String imageUrl;
+    
     //조건
     private String searchText;
     private String searchType;
     private String searchStartDt;
     private String searchEndDt;
+    
 }

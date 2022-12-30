@@ -29,17 +29,17 @@ public class OperationNicknmServiceImpl implements OperationNicknmService{
 	}
 	
 	@Override 
-	public int insertFaq(TDefineNicknm defineNicknm) {
+	public int insert(TDefineNicknm defineNicknm) {
 		return defineNicknmMapper.insert(defineNicknm); 
 	}
 	
 	@Override 
-	public int updateFaq(TDefineNicknm defineNicknm) {
+	public int update(TDefineNicknm defineNicknm) {
 		return defineNicknmMapper.updateByPrimaryKey(defineNicknm); 
 	}
 	
 	@Override 
-	public int deleteFaq(Integer nickSeq) {
+	public int delete(Integer nickSeq) {
 		return defineNicknmMapper.deleteByPrimaryKey(nickSeq); 
 	}
 }

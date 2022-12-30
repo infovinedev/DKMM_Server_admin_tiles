@@ -10,9 +10,9 @@ public interface OperationNicknmService {
     TDefineNicknm selectNicknmDetail(TDefineNicknm defineNicknm);
     
     //수정
-    int insertFaq(TDefineNicknm defineNicknm);
+    int insert(TDefineNicknm defineNicknm);
     //수정
-    int updateFaq(TDefineNicknm defineNicknm);
+    int update(TDefineNicknm defineNicknm);
     //삭제
-    int deleteFaq(Integer nickSeq);
+    int delete(Integer nickSeq);
 }

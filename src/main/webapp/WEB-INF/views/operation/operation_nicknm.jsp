@@ -79,13 +79,17 @@ function fun_search(){
 
 //text값 공백처리
 function fun_reset(type){
-	$("#txt_up_nickNm").val("");             //업적번호
-	$("#hidden_up_nickSeq").val("");              //업적명
-	$("#fileUploader").val(""); 	  //달성조건
-	//img_preview
+	$("#txt_up_nickNm").val("");            
+	$("#hidden_up_nickSeq").val("");             
+	$("#fileUploader").val(""); 	 
 	$("#img_preview").attr("src", "");
-	$("#txt_up_workNm").val("");             //달성 상세 요건
-	$("#txt_up_nickComment").val("");               //포인트
+	$("#txt_up_workNm").val("");            
+	$("#txt_up_nickComment").val("");              
+	$("#hidden_up_fileUuid").val(""); 
+	
+	$("#tr_preview").hide();
+	$("#img_preview").attr("src", "");
+	
 	
 }
 //상세보기
@@ -96,17 +100,20 @@ function fun_viewDetail(nickSeq) {
 	var inputData = {"nickSeq": nickSeq};
 	fun_ajaxPostSend("/nicknm/select/defineNicknmDetail.do", inputData, true, function(msg){
 		if(msg!=null){
-			var tempResult = JSON.parse(msg.result);
-			var tempResult         = JSON.parse(msg.result);
+			var tempResult 			= JSON.parse(msg.result);
+			
 			var nickSeq            = tempResult.nickSeq == null ? "" : tempResult.nickSeq;            //칭호번호
 			var nickNm             = tempResult.nickNm == null ? "" : tempResult.nickNm;              //칭호명
 			var fileUuid           = tempResult.fileUuid == null ? "N" : "Y";                         //칭호이미지
 			var workNm             = tempResult.workNm == null ? "" : tempResult.workNm;              //연결업적
 			var nickComment        = tempResult.nickComment == null ? "" : tempResult.nickComment;    //칭호코멘트
+			var imageUrl		   = tempResult.imageUrl == null ? "" : tempResult.imageUrl;   
+			
+			$("#img_previewDtl").attr("src", imageUrl);
 			
 			$("#txt_nickSeq").val(nickSeq);
 			$("#txt_nickNm").val(nickNm);
-			$("#txt_fileUuid").val(fileUuid);
+			$("#txt_fileUuid").val(imageUrl);
 			$("#txt_workNm").val(workNm);
 			$("#txt_nickComment").val(nickComment);
 			
@@ -116,6 +123,11 @@ function fun_viewDetail(nickSeq) {
 			$("#txt_up_fileUuid").val(fileUuid);
 			$("#txt_up_workNm").val(workNm);
 			$("#txt_up_nickComment").val(nickComment);
+			$("#hidden_up_fileUuid").val(fileUuid);
+			
+			
+			$("#tr_preview").show();
+			$("#img_preview").attr("src", imageUrl);
 		}
 	});
 }
@@ -173,6 +185,17 @@ function fun_setNicknmListInfo() {
 			, {
 				"targets": [4]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					var fileUuid = row.fileUuid;
+					var insertTr = "";
+					if ( fileUuid == "Y"){
+						insertTr = '<a href="'+row.imageUrl+'" target="_blank"><font color="blue">'+fileUuid+'</font></button>'; 
+						
+					}else{
+						insertTr = fileUuid;
+					}
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [5]
@@ -208,8 +231,7 @@ function fun_update(type) {
 	}else{
 		$("#btn_insert").hide();
 	}
-    $("#img_preview").attr("src", "");
-    $("#tr_preview").hide();
+    
 	$("#section1_detail_view").css("display", "none");
 	$("#section1_detail_edit").removeAttr("style");
 }
@@ -257,9 +279,6 @@ function fun_preview(obj, fileType){
     }
     reader.readAsDataURL(fileObject);
 
-
-
-
 }
 
 
@@ -278,37 +297,90 @@ function fun_save(type){
     }
 	
 	if(!result) return;
-	 
 	
+	if ( type == "D" ){
+		fun_saveNoFile(type);
+	}else{
+		if ( $("#txt_up_nickNm").val() == "" ){
+			alert("칭호명을 등록해주세요");
+			return;
+		}
+		
+		if ( $("#txt_up_nickComment").val() == "" ){
+			alert("칭호 코멘트를 등록해주세요");
+			return;
+		}
+		
+		if ( type == "U"){
+			
+			if ( $("#fileUploader").val() == "" ){
+				fun_saveNoFile(type);
+			}else{
+				fun_saveWithFile(type);
+			}
+			
+		}else{ 
+			
+			if ( $("#fileUploader").val() == "" ){
+				alert("칭호 이미지를 등록해주세요");
+				return;
+			}
+			
+			fun_saveWithFile(type);
+		}
+	}
+    
+}
+
+function fun_saveWithFile(type){
 	
-	
-    fun_fileUploader('img', 'doc', function(headers){
+	fun_fileUploader('img', 'doc', function(headers){
         var nickSeq          = $("#hidden_up_nickSeq").val();
         var nickNm           = $("#txt_up_nickNm").val();
         var fileUuid         = headers.uniqueId;            //$("#txt_up_fileUuid").val();
         var workNm           = $("#txt_up_workNm").val();
         var nickComment      = $("#txt_up_nickComment").val();
-
-
+        
         var inputData = {"nickSeq": nickSeq , "nickNm": nickNm , "fileUuid": fileUuid , "workNm": workNm, "nickComment": nickComment, "type" : type};
-       
 
-        if(result){
-            fun_ajaxPostSend("/nicknm/save/nickNmSave.do", inputData, true, function(msg){
-                if(msg.errorMessage !=null){
-                    var message = msg.errorMessage;
-                    if(message == "success"){
-                        alert("정상적으로 처리되었습니다.");
-                        $("#exampleModalScrollable").modal('hide');
-                        fun_search();
-                    }else if(message == "error"){
-                        alert("정상적으로 처리되지 않았습니다.");
-                    }
+        fun_ajaxPostSend("/nicknm/save/nickNmSave.do", inputData, true, function(msg){
+            if(msg.errorMessage !=null){
+                var message = msg.errorMessage;
+                if(message == "success"){
+                    alert("정상적으로 처리되었습니다.");
+                    $("#exampleModalScrollable").modal('hide');
+                    fun_search();
+                }else if(message == "error"){
+                    alert("정상적으로 처리되지 않았습니다.");
                 }
-            });
-        }
+            }
+        });
     });
 }
+
+function fun_saveNoFile(type){
+	var nickSeq          = $("#hidden_up_nickSeq").val();
+	var nickNm           = $("#txt_up_nickNm").val();
+	var fileUuid         = "";            //$("#txt_up_fileUuid").val();
+	var workNm           = $("#txt_up_workNm").val();
+	var nickComment      = $("#txt_up_nickComment").val();
+	
+	var inputData = {"nickSeq": nickSeq , "nickNm": nickNm , "fileUuid": fileUuid , "workNm": workNm, "nickComment": nickComment, "type" : type};
+	
+	fun_ajaxPostSend("/nicknm/save/nickNmSave.do", inputData, true, function(msg){
+	    if(msg.errorMessage !=null){
+	        var message = msg.errorMessage;
+	        if(message == "success"){
+	            alert("정상적으로 처리되었습니다.");
+	            $("#exampleModalScrollable").modal('hide');
+	            fun_search();
+	        }else if(message == "error"){
+	            alert("정상적으로 처리되지 않았습니다.");
+	        }
+	    }
+	});
+}
+
 //파일업로드
 function generateUUID() {
     var d = new Date().getTime();
@@ -326,14 +398,18 @@ function fun_fileUploader(fileType, pageType, callback){
     var fileObject = input.files[0]; */
     var input = $("#fileUploader");
     var fileObject = input.prop('files')[0];
-
+	
+    console.log(fileObject);
+    
+    
     var name = fileObject.name;
     if(fileObject==""){
         alert("파일을 업로드 해주세요.");
         return false;
     }
-
+	
     var ext = name.split('.').pop().toLowerCase();
+    
     var fileArr = ['png','jpg','jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'hwp', 'avi', 'mp4', 'm4v', 'wmv', 'mkv', 'mov', 'bz2'];
     if(fileType == "img"){
         fileArr = ['png','jpg','jpeg', 'gif'];
@@ -341,13 +417,12 @@ function fun_fileUploader(fileType, pageType, callback){
             alert("이미지 파일을 업로드 해 주세요.");
             return false;
         }
-
     }
     var headers = new Object();
     headers.pageType = pageType;
     headers.fileType = fileType;
     headers.uniqueId = generateUUID();
-    headers.fileObjectName = fileObject.name;
+    headers.fileObjectName = encodeURI(fileObject.name);
     headers.fileObjectSize = fileObject.size;
     headers.fileObjectType = fileObject.type;
     const HugeUploader = require('huge-uploader');
@@ -539,9 +614,17 @@ function fun_fileUploader(fileType, pageType, callback){
                                   </tr>
                                   <tr>
                                      <th>칭호이미지</th>
-                                     <td><input class="form-control" type="text" id="txt_fileUuid" readOnly/></td>
+                                     <td colspan="3"><input class="form-control" type="text" id="txt_fileUuid" readOnly/></td>
+                                  </tr>
+                                  <tr>
+                                      <th>미리보기</th>
+                                      <td colspan="3">
+                                          <img src="" style="" id="img_previewDtl">
+                                      </td>
+                                  </tr>
+                                  <tr>
                                      <th>연결업적</th>
-                                     <td><input class="form-control" type="text" id="txt_workNm" readOnly/></td>
+                                     <td colspan="3"><input class="form-control" type="text" id="txt_workNm" readOnly/></td>
                                   </tr>
                                   <tr>
                                      <th>칭호코멘트</th>
@@ -587,6 +670,7 @@ function fun_fileUploader(fileType, pageType, callback){
                                   <tr>
                                     <th>칭호이미지 <span class="text-red">*</span></th>
                                     <td colspan="3">
+                                    	<input class="form-control" type="hidden" id="hidden_up_fileUuid"/>
                                         <input type="file" class="btn btn-secondary btn-sm" id="fileUploader" onchange="fun_preview(this, 'img');">
                                         <!-- onchange="fun_fileUploader(fileUploader, 'img', 'doc', fun_fileUploaderCallback);" -->
                                         <div class='progress' style="width:600px; display:none;">
