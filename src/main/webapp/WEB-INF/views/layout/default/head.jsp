@@ -25,6 +25,9 @@
 	<link rel="stylesheet" href="../assets/css/additional.css">
 	<link rel="stylesheet" href="../assets/css/custom_pagenate.css">
 	
+	<!-- 	Toast UI Editor -->
+	<link rel="stylesheet" href="../assets/css/editor/toastui-editor.min.css">
+	
 	<script  src="../assets/js/jquery-3.3.1.js"></script>
 	<script  src="../assets/js/c21.js"></script>
 	<script  src="../assets/js/common.js"></script>
@@ -46,6 +49,10 @@
 	<script src="../assets/js/cryptoJs/sha512.js"></script>
 	<script src="../assets/js/module.js?version=0.1"></script>
 	<script src="../assets/js/blockUI.js?version=0.1"></script>
+	
+	<!-- 	Toast UI Editor -->
+	<script src="../assets/js/editor/toastui-editor-all.min.js?version=0.1"></script>
+	
 	<script>
 	let leftMenuLevel1 = [];
 	let leftMenuLevel2 = [];

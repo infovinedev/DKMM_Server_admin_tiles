@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script>
 var boardListInfo;
+var editor;
 
 $(document).ready(function () {
 	var ua = navigator.userAgent;
@@ -35,6 +36,13 @@ $(document).ready(function () {
 		fun_search();
 	});
 	
+	
+	editor = new toastui.Editor({
+        el: document.querySelector('#editor'),
+        previewStyle: 'vertical',
+        height: '500px',
+        initialValue: ""
+      });
    
 });
 
@@ -471,6 +479,11 @@ function fun_save(type){
                                      <th>이미지첨부</th>
                                      <td colspan="3">추후작업</td>
                                   </tr>
+                                  <tr>
+                                     <th>에디터</th>
+                                     <td colspan="3"><div id="editor"></div></td>
+                                  </tr>
+                                   
                                </tbody>
                                </tbody>
                             </table>
