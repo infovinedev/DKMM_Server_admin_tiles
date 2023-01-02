@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = DkmmAdminApplication.class
 , 
-properties = {"server.mode=local"})
+properties = {"server.mode=local", "batch.flag=false"})
 class DkmmAdminApplicationTests {
 
 	@Test
