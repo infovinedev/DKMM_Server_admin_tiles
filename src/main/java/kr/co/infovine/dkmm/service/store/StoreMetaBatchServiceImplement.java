@@ -79,8 +79,8 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	@Value("${spring.datasource.hikari.password}")
 	private String dbpass;
 	
-	@Value("${batch.flag}")
-	private boolean batchFlag;  
+//	@Value("${batch.flag}")
+	private String batchFlag = System.getenv("batch.flag");  
 	
 	@Value("${file.upload}")
 	private String WEB_UPLOAD_PATH;
@@ -101,7 +101,8 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	public void batchStoreInfo(String flag) {
 		
 		if ( !"WEB".equals(flag) ) {
-			if ( this.batchFlag != true ) return;
+			if ( this.batchFlag == null ) this.batchFlag = "";
+			if ( !"true".equals(batchFlag) ) return;
 		}
 		 
 		long start = System.currentTimeMillis();
@@ -243,7 +244,8 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	public void getCoordinatesToStoreInfo(String flag) {
 		
 		if ( !"WEB".equals(flag) ) {
-			if ( this.batchFlag != true ) return;
+			if ( this.batchFlag == null ) this.batchFlag = "";
+			if ( !"true".equals(batchFlag) ) return;
 		}
 		
 		try {
@@ -904,7 +906,8 @@ public class StoreMetaBatchServiceImplement implements StoreMetaBatchService{
 	public void batchStoreOrgBulkInsertToExcelStreaming(String flag) {
 		
 		if ( !"WEB".equals(flag) ) {
-			if ( this.batchFlag != true ) return;
+			if ( this.batchFlag == null ) this.batchFlag = "";
+			if ( !"true".equals(batchFlag) ) return;
 		}
 		
 		log.info( "==========  batchStoreOrgBulkInsertToExcelStreaming : STORE META DATA Bulk INSERT - MyBatis =============" );
