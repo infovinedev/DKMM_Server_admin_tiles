@@ -35,7 +35,6 @@
 	<script src="../assets/lib/moment/moment.min.js"></script>
 	<script src="../assets/lib/bootstrap/js/bootstrap-select.js"></script>
 	<script src="../assets/lib/swiper/js/swiper.min.js"></script>
-	<script src="../assets/lib/chart/Chart.min.js"></script>
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.css">
 

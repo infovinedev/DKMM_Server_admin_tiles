@@ -109,15 +109,18 @@
 	function fun_leftMenuActive(id){
 		if($('#parent_' + id).attr('class') == "nav-item has-treeview menu-open"){
 			$('#parent_' + id).removeClass('menu-open');
+			$('#ul_' + id).attr("style", "display : none;");
 		}else{
 			$('#parent_' + id).addClass("menu-open");
+			$('#ul_' + id).attr("style", "display : block;");
+
 		} 
 	}
 	      
 	function fun_leftTreeActivation(callback){
 			var temp_side = 		'<nav>';
 				temp_side += 			'<ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">';
-				temp_side += 				'<li class="nav-item has-treeview menu-open">';
+				temp_side += 				'<li class="nav-item has-treeview">';
 				temp_side += 					'<a href="/main/page.do" class="nav-link">';
 				temp_side += 						'<i class="nav-icon fas fa-chalkboard-teacher"></i>';
 				temp_side += 						'<p>홈으로 <i class="right fas fa-angle-right"></i></p>';
@@ -128,7 +131,7 @@
 					temp_Value1 = mid(value1.programId, 0, 2);
 					temp_side += '<li class="nav-item has-treeview" id="parent_' + value1.programId + '" onclick=fun_leftMenuActive("' +value1.programId +'")>';
 					temp_side += '<a class="nav-link" id="' + value1.programId + '" name="' + value1.programId + '"><i class="nav-icon fas fa-chalkboard-teacher"></i><p>' + value1.programName + '<i class="right fas fa-angle-right"></i></p></a>';
-					temp_side += '<ul class="nav nav-treeview">';
+					temp_side += '<ul class="nav nav-treeview" id="ul_' + value1.programId + '">';
 					
  					$.each(leftMenuLevel2, function (key2, value2) {
 							if (value1.programId == value2.parentsProgramId) {

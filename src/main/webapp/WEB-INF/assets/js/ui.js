@@ -16,7 +16,7 @@ function gnb() {
 	$(".nav-treeview a.active").closest(".has-treeview").addClass("menu-open");
 
 }
-gnb();
+//gnb();
 
 // 컬러피커
 document.querySelectorAll('input[type=color]').forEach(function (picker) {
