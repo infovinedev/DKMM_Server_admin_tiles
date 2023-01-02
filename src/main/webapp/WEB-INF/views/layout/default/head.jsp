@@ -30,7 +30,7 @@
 	<script  src="../assets/js/common.js"></script>
 	<script src="../assets/lib/jquery-ui/jquery-ui.min.js"></script>
 	<script src="../assets/js/ui.js" defer></script>
-	<script  src="../assets/js/adminlte.min.js" defer></script>
+	<script  src="../assets/js/adminlte.min.js"></script>
 	<!-- basic scripts -->
 	<script src="../assets/js/bootstrap.js?version=0.0" type="text/javascript"></script>
 	<script src="../assets/js/jquery-ui.custom.js" type="text/javascript"></script>
@@ -92,8 +92,9 @@
 	// }
 	      
 	function fun_leftTreeActivation(callback){
-			var temp_side = 		'<nav>';
-				temp_side += 			'<ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">';
+			var temp_side = '';
+				//temp_side += 		'<nav>';
+				//temp_side += 			'<ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">';
 				temp_side += 				'<li class="nav-item has-treeview">';
 				temp_side += 					'<a href="/main/page.do" class="nav-link">';
 				temp_side += 						'<i class="nav-icon fas fa-chalkboard-teacher"></i>';
@@ -104,7 +105,7 @@
 // 				if(value1.programId != 30000000){
 					temp_Value1 = mid(value1.programId, 0, 2);
 					temp_side += '<li class="nav-item has-treeview" id="parent_' + value1.programId + '">';	//onclick=fun_leftMenuActive("' +value1.programId +'")
-					temp_side += '<a class="nav-link" id="' + value1.programId + '" name="' + value1.programId + '"><i class="nav-icon fas fa-chalkboard-teacher"></i><p>' + value1.programName + '<i class="right fas fa-angle-right"></i></p></a>';
+					temp_side += '<a class="nav-link" id="' + value1.programId + '"><i class="nav-icon fas fa-chalkboard-teacher"></i><p>' + value1.programName + '<i class="right fas fa-angle-right"></i></p></a>';
 					temp_side += '<ul class="nav nav-treeview" id="ul_' + value1.programId + '">';
 					
  					$.each(leftMenuLevel2, function (key2, value2) {
@@ -116,10 +117,10 @@
 					temp_side += '</ul>';
 // 				}
 			});//each1 
-				temp_side += 			'</ul>';
-				temp_side += 		'</nav>';
+				//temp_side += 			'</ul>';
+				//temp_side += 		'</nav>';
 				
-			$("#side_div").append(temp_side);
+			$("#nav_side").append(temp_side);
 			callback();
 		}
 	

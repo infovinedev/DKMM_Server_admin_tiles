@@ -38,6 +38,11 @@
                 <div class="mt-1"></div>
             </a>
          <div id="side_div" class="sidebar">
+         	<nav>
+         		<ul id="nav_side" class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+         		
+         		</ul>
+         	</nav>
          </div>
        </aside> 
         
