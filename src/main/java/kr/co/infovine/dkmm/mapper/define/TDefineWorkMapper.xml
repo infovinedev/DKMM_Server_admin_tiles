@@ -233,7 +233,7 @@
         ,a.work_grp
       FROM t_define_work a
       WHERE 1=1
-      AND work_seq = ${workSeq}
+      AND work_seq = #{workSeq,jdbcType=INTEGER}
     </select>
     
     <select id="selectDefineWorkGetNicknm" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
@@ -263,7 +263,7 @@
     SET use_yn = 'N',
         upt_seq = #{uptSeq,jdbcType=BIGINT},
         upt_dt = now() 
-    WHERE work_seq = ${upWorkSeq}
+    WHERE work_seq = #{upWorkSeq,jdbcType=INTEGER}
     </update>
     
     <insert id="insertDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
@@ -392,7 +392,7 @@
         ,a.work_grp
       FROM t_define_work a
       WHERE 1=1
-      AND work_seq = ${workSeq}
+      AND work_seq = #{workSeq,jdbcType=INTEGER}
     </select>
     
     <update id="upDateAllDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
@@ -416,7 +416,7 @@
                 ,disp_order				= #{dispOrder ,jdbcType=BIGINT}
                 ,work_grp				= #{workGrp ,jdbcType=VARCHAR}
               WHERE 1=1
-              AND work_seq = ${workSeq}
+              AND work_seq = #{workSeq,jdbcType=INTEGER}
     </update>
     
     <delete id="deleteAllDefineWork" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
@@ -424,22 +424,44 @@
     DELETE 
       FROM t_define_work
      WHERE 1=1
-       AND work_seq = ${workSeq}
+       AND work_seq = #{workSeq,jdbcType=INTEGER}
     </delete>
     	
     <update id="upDateApproval" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
     /* 업적승인여부  upDateApproval */
-    UPDATE t_define_work SET approval_yn  = #{approvalYn,jdbcType=VARCHAR} WHERE work_seq = ${upWorkSeq}
+    UPDATE t_define_work SET approval_yn  = #{approvalYn,jdbcType=VARCHAR} WHERE work_seq = #{upWorkSeq,jdbcType=INTEGER}
     </update>
     
     <update id="upDateUseYn" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
     /* 업적등록승인 사용여부 수정 upDateUseYn */
-    UPDATE t_define_work SET use_yn = #{useYn,jdbcType=VARCHAR} WHERE work_seq = ${upWorkSeq}
+    UPDATE t_define_work SET use_yn = #{useYn,jdbcType=VARCHAR} WHERE work_seq = #{upWorkSeq,jdbcType=INTEGER}
     </update>
     
     <select id="selectNickComment" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
-    select nick_comment as nickComment from t_define_nicknm  where nick_seq = #{nickSeq}
+    select nick_comment as nickComment from t_define_nicknm  where nick_seq = #{nickSeq,jdbcType=INTEGER}
     </select>
     <!--                                                                      업적등록승인 end                                                                      -->
+    
+	<!--     업적 현황 -->
+	<select id="selectDefineWorkStat" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultType="java.util.HashMap">
+		SELECT a.user_seq				AS "사용자Seq"
+		 		,b.nick_name 			AS "닉네임"
+		 		,fn_decrypt(b.phone) 	AS "휴대폰"
+				,b.os_type 				AS "접속기기타입"
+		 		,a.user_action_cnt		AS "달성횟수"
+		 		,a.complete_yn			AS "달성여부"
+		 		,TO_CHAR(a.complete_dt, 'yyyy-mm-dd hh:mi:ss')			AS "업적달성일자"
+		 		,TO_CHAR(a.ins_dt, 'yyyy-mm-dd hh:mi:ss')				AS "첫업적등록일자"
+		 		,TO_CHAR(a.upt_dt, 'yyyy-mm-dd hh:mi:ss')				AS "마지막업적등록일자"
+		FROM t_user_work_stat a JOIN t_user_info b
+		 						ON a.user_seq = b.user_seq
+		WHERE a.work_seq = #{workSeq,jdbcType=INTEGER}				
+		<if test='completeYn neq null and "Y".equals(completeYn)'>
+			AND a.complete_yn = 'Y'
+		</if>
+		ORDER BY a.ins_dt, a.user_action_cnt DESC, b.nick_name
+		
+    </select>
+    
     
 </mapper>

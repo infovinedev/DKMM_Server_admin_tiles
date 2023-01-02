@@ -1,5 +1,6 @@
 package kr.co.infovine.dkmm.mapper.define;
 
+import java.util.HashMap;
 import java.util.List;
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
 import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
@@ -70,5 +71,9 @@ public interface TDefineWorkMapper {
     void upDateUseYn(TDefineWork defineWork);
     
     TDefineWork selectNickComment(TDefineWork defineWork);
+    
+    
+    /** 업적 현황 JS **/
+    List<HashMap<String, Object>> selectDefineWorkStat(TDefineWork defineWork);
     
 }

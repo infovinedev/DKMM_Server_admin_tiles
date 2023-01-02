@@ -484,21 +484,30 @@ function fun_updateDisplay() {
 		if(msg!=null){
 			
 			var tempResult = JSON.parse(msg.result);
+			
+			console.log(tempResult);
+			
 			if(tempResult.length > 0){
-				var seqString = tempResult[0].seqString;
 				var usuallySeq = $("#hidden_nickSeq").val();
 				var usuallyNm = $("#txt_nickNm").val();
 				
+				console.log(usuallySeq);
+				console.log(usuallyNm);
+				
 				$("select#sel_up_nickSeq option").remove();
 				$('#sel_up_nickSeq').append($('<option></option>').val("").html("선택"));
-				$('#sel_up_nickSeq').append($('<option></option>').val(usuallySeq).html(usuallyNm));
 				for(var i=0; i<tempResult.length; i++){
 					var nickSeq = tempResult[i].nickSeq;
-					if(!seqString.includes(nickSeq)){
-							var nickNm = tempResult[i].nickNm;
-							$('#sel_up_nickSeq').append($('<option></option>').val(nickSeq).html(nickNm));
+					if(nickSeq != null || nickSeq != " "){
+						var nickNm = tempResult[i].nickNm;
+						$('#sel_up_nickSeq').append($('<option></option>').val(nickSeq).html(nickNm));
 					}
 				}
+				
+				if ( usuallySeq != ''){
+					$('#sel_up_nickSeq').val(usuallySeq);
+				}
+				
 			}
 		}
 		$("#sel_up_nickSeq").val(setNickSeq);
@@ -647,8 +656,8 @@ function fun_btnInsert() {
 			for(var i=0; i<tempResult.length; i++){
 				var nickSeq = tempResult[i].nickSeq;
 				if(nickSeq != null || nickSeq != " "){
-						var nickNm = tempResult[i].nickNm;
-						$('#sel_add_nickSeq').append($('<option></option>').val(nickSeq).html(nickNm));
+					var nickNm = tempResult[i].nickNm;
+					$('#sel_add_nickSeq').append($('<option></option>').val(nickSeq).html(nickNm));
 				}
 			}
 		}

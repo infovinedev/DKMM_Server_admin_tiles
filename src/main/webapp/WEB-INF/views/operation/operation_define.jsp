@@ -120,8 +120,6 @@ function fun_search(){
 				tempResult[i].listIndex = i + 1
 			}
 			
-			console.log(tempResult);
-			
 			fun_dataTableAddData("#defineListInfo", tempResult);
 		}
 	});
@@ -237,7 +235,9 @@ function fun_setDefineListInfo() {
 			, {"data": "workConditionNm"}    //달성조건    workCondition
 			, {"data": "workCnt"}    //달성상세요건 workCnt
 			, {"data": "nickNm"}    //칭호       nickNm
-			, {"data": "point"}    //포인트     point
+// 			, {"data": "point"}    //포인트     point
+			, {"data": "startDt"}    //시작일자
+			, {"data": "endDt" }    //정료일자
 			, {"data": "zombieYn" }    //달성이후누적 zombieYn
 			, {"data": "limitYn" }    //기간한정여부 limitYn
 			, {"data": "joinCnt" }    //참여인원    joinCnt
@@ -294,10 +294,16 @@ function fun_setDefineListInfo() {
 			, {
 				"targets": [5]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					return getDateFormat2(row.startDt);
+                }
 			}
 			, {
 				"targets": [6]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					return getDateFormat2(row.endDt);
+                }
 			}
 			, {
 				"targets": [7]
@@ -310,14 +316,38 @@ function fun_setDefineListInfo() {
 			, {
 				"targets": [9]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					var joinCnt = row.joinCnt;
+					var insertTr = "";
+					if ( joinCnt == "" || joinCnt == "0" ){
+						insertTr = joinCnt;
+					}else{
+						insertTr = '<a href="javascript:void(0)" onclick="fun_start_Excel(\'join\', \'' + row.workSeq + '\', \'' + row.workNm + '\' )"><font color="blue"><b>'+joinCnt+'</b></font></a>';
+					}
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [10]
 				, "class": "text-center"
 				, "render": function (data, type, row) {
+					var completeCnt = row.completeCnt;
+					var insertTr = "";
+					if ( completeCnt == "" || completeCnt == "0" ){
+						insertTr = completeCnt;
+					}else{
+						insertTr = '<a href="javascript:void(0)" onclick="fun_start_Excel(\'complete\', \'' + row.workSeq + '\', \'' + row.workNm + '\' )"><font color="blue"><b>'+completeCnt+'</b></font></a>';
+					}
+					return insertTr;
+                }
+			}
+			, {
+				"targets": [11]
+				, "class": "text-center"
+				, "render": function (data, type, row) {
 					var msg = row.workSeq;
 					var insertTr = "";
-					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(' + msg + ')">상세보기</button>'; 
+					insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(' + msg + ')">상세</button>'; 
 					return insertTr;
                 }
 			}
@@ -416,36 +446,122 @@ function fun_btnDefineinsert() {
 
 function fun_start_Excel(argFlag, workSeq, workNm){
 	fun_startBlockUI();
-	setTimeout(() => fun_search_excel(argFlag, workSeq), 2000);
+	setTimeout(() => fun_search_excel(argFlag, workSeq, workNm), 500);
 }
 
-function fun_search_excel(argFlag, workSeq){
+function fun_search_excel(argFlag, workSeq, workNm){
 	
 	console.log("search EXCEL START");
 	
 	var excelArray = new Array(1); 
 	var fileName = "";
 	var url = "";
+	var inputData = {"workSeq": workSeq};
+	var columnCodeArray = [];
+	var wscols = [];
+	
+// 	      { width: 20 }, 
+// 	      { width: 20 }, 
+// 	      { width: 20 }, 
+// 	      { width: 20 },
+// 	      { width: 20 }, 
+// 	      { width: 20 }, 
+// 	      { width: 20 }, 
+// 	      { width: 20 },
+// 	      { width: 20 }
+// 	    ];
 	
 	if ( argFlag == "join" ){
-		fileName = "참여인원_" + workNm;
-	}else if ( argFlag == "complete" ){
-		fileName = "완료인원_" + workNm;
-	}else if ( argFlag == "promotion1" ){
-		fileName = "프로모션달성인원_" + workNm;
-	}else if ( argFlag == "promotion2" ){
-		fileName = "프로모션참가인원_" + workNm;
+		fileName = workNm + "_참여인원";
+		url = "/define/select/selectDefineWorkStatExcel.do";
+		inputData.completeYn = "N";
+		
+		columnCodeArray.push("사용자Seq");
+		columnCodeArray.push("닉네임");
+		columnCodeArray.push("휴대폰");
+		columnCodeArray.push("접속기기타입");
+		columnCodeArray.push("달성횟수");
+		columnCodeArray.push("달성여부");
+		columnCodeArray.push("업적달성일자");
+		columnCodeArray.push("첫업적등록일자");
+		columnCodeArray.push("마지막업적등록일자");
+		
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+	}
+	else if ( argFlag == "complete" ){
+		fileName = workNm + "_완료인원";
+		url = "/define/select/selectDefineWorkStatExcel.do";
+		inputData.completeYn = "Y";
+		
+		columnCodeArray.push("사용자Seq");
+		columnCodeArray.push("닉네임");
+		columnCodeArray.push("휴대폰");
+		columnCodeArray.push("접속기기타입");
+		columnCodeArray.push("달성횟수");
+		columnCodeArray.push("달성여부");
+		columnCodeArray.push("업적달성일자");
+		columnCodeArray.push("첫업적등록일자");
+		columnCodeArray.push("마지막업적등록일자");
+		
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+	}
+	else if ( argFlag == "promotion1" ){
+		fileName = workNm + "_프로모션달성인원(가중치포함)";
+	
+		url = "/define/select/selectDefineWorkStatExcel.do";
+		inputData.completeYn = "Y";
+		
+		columnCodeArray.push("사용자Seq");
+		columnCodeArray.push("닉네임");
+		columnCodeArray.push("휴대폰");
+		columnCodeArray.push("접속기기타입");
+		columnCodeArray.push("달성횟수");
+		columnCodeArray.push("달성여부");
+		columnCodeArray.push("업적달성일자");
+		columnCodeArray.push("첫업적등록일자");
+		columnCodeArray.push("마지막업적등록일자");
+		
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 });  
+		wscols.push({ width: 20 }); 
 	}
 	
 	
-	var inputData = {"workSeq": workSeq};
-	fun_ajaxPostSendNoBlock("", inputData, false, function(msg){
+	fun_ajaxPostSendNoBlock(url, inputData, false, function(msg){
 		if(msg!=null){
 			switch(msg.code){
 				case "0000":
 					var tempResult = JSON.parse(msg.result);
-					excelArray[1] = tempResult;
-					jsonToExcel(excelArray);
+					
+					console.log(tempResult);
+					
+					excelArray[0] = tempResult;
+					jsonToExcel(excelArray, fileName, columnCodeArray, wscols);
 					break;
 				case "0001":
 					alert("ERROR");
@@ -561,13 +677,14 @@ function fun_search_excel(argFlag, workSeq){
 	                                        <th class="text-center">업적명</th>
 	                                       	<th class="text-center">달성<br/>조건</th>
 	                                        <th class="text-center">달성<br/>횟수</th>
-	                                        <th class="text-center">칭호</th>
-	                                        <th class="text-center">포인트</th>
+	                                        <th class="text-center" width="10%">칭호</th>
+	                                        <th class="text-center" width="8%">시작일자</th>
+	                                        <th class="text-center" width="8%">종료일자</th>
 	                                        <th class="text-center">달성이후<br/>누적</th>
 	                                        <th class="text-center">기간한정<br/>여부</th>
-	                                        <th class="text-center" width="10%">참여<br/>인원</th>
-	                                        <th class="text-center" width="10%">완료<br/>인원</th>
-	                                        <th class="text-center" width="7%">관리</th>
+	                                        <th class="text-center" width="8%">참여<br/>인원</th>
+	                                        <th class="text-center" width="8%">완료<br/>인원</th>
+	                                        <th class="text-center" width="6%">관리</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -396,6 +396,9 @@ function fun_ajaxPostSendNoBlock(url, inputData, bAsync, callback) {
             callback(msg);
         } // end success
         , error: function (xhr, status, error) {
+        
+        	fun_endBlockUI();
+        
 			if(xhr.status==403){
 				alert("세션이 만료되었습니다");
 				location.href='/admin/loginView.do';
@@ -880,7 +883,7 @@ function fun_encryptMdn(strMdn){
 	return {"mdn":mdn, "iv":iv};
 }
 
-function jsonToExcel(wsData, fileName) {
+function jsonToExcel(wsData, fileName, columnCodeArray, wscols) {
 	
 	console.log("jsonToExcel");
     
@@ -888,7 +891,7 @@ function jsonToExcel(wsData, fileName) {
     
     for (var i=0; i<wsData.length; i++){
     	
-    	console.log(i + "번째 엑셀");
+    	//console.log(i + "번째 엑셀");
     	
     	// workbook 생성
         var wb = XLSX.utils.book_new();
@@ -896,28 +899,29 @@ function jsonToExcel(wsData, fileName) {
         // 문서 속성세팅 ( 윈도우에서 엑셀 오른쪽 클릭 속성 -> 자세히에 있는 값들
         // 필요 없으면 안써도 괜찮다.
         wb.Props = {
-            Title: "title",
-            Subject: "subject",
-            Author: "programmer93",
-            Manager: "Manager",
-            Company: "Company",
-            Category: "Category",
-            Keywords: "Keywords",
-            Comments: "Comments",
-            LastAuthor: "programmer93",
-            CreatedDate: new Date(2021,01,13)
+            Title: fileName,
+            Subject: fileName,
+            Author: "infovine",
+            Company: "infovine",
+            CreatedDate: new Date()
         };
         
     	// sheet명 생성 
         wb.SheetNames.push("sheet " + i);	
         // 배열 데이터로 시트 데이터 생성
 //         var ws = XLSX.utils.aoa_to_sheet(wsData);
-        var ws = XLSX.utils.json_to_sheet (wsData[i]);
+        var ws = XLSX.utils.json_to_sheet (wsData[i], {header: columnCodeArray});
     	// var ws2 = XLSX.utils.aoa_to_sheet(wsData2); 	//시트가 여러개인 경우
+    
+        ws["!cols"] = wscols;
+        
+        //console.log(ws);
         
         // 시트 데이터를 시트에 넣기 ( 시트 명이 없는 시트인경우 첫번째 시트에 데이터가 들어감 )
         wb.Sheets["sheet "+i] = ws;
         // wb.Sheets["sheet 2"] = ws2;	//시트가 여러개인 경우+
+        
+        //console.log(wb);
         
      // 엑셀 파일 쓰기
         var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
@@ -932,4 +936,9 @@ function jsonToExcel(wsData, fileName) {
 
 }
 
-
+function s2ab(s) {
+    var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+    var view = new Uint8Array(buf);  //create uint8array as viewer
+    for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+    return buf;
+}

@@ -234,4 +234,6 @@ public class TDefineWork {
     
     private int joinCnt;
     private int completeCnt;
+    
+    private String completeYn;
 }

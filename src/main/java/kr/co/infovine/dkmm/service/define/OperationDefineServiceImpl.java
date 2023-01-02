@@ -1,5 +1,6 @@
 package kr.co.infovine.dkmm.service.define;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,10 @@ public class OperationDefineServiceImpl implements OperationDefineService{
 	public void insertDefineWork(TDefineWork defineWork) {
 		defineWorkMapper.insertDefineWork(defineWork);
 	}
-	 
+	
+	@Override
+	public List<HashMap<String, Object>> selectDefineWorkStat(TDefineWork defineWork) {
+		return defineWorkMapper.selectDefineWorkStat(defineWork);
+	}
+	
 }

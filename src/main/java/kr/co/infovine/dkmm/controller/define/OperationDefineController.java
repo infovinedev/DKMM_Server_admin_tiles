@@ -1,5 +1,6 @@
 package kr.co.infovine.dkmm.controller.define;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ public class OperationDefineController {
 		model.addObject("leftPageUrl", "define/define");
 		return model;
 	}
-
+	
 	@RequestMapping(value = "/select/defineWorkList.do", method = RequestMethod.POST
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody
@@ -124,6 +125,24 @@ public class OperationDefineController {
 			result.setErrorMessage("success");
 		} catch (Exception e) {
 			result.setErrorMessage("error");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/select/selectDefineWorkStatExcel.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel selectDefineWorkStat(HttpServletRequest request, HttpServletResponse response 
+			,@RequestBody TDefineWork defineWork) {
+		ResponseModel result = new ResponseModel();
+		try {
+			List<HashMap<String, Object>> model = operationDefineService.selectDefineWorkStat(defineWork);
+			ObjectMapper mapper = new ObjectMapper();
+			String defineWorkStatExcel = mapper.writeValueAsString(model);
+			result.setCode("0000");
+			result.setResult(defineWorkStatExcel);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;

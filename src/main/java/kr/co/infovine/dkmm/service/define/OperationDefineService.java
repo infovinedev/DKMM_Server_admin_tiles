@@ -1,5 +1,6 @@
 package kr.co.infovine.dkmm.service.define;
 
+import java.util.HashMap;
 import java.util.List;
 
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
@@ -12,4 +13,6 @@ public interface OperationDefineService {
     
     void upDateDefineWork(TDefineWork defineWork);
     void insertDefineWork(TDefineWork defineWork);
+    
+    List<HashMap<String, Object>> selectDefineWorkStat(TDefineWork defineWork);
 }
