@@ -17,9 +17,6 @@
 	    <!--Top Menu-->
 	    <div id="top_menu" style="display:none;">
 	        <div id="head_div" class="sidebar h-sidebar navbar-collapse collapse">
-	            <script type="text/javascript">
-	                try { ace.settings.check('head_div', 'fixed') } catch (e) { }
-			        </script>
 	            <div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<a href="#" class="btn btn-danger">
@@ -41,9 +38,6 @@
                 <div class="mt-1"></div>
             </a>
          <div id="side_div" class="sidebar">
-         	<script type="text/javascript">
-				try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-			</script>
          </div>
        </aside> 
         
