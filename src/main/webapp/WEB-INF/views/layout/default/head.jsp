@@ -31,41 +31,15 @@
 	<script src="../assets/lib/jquery-ui/jquery-ui.min.js"></script>
 	<script src="../assets/js/ui.js" defer></script>
 	<script  src="../assets/js/adminlte.min.js" defer></script>
-	<!-- 우편번호 -->
-<!--<script type="text/JavaScript" src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-	<script type="text/JavaScript" src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script> -->
 	<!-- basic scripts -->
 	<script src="../assets/js/bootstrap.js?version=0.0" type="text/javascript"></script>
-	<script src="../assets/js/jquery.easypiechart.js" type="text/javascript"></script>
 	<script src="../assets/js/jquery-ui.custom.js" type="text/javascript"></script>
 	<script src="../assets/js/jquery.ui.touch-punch.js" type="text/javascript"></script>
-	<script src="../assets/js/jquery.easypiechart.js" type="text/javascript"></script>
-	<script src="../assets/js/jquery.sparkline.js" type="text/javascript"></script>
-	<script src="../assets/js/flot/jquery.flot.js" type="text/javascript"></script>
-	<script src="../assets/js/flot/jquery.flot.pie.js" type="text/javascript"></script>
-	<script src="../assets/js/flot/jquery.flot.resize.js" type="text/javascript"></script>
-	<script src="../assets/js/flot/jquery.flot.tickrotor.js" type="text/javascript"></script>
-	
-	<!-- page specific plugin scripts -->
-	<script src="../assets/js/dropzone.js" type="text/javascript"></script>
-	
+
 	<!-- Datatable Script -->
 	<script src="../assets/js/dataTables/jquery.dataTables.js" type="text/javascript"></script>
 	<script src="../assets/js/dataTables/jquery.dataTables.bootstrap.js" type="text/javascript"></script>
-<!--삭제 <script src="../assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js" type="text/javascript"></script>-->
-<!-- 	<script src="../assets/js/dataTables/extensions/ColVis/js/dataTables.colVis.js" type="text/javascript"></script> -->
-<!-- 	<script src="../assets/js/jquery-datatable/json2.js" type="text/javascript"></script>  -->
-<!--  	<script src="../assets/js/jquery-datatable/jquery.table2excel.js" type="text/javascript"></script>  -->
-<!-- 	<script src="../assets/js/jquery-datatable/jquery.tabletojson.js" type="text/javascript"></script> -->
-<!-- 	<script src="../assets/js/jquery-datatable/jquery.dataTables.editable.js" type="text/javascript"></script> -->
-<!-- 	<script src="../assets/js/jquery-datatable/jquery.jeditable.js" type="text/javascript"></script> -->
-<!-- 	<script src="../assets/js/jquery-datatable/jquery.mask.min.js" type="text/javascript"></script> -->
-<!-- 	<script src="../assets/js/jquery-datatable/jquery.validate.js" type="text/javascript"></script> -->
-	<!-- 삭제<script src="../assets/js/all.min.js" type="text/javascript"></script> -->
-	
-<!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script> -->
-<!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script> -->
-	
+
 	<script src="../assets/js/excel/xlsx.full.min.js"></script>
 	<script src="../assets/js/excel/FileSaver.min.js"></script>
 	
