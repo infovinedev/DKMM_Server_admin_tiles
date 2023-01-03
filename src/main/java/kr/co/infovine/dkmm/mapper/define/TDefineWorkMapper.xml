@@ -429,12 +429,12 @@
     	
     <update id="upDateApproval" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
     /* 업적승인여부  upDateApproval */
-    UPDATE t_define_work SET approval_yn  = #{approvalYn,jdbcType=VARCHAR} WHERE work_seq = #{upWorkSeq,jdbcType=INTEGER}
+    UPDATE t_define_work SET approval_yn  = #{approvalYn,jdbcType=VARCHAR} WHERE work_seq = ${upWorkSeq}
     </update>
     
     <update id="upDateUseYn" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork">
     /* 업적등록승인 사용여부 수정 upDateUseYn */
-    UPDATE t_define_work SET use_yn = #{useYn,jdbcType=VARCHAR} WHERE work_seq = #{upWorkSeq,jdbcType=INTEGER}
+    UPDATE t_define_work SET use_yn = #{useYn,jdbcType=VARCHAR} WHERE work_seq = ${upWorkSeq}
     </update>
     
     <select id="selectNickComment" parameterType="kr.co.infovine.dkmm.db.model.define.TDefineWork" resultMap="BaseResultMap">
