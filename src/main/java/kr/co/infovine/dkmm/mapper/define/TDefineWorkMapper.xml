@@ -459,7 +459,7 @@
 		<if test='completeYn neq null and "Y".equals(completeYn)'>
 			AND a.complete_yn = 'Y'
 		</if>
-		ORDER BY a.ins_dt, a.user_action_cnt DESC, b.nick_name
+		ORDER BY a.complete_dt, a.ins_dt, a.user_action_cnt DESC, b.nick_name
 		
     </select>
     
