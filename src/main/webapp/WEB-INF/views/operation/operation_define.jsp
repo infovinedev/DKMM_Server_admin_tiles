@@ -278,6 +278,16 @@ function fun_setDefineListInfo() {
 			 , {
 				"targets": [2]
 				, "class": "text-left"
+				, "render": function (data, type, row) {
+					var insertTr = "";
+					if ( row.workCondition == "CUSTOM001" && row.limitYn == 'Y' ){
+						insertTr = '<a href="javascript:void(0)" onclick="fun_start_Excel(\'promotion1\', \'' + row.workSeq + '\', \'' + row.workNm + '\' )"><font color="blue"><b>'+row.workConditionNm+'</b></font></a>';
+					}
+					else{
+						insertTr = row.workConditionNm;	
+					}
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [3]
@@ -526,9 +536,11 @@ function fun_search_excel(argFlag, workSeq, workNm){
 	else if ( argFlag == "promotion1" ){
 		fileName = workNm + "_프로모션달성인원(가중치포함)";
 	
-		url = "/define/select/selectDefineWorkStatExcel.do";
+		url = "/define/select/selectDefineWorkPromoStatExcel.do";
 		inputData.completeYn = "Y";
 		
+		columnCodeArray.push("번호");
+		columnCodeArray.push("사용자업적완료순서");
 		columnCodeArray.push("사용자Seq");
 		columnCodeArray.push("닉네임");
 		columnCodeArray.push("휴대폰");
@@ -539,16 +551,18 @@ function fun_search_excel(argFlag, workSeq, workNm){
 		columnCodeArray.push("첫업적등록일자");
 		columnCodeArray.push("마지막업적등록일자");
 		
-		wscols.push({ width: 20 });  
-		wscols.push({ width: 20 });  
-		wscols.push({ width: 20 });  
-		wscols.push({ width: 20 });  
-		wscols.push({ width: 20 });  
-		wscols.push({ width: 20 });  
-		wscols.push({ width: 20 });  
-		wscols.push({ width: 20 });  
-		wscols.push({ width: 20 });  
-		wscols.push({ width: 20 }); 
+		wscols.push({ width: 10 });  
+		wscols.push({ width: 15 });  
+		wscols.push({ width: 15 });  
+		wscols.push({ width: 15 });  
+		wscols.push({ width: 15 });  
+		wscols.push({ width: 15 });  
+		wscols.push({ width: 15 });  
+		wscols.push({ width: 15 });  
+		wscols.push({ width: 15 });  
+		wscols.push({ width: 18 });  
+		wscols.push({ width: 18 });  
+		wscols.push({ width: 18 }); 
 	}
 	
 	

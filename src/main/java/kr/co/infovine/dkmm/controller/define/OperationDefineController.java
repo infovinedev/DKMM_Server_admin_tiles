@@ -1,5 +1,6 @@
 package kr.co.infovine.dkmm.controller.define;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -142,6 +143,65 @@ public class OperationDefineController {
 			String defineWorkStatExcel = mapper.writeValueAsString(model);
 			result.setCode("0000");
 			result.setResult(defineWorkStatExcel);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	@RequestMapping(value = "/select/selectDefineWorkPromoStatExcel.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel selectDefineWorkPromoStatExcel(HttpServletRequest request, HttpServletResponse response 
+			,@RequestBody TDefineWork defineWork) {
+		ResponseModel result = new ResponseModel();
+		try {
+			List<HashMap<String, Object>> rtnList = new ArrayList<HashMap<String,Object>>();
+			List<HashMap<String, Object>> model = operationDefineService.selectDefineWorkStat(defineWork);
+			
+			int totalCnt = 0;
+			
+			for( HashMap<String, Object> hm : model  ) {
+				
+				String completeCntStr = (String) hm.get("달성횟수");
+				int completeCnt = Integer.parseInt(completeCntStr);
+				int numCnt = 0;
+				for (int i=0; i<completeCnt; i++) {
+					
+					totalCnt++;
+					numCnt++;
+					
+					HashMap<String, Object> newHm = new HashMap<String, Object>();
+					
+					newHm.put("번호", totalCnt);
+					newHm.put("사용자업적완료순서", numCnt);
+					newHm.put("사용자Seq", hm.get("사용자Seq"));
+					newHm.put("닉네임", hm.get("닉네임"));
+					newHm.put("휴대폰", hm.get("휴대폰"));
+					newHm.put("접속기기타입", hm.get("접속기기타입"));
+					newHm.put("달성횟수", hm.get("달성횟수"));
+					newHm.put("달성여부", hm.get("달성여부"));
+					newHm.put("업적달성일자", hm.get("업적달성일자"));
+					newHm.put("첫업적등록일자", hm.get("첫업적등록일자"));
+					newHm.put("마지막업적등록일자", hm.get("마지막업적등록일자"));
+					
+					
+					log.info(newHm.toString());
+					
+					rtnList.add(newHm);
+				}
+			}
+			
+			log.info(rtnList.toString());
+			
+			ObjectMapper mapper = new ObjectMapper();
+			String defineWorkStatPromoExcel = mapper.writeValueAsString(rtnList);
+			
+			log.info(defineWorkStatPromoExcel.toString());
+			
+			result.setCode("0000");
+			result.setResult(defineWorkStatPromoExcel);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
