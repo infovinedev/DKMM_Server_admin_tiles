@@ -11,18 +11,25 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.ModelAndView;
 
 import org.codehaus.jettison.json.JSONObject;
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
 import kr.co.infovine.dkmm.service.store.StoreMetaBatchService;
 import lombok.extern.slf4j.Slf4j;
+import reactor.netty.http.client.HttpClient;
 
 @Slf4j
 @Controller
@@ -30,6 +37,13 @@ public class BaseController {
 	
 	@Autowired
 	StoreMetaBatchService storeMetaBatchService;
+	
+	@Autowired
+	HttpClient httpClient;
+	
+	@Value("${url.server.api}")
+	String urlServerApi;
+	
 	
 	@RequestMapping(value="/error.do")
 	public ModelAndView error(HttpServletRequest request, HttpServletResponse response) {
@@ -52,6 +66,40 @@ public class BaseController {
 		} catch (IOException e) {
 		}
 	}
+	
+	
+	@RequestMapping(value="/baseInfo.do", method = RequestMethod.POST
+			, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )
+	@ResponseBody
+	public ResponseModel baseInfo(HttpServletRequest request, HttpServletResponse response
+			, @RequestBody String admin) {
+		ResponseModel result = new ResponseModel();
+		try {
+			JSONObject requestJson = new JSONObject();
+			requestJson.put("admin", "kdh");
+	
+			WebClient requestApi = WebClient.builder()
+			      .clientConnector(new ReactorClientHttpConnector(httpClient))
+			      .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			      .build();
+	
+	
+			String resultLoadBalancer = requestApi.post()
+			      .uri(urlServerApi + "/baseinfo.do")
+			      .accept(MediaType.APPLICATION_JSON)
+			      .body(BodyInserters.fromValue(requestJson.toString()))
+			      .retrieve()
+			      .bodyToMono(String.class).block();
+		
+			result.setCode("0000");
+			result.setResult(resultLoadBalancer);
+		}
+		catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return result;
+	}
+	
 	
 	@RequestMapping(value="/session.do", method = RequestMethod.POST
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8" )

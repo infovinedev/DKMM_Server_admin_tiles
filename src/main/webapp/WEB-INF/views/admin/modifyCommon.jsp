@@ -441,6 +441,42 @@ function fun_clickButtonInsertCommonCode(){
 }
 
 
+function fun_loadAppCommonCode(){
+	
+	//var url = window.location.protocol + "//" + window.location.hostname + ":9123";
+	var url = "/baseInfo.do"
+	
+	var inputData = {"admin":"kdh"};
+	
+	$.ajax({
+		type: 'POST'
+		, url: url
+		, async: false
+		, data: JSON.stringify(inputData)
+		, contentType: 'application/json; charset=utf8'
+		, dataType: 'json'
+		, success: function (msg) {
+			
+			console.log(msg);
+			
+			if(msg.code == "0000"){
+				
+				var jsonResult = JSON.parse(msg.result);
+				
+				alert("[Success]공통 코드 초기화가 수행되었습니다. >> " + jsonResult.result);
+			}
+			else{
+				alert("[Fail]에러가 발생하였습니다.");
+			}
+		}
+		, error: function (xhr, status, error) {
+			alert("code : " + xhr.status + "\r\nmessage : " + xhr.responseText);
+		}
+	});
+	
+	
+}
+
 </script>
 
 
@@ -533,6 +569,7 @@ function fun_clickButtonInsertCommonCode(){
                          <div class="row justify-content-between align-items-end mb-3">
                         	<input  type="hidden" id="totalCnt" name="totalCnt" />
                             <div class="col-auto">
+                            	<button type="button" class="btn btn-danger" onclick="fun_loadAppCommonCode();">API 서버 코드 초기화</button>
                             </div>
                             <div class="col-auto">
                             	<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_insert();">코드등록</button>
