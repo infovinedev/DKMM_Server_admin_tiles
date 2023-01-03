@@ -690,7 +690,7 @@ function fun_search_excel(argFlag, workSeq, workNm){
 	                                        <th class="text-center" width="3%">번호</th>
 	                                        <th class="text-center">업적명</th>
 	                                       	<th class="text-center">달성<br/>조건</th>
-	                                        <th class="text-center">달성<br/>횟수</th>
+	                                        <th class="text-center" width="5%">달성<br/>횟수</th>
 	                                        <th class="text-center" width="10%">칭호</th>
 	                                        <th class="text-center" width="8%">시작일자</th>
 	                                        <th class="text-center" width="8%">종료일자</th>

@@ -552,27 +552,25 @@ public class AdminController{
 				Calendar currentTime = Calendar.getInstance(Locale.KOREA);
 				String localDate = sdf.format(currentTime.getTime());
 				int i=0;
-				for(TbAdminPermissionModel model : tempPermission) {
-					if(i==0) {		//먼저 전체 데이터를 삭제 한다
-						int adminUserSeq = model.getAdminUserSeq();
-						tbAdminService.deletePermissionOfAdminUser(adminUserSeq);
+				
+				
+				if ( tempPermission.size() < 1) {
+					tbAdminService.deletePermissionOfAdminUser(permission.getAdminUserSeq());
+				}
+				else {
+					for(TbAdminPermissionModel model : tempPermission) {
+						if(i==0) {		//먼저 전체 데이터를 삭제 한다
+							int adminUserSeq = model.getAdminUserSeq();
+							tbAdminService.deletePermissionOfAdminUser(adminUserSeq);
+						}
+						//그 뒤로부터 권한을 부여 합니다.
+						model.setRegDate(localDate);
+						
+						tbAdminService.insertPermissionOfAdminUser(model);
+						i++;
 					}
-					//그 뒤로부터 권한을 부여 합니다.
-					model.setRegDate(localDate);
-					
-					tbAdminService.insertPermissionOfAdminUser(model);
-					i++;
 				}
 				
-//				if(adminProgramSeq == -1) {
-//					programMenu.setAdminProgramSeq(null);
-//					programMenu.setRegDate(localDate);
-//					tbAdminService.insertByProgramMenu(programMenu);
-//				}
-//				else {
-//					programMenu.setUpdateDate(localDate);
-//					tbAdminService.updateByProgramMenu(programMenu);
-//				}
 				result.setCode("0000");
 			}
 			else {

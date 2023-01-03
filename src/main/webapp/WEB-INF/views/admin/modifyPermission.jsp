@@ -459,8 +459,9 @@ function fun_clickButtonOfModify() {
 		}
 		
 		var inputData = {
-			'password': shaPassword
-			, "permission" : tempPermission
+				'adminUserSeq':$("#hdf_adminUserSeq").val()
+				,'password': shaPassword
+				, "permission" : tempPermission
 		};
 		fun_ajaxPostSend("/admin/insert/programPermissionOfAdminUser.do", inputData, true, function(msg){
 			if(msg!=null){
