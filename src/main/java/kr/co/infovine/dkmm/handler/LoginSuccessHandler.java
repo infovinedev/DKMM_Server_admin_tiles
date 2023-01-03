@@ -157,31 +157,13 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			
 			
 		}
-		String serverMode = ApplicationContextProvider.getApplicationContext().getEnvironment().getProperty("server.mode");
+		String urlMain = ApplicationContextProvider.getApplicationContext().getEnvironment().getProperty("url.main");
 
 		if(result.getCode().equals(PASSWORD_NEW)) {
-			if(serverMode.equals("real")) {
-				setDefaultTargetUrl("https://dkmm.infovine.co.kr:9124" + "/admin/firstPassword.do");
-			}
-			else if(serverMode.equals("local")){
-				setDefaultTargetUrl("https://localhost:9124" + "/admin/firstPassword.do");
-			}
-			else{
-				setDefaultTargetUrl("https://devdkmm.infovine.co.kr:9124" + "/admin/firstPassword.do");
-			}
-			//setDefaultTargetUrl(urlMain + "/admin/firstPassword.do");
+			setDefaultTargetUrl(urlMain + "/admin/firstPassword.do");
 		}
 		else {
-			if(serverMode.equals("real")) {
-				setDefaultTargetUrl("https://dkmm.infovine.co.kr:9124" + "/main/page.do");
-			}
-			else if(serverMode.equals("local")){
-				setDefaultTargetUrl("https://localhost:9124" + "/main/page.do");
-			}
-			else{
-				setDefaultTargetUrl("https://devdkmm.infovine.co.kr:9124" + "/main/page.do");
-			}
-			//setDefaultTargetUrl(urlMain + "/main/page.do");
+			setDefaultTargetUrl(urlMain + "/main/page.do");
 		}
 		super.onAuthenticationSuccess(request, response, authentication);
 
