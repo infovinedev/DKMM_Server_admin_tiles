@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,9 +33,10 @@ import kr.co.infovine.dkmm.service.admin.TAdminService;
  *
  * @author duHyun, Kim
  */
+@Component
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-	protected final String PASSWORD_NEW = "0004";  
-	
+	protected final String PASSWORD_NEW = "0004";
+
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws ServletException, IOException {
@@ -155,12 +157,31 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			
 			
 		}
-		
+		String serverMode = ApplicationContextProvider.getApplicationContext().getEnvironment().getProperty("server.mode");
+
 		if(result.getCode().equals(PASSWORD_NEW)) {
-			setDefaultTargetUrl("/admin/firstPassword.do");
+			if(serverMode.equals("real")) {
+				setDefaultTargetUrl("https://dkmm.infovine.co.kr:9124" + "/admin/firstPassword.do");
+			}
+			else if(serverMode.equals("local")){
+				setDefaultTargetUrl("https://localhost:9124" + "/admin/firstPassword.do");
+			}
+			else{
+				setDefaultTargetUrl("https://devdkmm.infovine.co.kr:9124" + "/admin/firstPassword.do");
+			}
+			//setDefaultTargetUrl(urlMain + "/admin/firstPassword.do");
 		}
 		else {
-			setDefaultTargetUrl("/main/page.do");
+			if(serverMode.equals("real")) {
+				setDefaultTargetUrl("https://dkmm.infovine.co.kr:9124" + "/main/page.do");
+			}
+			else if(serverMode.equals("local")){
+				setDefaultTargetUrl("https://localhost:9124" + "/main/page.do");
+			}
+			else{
+				setDefaultTargetUrl("https://devdkmm.infovine.co.kr:9124" + "/main/page.do");
+			}
+			//setDefaultTargetUrl(urlMain + "/main/page.do");
 		}
 		super.onAuthenticationSuccess(request, response, authentication);
 
