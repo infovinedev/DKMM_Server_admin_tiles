@@ -463,7 +463,12 @@ function fun_loadAppCommonCode(){
 				
 				var jsonResult = JSON.parse(msg.result);
 				
-				alert("[Success]공통 코드 초기화가 수행되었습니다. >> " + jsonResult.result);
+				if ( jsonResult.recievedServer == undefined && jsonResult.recievedServer == null ){
+					alert("[Success]공통 코드 초기화가 수행되었습니다. >> " + jsonResult.result);
+				}else{
+					alert("[Success]공통 코드 초기화가 수행되었습니다. >> " + jsonResult.result + ", " + jsonResult.recievedServer);
+				}
+				
 			}
 			else{
 				alert("[Fail]에러가 발생하였습니다.");
