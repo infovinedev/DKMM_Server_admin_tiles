@@ -99,9 +99,27 @@ function fun_viewDetail(faqSeq) {
 			var title = tempResult.title == null ? "N/A" : tempResult.title;                             //제목
 			var viewCnt  = tempResult.viewCnt == null ? "N/A" : tempResult.viewCnt;                      //조회수
 			var content  = tempResult.content == null ? "N/A" : tempResult.content;                      //내용
+			
+			var insertTr = "";
+			if ( faqDiv == "POLICY" ){
+				insertTr = "운영정책";
+			}
+			else if( faqDiv == "ERROR" ){
+				insertTr = "오류";
+			}
+			else if( faqDiv == "EVENT" ){
+				insertTr = "이벤트";						
+			}
+			else if( faqDiv == "ROLE" ){
+				insertTr = "기능";
+			}
+			else if( faqDiv == "OTHER" ){
+				insertTr = "기타";
+			}
+			
 			//상세보기 데이터	
 			$("#hidden_faqSeq").val(faqSeq);
-			$("#txt_faqDiv").val(faqDiv);
+			$("#txt_faqDiv").val(insertTr);
 			$("#txt_insDt").val(insDt);
 			$("#txt_title").val(title);
 			$("#txt_viewCnt").val(viewCnt);
@@ -185,6 +203,26 @@ function fun_setfaqListInfo() {
 			 , {
 				"targets": [2]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					var faqDiv = row.faqDiv;
+					var insertTr = "";
+					if ( faqDiv == "POLICY" ){
+						insertTr = "운영정책";
+					}
+					else if( faqDiv == "ERROR" ){
+						insertTr = "오류";
+					}
+					else if( faqDiv == "EVENT" ){
+						insertTr = "이벤트";						
+					}
+					else if( faqDiv == "ROLE" ){
+						insertTr = "기능";
+					}
+					else if( faqDiv == "OTHER" ){
+						insertTr = "기타";
+					}
+					return insertTr;
+				}
 			}
 			, {
 				"targets": [3]

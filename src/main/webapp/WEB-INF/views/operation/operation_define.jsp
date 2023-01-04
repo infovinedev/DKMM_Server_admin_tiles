@@ -470,17 +470,6 @@ function fun_search_excel(argFlag, workSeq, workNm){
 	var columnCodeArray = [];
 	var wscols = [];
 	
-// 	      { width: 20 }, 
-// 	      { width: 20 }, 
-// 	      { width: 20 }, 
-// 	      { width: 20 },
-// 	      { width: 20 }, 
-// 	      { width: 20 }, 
-// 	      { width: 20 }, 
-// 	      { width: 20 },
-// 	      { width: 20 }
-// 	    ];
-	
 	if ( argFlag == "join" ){
 		fileName = workNm + "_참여인원";
 		url = "/define/select/selectDefineWorkStatExcel.do";
@@ -588,6 +577,87 @@ function fun_search_excel(argFlag, workSeq, workNm){
 	
 }
 
+function fun_work_excel_start(){
+	fun_startBlockUI();
+	setTimeout(() => fun_work_excel(), 500);
+}
+
+function fun_work_excel(){
+	
+	var inputData = {"workCondition": "", "searchText": "", "searchStartDt": "","searchEndDt": ""};
+	
+	var excelArray = new Array(1); 
+	var fileName = "업적현황";
+	var url = "/define/select/selectDefineWorkStatExcel.do";
+	var columnCodeArray = [];
+	var columnNameArray = [];
+	var wscols = [];
+	
+	wscols.push({ width: 10 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 }); 
+	
+	fun_ajaxPostSend("/define/select/defineWorkList.do", inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					break;
+				case "0001":
+			}
+			var tempResult = JSON.parse(msg.result);
+			
+			var arrayList = [];
+			for (let i = 0; i < tempResult.length; i++) {
+				
+				var obj = {}; 
+				obj.번호 = i + 1;
+				obj.업적번호 = tempResult[i].workSeq
+				obj.업적명 = tempResult[i].workNm;
+				obj.달성조건코드 = tempResult[i].workCondition;
+				obj.달성조건 = tempResult[i].workConditionNm;
+				obj.달성횟수 = tempResult[i].workCnt+"회";
+				obj.참여인원 = tempResult[i].joinCnt;
+				obj.완료인원 = tempResult[i].completeCnt;
+				obj.칭호코드 = tempResult[i].nickSeq;
+				obj.칭호 = tempResult[i].nickNm;
+				obj.칭호코멘트	= tempResult[i].nickComment;
+				obj.시작일자 = tempResult[i].startDt;
+				obj.종료일자 = tempResult[i].endDt;
+				obj.달성이후누적 = tempResult[i].zombieYn;
+				obj.기간한정여부 = tempResult[i].limitYn;
+				obj.포인트 = tempResult[i].point;
+				obj.업적제외조건앱내상세설명 = tempResult[i].exceptCondition;
+				obj.업적간략설명 = tempResult[i].workConditionDesc;
+				obj.단위텍스트 = tempResult[i].unitTxt;
+				obj.정렬순서 = tempResult[i].dispOrder;
+				obj.업적그룹 = tempResult[i].workGrp;
+				obj.승인여부 = tempResult[i].approvalYn;
+				obj.숨김여부 = tempResult[i].useYn;
+				
+				arrayList.push(obj);
+			}
+			
+			console.log(arrayList);
+			
+			
+			excelArray[0] = arrayList;
+			jsonToExcel(excelArray, fileName, columnCodeArray, wscols);
+			
+		}
+	});
+	
+}
+
+
 </script>
 <head>
 	<title>관리자 운영 - 업적관리</title>
@@ -600,7 +670,7 @@ function fun_search_excel(argFlag, workSeq, workNm){
                <div class="container-fluid">
                   <div class="row">
                      <div class="col">
-                        <h1 class="title">업적관리</h1>
+                        <h1 class="title">업적현황</h1>
                      </div>
                   </div>
                </div>
@@ -675,7 +745,8 @@ function fun_search_excel(argFlag, workSeq, workNm){
                         <div class="row justify-content-between align-items-end mb-3">
                                 <div class="col-auto"></div>
                                 <div class="col-auto">
-                                    <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_btnInsert()">업적등록</button>
+<!--                                     <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_btnInsert()">업적등록</button> -->
+                                    <button type="button" class="btn btn-outline-primary mr-1" onclick="fun_work_excel_start()">엑셀다운로드</button>
                                     <select id="userListLength" class="custom-select w-auto">
                                     	<option value="10">10</option>
                                     	<option value="20">20</option>
@@ -690,7 +761,7 @@ function fun_search_excel(argFlag, workSeq, workNm){
 	                                        <th class="text-center" width="3%">번호</th>
 	                                        <th class="text-center">업적명</th>
 	                                       	<th class="text-center">달성<br/>조건</th>
-	                                        <th class="text-center" width="5%">달성<br/>횟수</th>
+	                                        <th class="text-center" width="6%">달성<br/>횟수</th>
 	                                        <th class="text-center" width="10%">칭호</th>
 	                                        <th class="text-center" width="8%">시작일자</th>
 	                                        <th class="text-center" width="8%">종료일자</th>

@@ -188,9 +188,11 @@
 			,a.user_seq
 			,a.nick_name
 			,a.gender
-			,ins_dt
+			,a.ins_dt
 			,a.os_type
 			,'0' as point
+			,CONCAT(substring(fn_decrypt(a.phone) from 1 for 3),'-' ,substring(fn_decrypt(a.phone) from 4 for 4), '-' ,substring(fn_decrypt(a.phone) from 8 for 4)) as phone
+			,COALESCE(fn_decrypt(a.email) , '-') as email
 		FROM t_user_info a
 		WHERE 1=1
 		AND a.del_yn = 'N'

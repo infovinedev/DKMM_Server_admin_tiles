@@ -162,6 +162,7 @@ function fun_setUserListInfo() {
 			, {"data": "nickName"}
 			, {"data": "gender"}
 			, {"data": "waitCnt"}
+			, {"data": "likeCnt"}
 			, {"data": "insDt" }
 			, {"data": "point" }
 			, {"data": "add" }
@@ -224,6 +225,10 @@ function fun_setUserListInfo() {
 			, {
 				"targets": [8]
 				, "class": "text-center"
+			}
+			, {
+				"targets": [9]
+				, "class": "text-center"
 				, "render": function (data, type, row) {
 					var msg = row.userSeq;
 					var insertTr = "";
@@ -236,6 +241,71 @@ function fun_setUserListInfo() {
 	
 	fun_search();
 };
+
+function fun_work_excel_start(){
+	fun_startBlockUI();
+	setTimeout(() => fun_work_excel(), 500);
+}
+
+function fun_work_excel(){
+	
+	var inputData = {"osType": "", "searchText": "", "searchStartDt": "","searchEndDt": ""};
+	
+	var excelArray = new Array(1); 
+	var fileName = "회원정보조회";
+	var url = "/user/select/userInfo.do";
+	var columnCodeArray = [];
+	var columnNameArray = [];
+	var wscols = [];
+	
+	wscols.push({ width: 10 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 }); 
+	
+	fun_ajaxPostSend(url, inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					break;
+				case "0001":
+			}
+			var tempResult = JSON.parse(msg.result);
+			
+			var arrayList = [];
+			for (let i = 0; i < tempResult.length; i++) {
+				
+				var obj = {}; 
+				obj.번호 = i + 1;
+				obj.사용자SEQ = tempResult[i].userSeq
+				obj.닉네임 = tempResult[i].nickName;
+				obj.OS = tempResult[i].osType;
+				obj.대기등록횟수 = tempResult[i].waitCnt;
+				obj.즐겨찾기횟수 = tempResult[i].likeCnt;
+				obj.성별 = tempResult[i].gender;
+				obj.가입일 = tempResult[i].insDt;
+				
+				arrayList.push(obj);
+			}
+			
+			console.log(arrayList);
+			
+			
+			excelArray[0] = arrayList;
+			jsonToExcel(excelArray, fileName, columnCodeArray, wscols);
+			
+		}
+	});
+	
+}
 </script>
 <head>
 	<title>관리자 운영 - 회원정보조회</title>
@@ -324,26 +394,29 @@ function fun_setUserListInfo() {
 
                     <section id="section1">
                         <div class="row justify-content-between align-items-end mb-3">
-                                <div class="col-auto">
-                                    <select id="userListLength" class="custom-select w-auto">
-                                    	<option value="10">10</option>
-                                    	<option value="20">20</option>
-                                    	<option value="50">50</option>
-                                    </select>
-                                </div>
+                        	<div class="col-auto"></div>
+                            <div class="col-auto">
+                            	<button type="button" class="btn btn-outline-primary mr-1" onclick="fun_work_excel_start()">엑셀다운로드</button>
+                                <select id="userListLength" class="custom-select w-auto">
+                                	<option value="10">10</option>
+                                	<option value="20">20</option>
+                                	<option value="50">50</option>
+                                </select>
+                            </div>
                          </div>
                          <div class="main_search_result_list">
                                 <table id="userListInfo" class="table table-bordered">
                                     <thead>
                                     	<tr>
 	                                        <th class="text-center" width="5%">번호</th>
-	                                        <th class="text-center" width="10%">사용자ID</th>
+	                                        <th class="text-center" width="10%">사용자<br/>ID</th>
 	                                       	<th class="text-center" width="8%">OS</th>
 	                                        <th class="text-center">닉네임</th>
-	                                        <th class="text-center" width="8%">성별</th>
-	                                        <th class="text-center" width="10%">대기등록횟수</th>
-	                                        <th class="text-center" width="12%">가입일</th>
-	                                        <th class="text-center" width="10%">보유포인트</th>
+	                                        <th class="text-center" width="7%">성별</th>
+	                                        <th class="text-center" width="8%">대기등록<br/>횟수</th>
+	                                        <th class="text-center" width="8%">즐겨찾기<br/>횟수</th>
+	                                        <th class="text-center" width="11%">가입일</th>
+	                                        <th class="text-center" width="8%">보유<br/>포인트</th>
 	                                        <th class="text-center" width="8%">관리</th>
                                         </tr>
                                     </thead>

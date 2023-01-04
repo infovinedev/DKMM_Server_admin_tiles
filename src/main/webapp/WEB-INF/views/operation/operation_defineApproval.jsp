@@ -332,7 +332,7 @@ function fun_setdefineApprovalListInfo() {
 			 ,
 			{
 				"targets": [1]
-				, "class": "text-center"
+				, "class": "text-left"
 			}
 			 , {
 				"targets": [2]
@@ -835,7 +835,7 @@ function fun_btnDefineinsert() {
                                     <thead>
                                     	<tr>
 	                                        <th class="text-center" width="5%">번호</th>
-	                                        <th class="text-center">업적명</th>
+	                                        <th class="text-center" width="10%">업적명</th>
 	                                       	<th class="text-center">달성<br/>조건</th>
 	                                        <th class="text-center" width="5%">달성<br/>횟수</th>
 	                                        <th class="text-center" width="10%">칭호</th>
@@ -844,8 +844,8 @@ function fun_btnDefineinsert() {
 	                                        <th class="text-center" width="5%">승인<br/>여부</th>
 	                                        <th class="text-center" width="5%">사용<br/>여부</th>
 	                                        
-	                                        <th class="text-center">달성이후<br/>누적</th>
-	                                        <th class="text-center">기간한정<br/>여부</th>
+	                                        <th class="text-center" width="5%">달성<br/>이후<br/>누적</th>
+	                                        <th class="text-center" width="5%">기간<br/>한정<br/>여부</th>
 	                                        <th class="text-center">단위<br/>텍스트</th>
 	                                        <th class="text-center" width="5%">정렬<br/>순서</th>
 	                                        <th class="text-center">업적<br/>그룹</th>

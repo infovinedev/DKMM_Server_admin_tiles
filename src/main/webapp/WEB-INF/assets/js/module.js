@@ -909,21 +909,18 @@ function jsonToExcel(wsData, fileName, columnCodeArray, wscols) {
     	// sheet명 생성 
         wb.SheetNames.push("sheet " + i);	
         // 배열 데이터로 시트 데이터 생성
-//         var ws = XLSX.utils.aoa_to_sheet(wsData);
+//      var ws = XLSX.utils.aoa_to_sheet(wsData);
         var ws = XLSX.utils.json_to_sheet (wsData[i], {header: columnCodeArray});
-    	// var ws2 = XLSX.utils.aoa_to_sheet(wsData2); 	//시트가 여러개인 경우
+//    	var ws2 = XLSX.utils.aoa_to_sheet(wsData2); 	//시트가 여러개인 경우
     
         ws["!cols"] = wscols;
         
-        //console.log(ws);
-        
         // 시트 데이터를 시트에 넣기 ( 시트 명이 없는 시트인경우 첫번째 시트에 데이터가 들어감 )
         wb.Sheets["sheet "+i] = ws;
-        // wb.Sheets["sheet 2"] = ws2;	//시트가 여러개인 경우+
+//      wb.Sheets["sheet 2"] = ws2;	//시트가 여러개인 경우+
         
-        //console.log(wb);
         
-     // 엑셀 파일 쓰기
+     	// 엑셀 파일 쓰기
         var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
     	
         fun_endBlockUI();

@@ -37,12 +37,12 @@ $(document).ready(function () {
 	});
 	
 	
-	editor = new toastui.Editor({
-        el: document.querySelector('#editor'),
-        previewStyle: 'vertical',
-        height: '500px',
-        initialValue: ""
-      });
+// 	editor = new toastui.Editor({
+//         el: document.querySelector('#editor'),
+//         previewStyle: 'vertical',
+//         height: '500px',
+//         initialValue: ""
+//       });
    
 });
 
@@ -108,9 +108,21 @@ function fun_viewDetail(boardSeq) {
 			var title = tempResult.title == null ? "N/A" : tempResult.title;                             //제목
 			var viewCnt  = tempResult.viewCnt == null ? "N/A" : tempResult.viewCnt;                      //조회수
 			var content  = tempResult.content == null ? "N/A" : tempResult.content;                      //내용
+			
+			var insertTr = "";
+			if ( boardDiv == "INFO" ){
+				insertTr = "공지사항";
+			}
+			else if( boardDiv == "UPDATE" ){
+				insertTr = "업데이트";
+			}
+			else if( boardDiv == "EVENT" ){
+				insertTr = "이벤트";						
+			}
+			
 			//상세보기 데이터	
 			$("#hidden_boardSeq").val(boardSeq);
-			$("#txt_boardDiv").val(boardDiv);
+			$("#txt_boardDiv").val(insertTr);
 			$("#txt_insDt").val(insDt);
 			$("#txt_title").val(title);
 			$("#txt_viewCnt").val(viewCnt);
@@ -194,6 +206,21 @@ function fun_setboardListInfo() {
 			 , {
 				"targets": [2]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					var boardDiv = row.boardDiv;
+					var insertTr = "";
+					if ( boardDiv == "INFO" ){
+						insertTr = "공지사항";
+					}
+					else if( boardDiv == "UPDATE" ){
+						insertTr = "업데이트";
+					}
+					else if( boardDiv == "EVENT" ){
+						insertTr = "이벤트";						
+					}
+                     
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [3]
@@ -479,10 +506,10 @@ function fun_save(type){
                                      <th>이미지첨부</th>
                                      <td colspan="3">추후작업</td>
                                   </tr>
-                                  <tr>
-                                     <th>에디터</th>
-                                     <td colspan="3"><div id="editor"></div></td>
-                                  </tr>
+<!--                                   <tr> -->
+<!--                                      <th>에디터</th> -->
+<!--                                      <td colspan="3"><div id="editor"></div></td> -->
+<!--                                   </tr> -->
                                    
                                </tbody>
                                </tbody>

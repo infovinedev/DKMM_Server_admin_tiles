@@ -199,7 +199,7 @@ function fun_setNicknmListInfo() {
 			}
 			, {
 				"targets": [5]
-				, "class": "text-center"
+				, "class": "text-left"
 			}
 			, {
 				"targets": [6]
