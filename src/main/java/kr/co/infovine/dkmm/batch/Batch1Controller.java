@@ -53,7 +53,7 @@ public class Batch1Controller {
         	
         	//04. 인허가 상점 정보 EXCEL 업로드
         	JobDetail jobDetailPromotionChange = buildJobDetail(BatchPromotionChangeService.class, "BatchPromotionChange", "t_BatchPromotionChange", map);
-        	scheduler.scheduleJob(jobDetailPromotionChange, buildJobTrigger("0 0 0 * * *"));
+        	scheduler.scheduleJob(jobDetailPromotionChange, buildJobTrigger("0 0 0 ? * *"));
         	
         	
 		} catch (Exception e) {
