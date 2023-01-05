@@ -12,13 +12,15 @@ import kr.co.infovine.dkmm.db.model.admin.TbAdminUserModel;
 import kr.co.infovine.dkmm.db.model.common.TCommonCodeModel;
 
 public interface TAdminService {
-	public TbAdminUserModel selectByAdminUserIdAndPassword(TbAdminUserModel tbAdminUser);
+	TbAdminUserModel selectByAdminUserIdAndPassword(TbAdminUserModel tbAdminUser);
 	
-	public TbAdminUserModel selectByAdminUserId(TbAdminUserModel tbAdminUser);
+	TbAdminUserModel selectByAdminUserId(TbAdminUserModel tbAdminUser);
 	
-	public int updateByAdminUserUserId(TbAdminUserModel tbAdminUser);
+	int updateByAdminUserUserId(TbAdminUserModel tbAdminUser);
 	
-	public int updateByAdminUserPrimaryKey(TbAdminUserModel tbAdminUser);
+	int updateByAdminUserPrimaryKey(TbAdminUserModel tbAdminUser);
+	
+	int updateByPassword(TbAdminUserModel record);
 	
     int deleteByPrimaryKey(Integer adminUserSeq);
 
@@ -32,27 +34,27 @@ public interface TAdminService {
 
     List<TbAdminUserModel> selectAllAdminUser(TbAdminUserModel tbAdminUserModel);
     
-    public int updateByAdminUserPassword(TbAdminUserModel tbAdminUser);
+    int updateByAdminUserPassword(TbAdminUserModel tbAdminUser);
     
-    public int insertPermissionOfAdminUser(TbAdminPermissionModel tbAdminPermissionModel);
+    int insertPermissionOfAdminUser(TbAdminPermissionModel tbAdminPermissionModel);
     
-    public int deletePermissionOfAdminUser(int adminUserSeq);
+    int deletePermissionOfAdminUser(int adminUserSeq);
     
-	public List<TbAdminPermissionModel> selectByUserLeftMenu(int adminUserSeq);
+	List<TbAdminPermissionModel> selectByUserLeftMenu(int adminUserSeq);
 	
-	public List<TbAdminProgramModel> selectAllProgramMenu(TbAdminProgramModel programMenu);
+	List<TbAdminProgramModel> selectAllProgramMenu(TbAdminProgramModel programMenu);
 	
 	TbAdminProgramModel selectNextProgramId(TbAdminProgramModel programMenu);
 	 
-	public int insertByProgramMenu(TbAdminProgramModel record);
+	int insertByProgramMenu(TbAdminProgramModel record);
 	
-	public int updateByProgramMenu(TbAdminProgramModel record);
+	int updateByProgramMenu(TbAdminProgramModel record);
 	
-	public int deleteByProgramMenu(int adminProgramSeq);
+	int deleteByProgramMenu(int adminProgramSeq);
 
-	public int insertAdminUserLog(TbAdminUserLogModel record);
+	int insertAdminUserLog(TbAdminUserLogModel record);
 	
-	public List<TbAdminUserLogModel> selectByPrimaryKey(String startDate, String closeDate);
+	List<TbAdminUserLogModel> selectByPrimaryKey(String startDate, String closeDate);
 	
 	//공통코드 조회
 	List<TCommonCodeModel> selectAllTbCommonCode(TCommonCodeModel record);

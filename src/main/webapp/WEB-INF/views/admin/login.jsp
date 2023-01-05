@@ -143,13 +143,13 @@
                 </div>
                 <div class="login-body">
                     <div class="form-group">
-                        <input id="username" name="username" type="text" class="form-control form-control-lg" value="infovine">
+                        <input id="username" name="username" type="text" class="form-control form-control-lg" value="">
                     </div>
                     <div class="mb-1 check_text_div" style="display:none">
                         <p class="form-text text-danger">ⓘ 이메일(아이디)를 입력해주세요.</p>
                     </div>
                     <div class="form-group">
-                        <input id="password" name="password" type="password" class="form-control form-control-lg" value="admin1!">
+                        <input id="password" name="password" type="password" class="form-control form-control-lg" value="">
                         <a href="javascript:;" class="password-visiblity"><i class="fas fa-eye-slash"></i></a>
                     </div>
                     <div clsss="check_text_div" style="display:none">

@@ -1044,38 +1044,38 @@ public class AdminController{
 	
 	//공통코드 삭제
 	@RequestMapping(value = "/delete/tCommon.do", method = RequestMethod.POST
-		, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
-		@ResponseBody
-		public ResponseModel deleteTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session
-				, @RequestBody TCommonCodeModel commonCodeModel) {
-			ResponseModel result = new ResponseModel();
-			try {
-				SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
-				String userId = sessionModel.getUserId();
-				TbAdminUserModel tbAdminUser = new TbAdminUserModel();
-				tbAdminUser.setUserId(userId);
-				String password = commonCodeModel.getPassword();
-				tbAdminUser.setPassword(password);
-				TbAdminUserModel resultSet = tbAdminService.selectByAdminUserIdAndPassword(tbAdminUser);
-				
-				if(resultSet!=null) {
-					String codeGroup = commonCodeModel.getCodeGroup();
-					String codeValue = commonCodeModel.getCodeValue();
-					if(!codeGroup.equals("")) {
-						tbAdminService.deleteByTCommonCodePrimaryKey(codeGroup, codeValue);
-						result.setCode("0000");
-					}
-					else {
-						result.setCode("0001");
-					}
-				}else {
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel deleteTbCommon(HttpServletRequest request, HttpServletResponse response, HttpSession session
+			, @RequestBody TCommonCodeModel commonCodeModel) {
+		ResponseModel result = new ResponseModel();
+		try {
+			SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+			String userId = sessionModel.getUserId();
+			TbAdminUserModel tbAdminUser = new TbAdminUserModel();
+			tbAdminUser.setUserId(userId);
+			String password = commonCodeModel.getPassword();
+			tbAdminUser.setPassword(password);
+			TbAdminUserModel resultSet = tbAdminService.selectByAdminUserIdAndPassword(tbAdminUser);
+			
+			if(resultSet!=null) {
+				String codeGroup = commonCodeModel.getCodeGroup();
+				String codeValue = commonCodeModel.getCodeValue();
+				if(!codeGroup.equals("")) {
+					tbAdminService.deleteByTCommonCodePrimaryKey(codeGroup, codeValue);
+					result.setCode("0000");
+				}
+				else {
 					result.setCode("0001");
 				}
-			} catch (Exception e) {
+			}else {
 				result.setCode("0001");
 			}
-			return result;
+		} catch (Exception e) {
+			result.setCode("0001");
 		}
+		return result;
+	}
 	// end region
 	
 	
@@ -1167,4 +1167,41 @@ public class AdminController{
 		return result;
 	}
 	// end region
+	
+	
+	//공통코드 삭제
+	@RequestMapping(value = "/update/passWdReset.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel TbAdminUserModel(HttpServletRequest request, HttpServletResponse response, HttpSession session
+		, @RequestBody TbAdminUserModel tbAdminUser) {
+		ResponseModel result = new ResponseModel();
+		try {
+			SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+			String userId = sessionModel.getUserId();
+			
+			String oldPassword = tbAdminUser.getOldPassword();
+			String newPassword1 = tbAdminUser.getNewPassword1();
+			String newPassword2 = tbAdminUser.getNewPassword2();
+			
+			tbAdminUser.setUserId(userId);
+			tbAdminUser.setPassword(oldPassword);
+			TbAdminUserModel resultSet = tbAdminService.selectByAdminUserIdAndPassword(tbAdminUser);
+			
+			if(resultSet!=null) {
+				tbAdminUser.setPassword(newPassword1);
+				tbAdminService.updateByPassword(tbAdminUser);
+				result.setCode("0000");
+			}else {
+				result.setCode("0001");
+				result.setErrorMessage("기존 비밀번호가 맞지않습니다.");
+			}
+		} catch (Exception e) {
+			result.setCode("0002");
+			result.setErrorMessage(e.getMessage());
+		}
+		return result;
+	}
+		// end region
+		
 }

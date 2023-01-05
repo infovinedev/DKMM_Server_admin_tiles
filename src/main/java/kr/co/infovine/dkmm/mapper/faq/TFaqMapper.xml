@@ -104,6 +104,7 @@
           ,a.content
           ,a.view_cnt
           ,a.file_uuid
+          ,a.del_yn
           ,a.ins_seq
           ,a.ins_dt
           ,a.upt_seq
@@ -124,6 +125,7 @@
           ,a.file_uuid
           ,(SELECT file_nm FROM t_file_sub WHERE file_uuid_sub = a.file_uuid) as fileNm
           ,(SELECT file_save_nm FROM t_file_sub WHERE file_uuid_sub = a.file_uuid) as fileSaveNm
+          ,a.del_yn
           ,a.ins_seq
           ,ins_dt
           ,a.upt_seq

@@ -84,20 +84,18 @@ public class OperationFaqController {
 	@RequestMapping(value = "/save/faqSave.do", method = RequestMethod.POST 
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody 
-	public ResponseModel insertSavafaq(HttpServletRequest request, HttpServletResponse response 
-			,HttpSession session,@RequestBody TFaq faq) {
-	ResponseModel result = new ResponseModel();
+	public ResponseModel insertSavafaq(HttpServletRequest request, HttpServletResponse response ,HttpSession session, @RequestBody TFaq faq) {
+		ResponseModel result = new ResponseModel();
+		
 		try {
 			SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+			faq.setInsSeq(sessionModel.getAdminUserSeq());
+			faq.setUptSeq(sessionModel.getAdminUserSeq());
+			
 			if(faq.getType().equals("I")) {
-				faq.setInsSeq(sessionModel.getAdminUserSeq());
 				operationfaqService.insertFaq(faq);
-				
-				
 			}else if(faq.getType().equals("U")) {
-				faq.setUptSeq(sessionModel.getAdminUserSeq());
 				operationfaqService.updateFaq(faq);
-				
 			}else {
 				int faqSeq = faq.getFaqSeq();
 				operationfaqService.deleteFaq(faqSeq);

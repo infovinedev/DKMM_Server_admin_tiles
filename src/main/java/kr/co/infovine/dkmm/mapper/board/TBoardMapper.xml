@@ -55,8 +55,8 @@
               upt_dt, del_yn)
     values (#{boardDiv,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
             #{content,jdbcType=VARCHAR}, #{viewCnt,jdbcType=BIGINT}, #{fileUuid,jdbcType=VARCHAR}, 
-            #{insSeq,jdbcType=BIGINT}, #{insDt,jdbcType=TIMESTAMP}, #{uptSeq,jdbcType=BIGINT}, 
-            #{uptDt,jdbcType=TIMESTAMP}, #{delYn,jdbcType=VARCHAR})
+            #{insSeq,jdbcType=BIGINT}, now(), #{uptSeq,jdbcType=BIGINT}, 
+            now(), #{delYn,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="kr.co.infovine.dkmm.db.model.board.TBoard">
     <!--
@@ -70,10 +70,8 @@
       content = #{content,jdbcType=VARCHAR},
       view_cnt = #{viewCnt,jdbcType=BIGINT},
       file_uuid = #{fileUuid,jdbcType=VARCHAR},
-      ins_seq = #{insSeq,jdbcType=BIGINT},
-      ins_dt = #{insDt,jdbcType=TIMESTAMP},
       upt_seq = #{uptSeq,jdbcType=BIGINT},
-      upt_dt = #{uptDt,jdbcType=TIMESTAMP},
+      upt_dt = now(),
       del_yn = #{delYn,jdbcType=VARCHAR}
     where board_seq = #{boardSeq,jdbcType=INTEGER}
   </update>
@@ -112,6 +110,7 @@
         ,a.ins_dt
         ,a.upt_seq
         ,a.upt_dt
+        ,a.del_yn
     FROM t_board a
     WHERE 1=1
     <include refid="searchCondition_board"></include>
@@ -132,6 +131,7 @@
         ,ins_dt
         ,a.upt_seq
         ,upt_dt
+        ,a.del_yn
     FROM t_board a
     WHERE 1=1
     AND a.board_seq = ${boardSeq}

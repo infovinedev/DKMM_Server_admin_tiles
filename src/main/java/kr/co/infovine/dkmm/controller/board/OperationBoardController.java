@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.infovine.dkmm.api.model.base.ResponseModel;
+import kr.co.infovine.dkmm.api.model.base.SessionModel;
 import kr.co.infovine.dkmm.controller.map.MapController;
 import kr.co.infovine.dkmm.db.model.board.TBoard;
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
@@ -84,9 +86,11 @@ public class OperationBoardController {
 	@RequestMapping(value = "/save/boardSave.do", method = RequestMethod.POST 
 	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
 	@ResponseBody 
-	public ResponseModel insertSavaBoard(HttpServletRequest request, HttpServletResponse response 
-	,@RequestBody TBoard board) {
-	ResponseModel result = new ResponseModel();
+	public ResponseModel insertSavaBoard(HttpServletRequest request, HttpServletResponse response, HttpSession session, @RequestBody TBoard board) {
+		ResponseModel result = new ResponseModel();
+		SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+		board.setInsSeq(sessionModel.getAdminUserSeq());
+		board.setUptSeq(sessionModel.getAdminUserSeq());
 		try {
 			if(board.getType().equals("I")) {
 				operationboardService.insertBoard(board);

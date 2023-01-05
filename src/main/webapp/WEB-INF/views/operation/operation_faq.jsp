@@ -99,6 +99,7 @@ function fun_viewDetail(faqSeq) {
 			var title = tempResult.title == null ? "N/A" : tempResult.title;                             //제목
 			var viewCnt  = tempResult.viewCnt == null ? "N/A" : tempResult.viewCnt;                      //조회수
 			var content  = tempResult.content == null ? "N/A" : tempResult.content;                      //내용
+			var delYn  = tempResult.delYn == null ? "" : tempResult.delYn;                      //내용
 			
 			var insertTr = "";
 			if ( faqDiv == "POLICY" ){
@@ -124,6 +125,7 @@ function fun_viewDetail(faqSeq) {
 			$("#txt_title").val(title);
 			$("#txt_viewCnt").val(viewCnt);
 			$("#txt_content").val(content);
+			$("#txt_delYn").val(delYn);
 			
 			//상세보기 수정 데이터
 			$("#hidden_up_faqSeq").val(faqSeq);
@@ -132,6 +134,7 @@ function fun_viewDetail(faqSeq) {
 			$("#txt_up_title").val(title);
 			$("#txt_up_viewCnt").val(viewCnt);
 			$("#txt_up_content").val(content);
+			$("#sel_up_delYn").val(delYn);
 		}
 	});
 }
@@ -152,6 +155,7 @@ function fun_update(type) {
 		$("#txt_up_title").val("");
 		$("#txt_up_viewCnt").val("");
 		$("#txt_up_content").val("");
+		$("#sel_up_delYn").val("");
 	}else{
 		$("#btn_insert").hide();
 	}
@@ -168,6 +172,7 @@ function fun_setfaqListInfo() {
 			, {"data": "title"}
 			, {"data": "viewCnt"}
 			, {"data": "insDt" }
+			, {"data": "delYn" }
 			, {"data": "add" }
 		]
 		, "paging": true            // Table Paging
@@ -239,6 +244,10 @@ function fun_setfaqListInfo() {
 			, {
 				"targets": [6]
 				, "class": "text-center"
+			}
+			, {
+				"targets": [7]
+				, "class": "text-center"
 				, "render": function (data, type, row) {
 					var msg = row.faqSeq;
 					var insertTr = "";
@@ -260,14 +269,37 @@ function fun_save(type){
 	var title            = $("#txt_up_title").val();
 	var viewCnt          = $("#txt_up_viewCnt").val();
 	var content          = $("#txt_up_content").val();
+	var delYn          = $("#sel_up_delYn").val();
 	
-	var inputData = {"faqSeq": faqSeq , "faqDiv": faqDiv , "insDt": insDt , "title": title, "viewCnt": viewCnt, "content": content,"type": type};
+	var inputData = {"faqSeq": faqSeq , "faqDiv": faqDiv , "insDt": insDt , "title": title, "viewCnt": viewCnt, "content": content,"type": type, "delYn" : delYn};
 	if(type == "I"){
 		var result = confirm('추가 하시겠습니까?');
 	}else if(type == "U"){
 		var result = confirm('수정 하시겠습니까?');
 	}else{
-		var result = confirm('삭제하시겠습니까?');
+		var result = confirm('Data가 완전히 삭제됩니다.\n삭제하시겠습니까?');
+	}
+	
+	if(type == "I" || type == "U"){
+		if ( faqDiv == "" ){
+			alert("구분을 선택해주세요.");
+			return;
+		}
+		
+		if ( title == "" ){
+			alert("제목을 입력해 주세요.");
+			return;
+		}
+		
+		if ( content == "" ){
+			alert("내용을 입력해주세요.");
+			return;
+		}
+		
+		if ( delYn == "" ){
+			alert("삭제 여부를 선택해주세요.");
+			return;
+		}
 	}
 	
 	if(result){
@@ -286,7 +318,6 @@ function fun_save(type){
 	}
 }
 </script>
-<body class="hold-transition sidebar-mini">
     <div class="wrapper">
           <div class="content-wrapper">
             <!-- 상단 title -->
@@ -396,6 +427,7 @@ function fun_save(type){
 	                                        <th class="text-center">제목</th>
 	                                        <th class="text-center">조회수</th>
 	                                        <th class="text-center">등록날짜</th>
+	                                        <th class="text-center">삭제여부</th>
 	                                        <th class="text-center">관리</th>
                                         </tr>
                                     </thead>
@@ -445,6 +477,12 @@ function fun_save(type){
                                      <th>내용</th>
                                      <td colspan="3">
                                         <textarea class="form-control" type="text" id="txt_content" style="height:300px;" readOnly></textarea>
+                                     </td>
+                                  </tr>
+                                  <tr>
+                                     <th>삭제여부</th>
+                                     <td colspan="3">
+                                        <input class="form-control" type="text" id="txt_delYn" readOnly/>
                                      </td>
                                   </tr>
                                   <tr>
@@ -510,6 +548,16 @@ function fun_save(type){
                                      </td>
                                   </tr>
                                   <tr>
+                                     <th>삭제여부</th>
+                                     <td colspan="3">
+                                       <select class="form-control" style="width:40%;" id="sel_up_delYn">
+                                           <option value="">선택</option>
+                                           <option value="Y">삭제</option>  
+                                           <option value="N">미삭제</option>
+                                       </select>
+                                     </td>
+                                  </tr>
+                                  <tr>
                                      <th>이미지첨부</th>
                                      <td colspan="3">추후작업</td>
                                   </tr>
@@ -532,5 +580,3 @@ function fun_save(type){
             </div>
         </div>
     </div>
-    </body>
-    

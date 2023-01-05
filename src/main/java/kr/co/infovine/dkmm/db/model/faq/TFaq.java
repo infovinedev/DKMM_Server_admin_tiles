@@ -16,7 +16,7 @@ public class TFaq {
      *
      * @mbg.generated Thu Dec 08 17:45:02 KST 2022
      */
-    private Integer faqSeq;
+    private int faqSeq;
 
     /**
      *
@@ -52,7 +52,7 @@ public class TFaq {
      *
      * @mbg.generated Thu Dec 08 17:45:02 KST 2022
      */
-    private Long viewCnt;
+    private int viewCnt;
 
     /**
      *

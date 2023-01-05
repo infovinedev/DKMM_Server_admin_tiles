@@ -16,7 +16,7 @@ public class TBoard {
      *
      * @mbg.generated Wed Dec 07 09:59:40 KST 2022
      */
-    private Integer boardSeq;
+    private int boardSeq;
 
     /**
      *
@@ -52,7 +52,7 @@ public class TBoard {
      *
      * @mbg.generated Wed Dec 07 09:59:40 KST 2022
      */
-    private Long viewCnt;
+    private int viewCnt;
 
     /**
      *
@@ -70,7 +70,7 @@ public class TBoard {
      *
      * @mbg.generated Wed Dec 07 09:59:40 KST 2022
      */
-    private Long insSeq;
+    private int insSeq;
 
     /**
      *
@@ -89,7 +89,7 @@ public class TBoard {
      *
      * @mbg.generated Wed Dec 07 09:59:40 KST 2022
      */
-    private Long uptSeq;
+    private int uptSeq;
 
     /**
      *

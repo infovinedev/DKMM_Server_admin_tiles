@@ -1,71 +1,67 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<title>infovine Admin</title>
-<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
-<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-<meta name="description" content=""></meta>
-<meta name="author" content=""></meta>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width , initial-scale=1, maximum-scale=1">
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="javax.servlet.http.*" %>
+<%@ page trimDirectiveWhitespaces="true" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<title>infovine Admin</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+	<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+	<meta name="description" content=""></meta>
+	<meta name="author" content=""></meta>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width , initial-scale=1, maximum-scale=1">
+	
+	<link rel="shortcut icon" href="../assets/images/favicon.ico">
+	<link rel="icon" type="image/png" href="../assets/images/favicon.png" sizes="192x192">
+	<link rel="stylesheet" href="../assets/lib/chart/Chart.min.css">
+	<link rel="shortcut icon" href="../assets/images/favicon.ico">
+	<link rel="icon" type="image/png" href="../assets/images/favicon.png" sizes="192x192">
+	<link rel="stylesheet" type="text/css" href="../assets/lib/fontawesome-free/css/all.css">
+	<link rel="stylesheet" type="text/css" href="../assets/lib/bootstrap/css/bootstrap-select.min.css">
+	<link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../assets/lib/swiper/css/swiper.min.css">
+	<link rel="stylesheet" type="text/css" href="../assets/lib/jquery-ui/jquery-ui.min.css">
+	<link rel="stylesheet" href="../assets/lib/chart/Chart.min.css">
+	<link rel="stylesheet" href="../assets/css/adminlte.css">
+	<link rel="stylesheet" href="../assets/css/style.css">
+	<!-- Additional style(개발단에서 수정 및 추가 필요한 경우 additional.css에 작성)  -->
+	<link rel="stylesheet" href="../assets/css/additional.css">
+	<link rel="stylesheet" href="../assets/css/custom_pagenate.css">
+	
+	<!-- 	Toast UI Editor -->
+	<link rel="stylesheet" href="../assets/css/editor/toastui-editor.min.css">
+	
+	<script  src="../assets/js/jquery-3.3.1.js"></script>
+	<script  src="../assets/js/c21.js"></script>
+	<script  src="../assets/js/common.js"></script>
+	<script src="../assets/lib/jquery-ui/jquery-ui.min.js"></script>
+	<script src="../assets/js/ui.js" defer></script>
+	<script  src="../assets/js/adminlte.min.js"></script>
+	<!-- basic scripts -->
+	<script src="../assets/js/bootstrap.js?version=0.0" type="text/javascript"></script>
+	<script src="../assets/js/jquery-ui.custom.js" type="text/javascript"></script>
+	<script src="../assets/js/jquery.ui.touch-punch.js" type="text/javascript"></script>
 
-<script  src="../assets/js/jquery-3.3.1.js"></script>
-   <!-- basic scripts -->
-<script src="../assets/js/bootstrap.min.js" type="text/javascript"></script>
-   <!-- bootstrap & fontawesome -->
-<link href="../assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
-<link href="../assets/css/custom.css" rel="stylesheet" type="text/css" />
-<link href="../assets/css/datepicker.css" rel="stylesheet" type="text/css" />
-<link href="../assets/css/font-awesome.css" rel="stylesheet" type="text/css" />
+	<!-- Datatable Script -->
+	<script src="../assets/js/dataTables/jquery.dataTables.js" type="text/javascript"></script>
+	<script src="../assets/js/dataTables/jquery.dataTables.bootstrap.js" type="text/javascript"></script>
 
-<!-- page specific plugin styles -->
-<link rel="stylesheet" href="../assets/css/dropzone.css" type="text/css" />
-
-<!-- text fonts -->
-<link rel="stylesheet" href="../assets/css/ace-fonts.css" type="text/css" />
-
-<!-- page specific plugin styles -->
-<link rel="stylesheet" href="../assets/css/colorbox.css" type="text/css" />
-
-<!-- ace styles -->
-<link rel="stylesheet" href="../assets/css/ace.css" class="ace-main-stylesheet" type="text/css" />
-
-<link rel="stylesheet" href="../assets/css/ace.onpage-help.css" type="text/css" />
-
-<!-- ace settings handler -->
-<script src="../assets/js/ace-extra.js" type="text/javascript"></script>
-
-   <script src="../assets/js/jquery.easypiechart.js" type="text/javascript"></script>
-
-   <script src="../assets/js/jquery-ui.custom.js" type="text/javascript"></script>
-<script src="../assets/js/jquery.ui.touch-punch.js" type="text/javascript"></script>
-<script src="../assets/js/jquery.easypiechart.js" type="text/javascript"></script>
-<script src="../assets/js/jquery.sparkline.js" type="text/javascript"></script>
-<script src="../assets/js/flot/jquery.flot.js" type="text/javascript"></script>
-<script src="../assets/js/flot/jquery.flot.pie.js" type="text/javascript"></script>
-<script src="../assets/js/flot/jquery.flot.resize.js" type="text/javascript"></script>
-<script src="../assets/js/flot/jquery.flot.tickrotor.js" type="text/javascript"></script>
-<script src="../assets/js/date-time/bootstrap-datepicker.js" type="text/javascript"></script>
-<script src="../assets/js/date-time/bootstrap-datepicker.kr.js" type="text/javascript"></script>
-
-<!-- page specific plugin scripts -->
-<script src="../assets/js/dropzone.js" type="text/javascript"></script>
-
-<!-- Datatable Script -->
-<script src="../assets/js/dataTables/jquery.dataTables.js" type="text/javascript"></script>
-<script src="../assets/js/dataTables/jquery.dataTables.bootstrap.js" type="text/javascript"></script>
-<script src="../assets/js/dataTables/extensions/TableTools/js/dataTables.tableTools.js" type="text/javascript"></script>
-<script src="../assets/js/dataTables/extensions/ColVis/js/dataTables.colVis.js" type="text/javascript"></script>
-<script src="../assets/js/jquery-datatable/json2.js" type="text/javascript"></script>
-<script src="../assets/js/jquery-datatable/jquery.table2excel.js" type="text/javascript"></script> 
-<script src="../assets/js/jquery-datatable/jquery.tabletojson.js" type="text/javascript"></script>
-
-<script src="../assets/js/jquery-datatable/jquery.dataTables.editable.js" type="text/javascript"></script>
-<script src="../assets/js/jquery-datatable/jquery.jeditable.js" type="text/javascript"></script>
-
-<script src="../assets/js/jquery-datatable/jquery.mask.min.js" type="text/javascript"></script>
-<script src="../assets/js/jquery-datatable/jquery.validate.js" type="text/javascript"></script>
-<script src="../assets/js/module.js"></script>
-<script src="../assets/js/cryptoJs/sha512.js"></script>
+	<script src="../assets/js/excel/xlsx.full.min.js"></script>
+	<script src="../assets/js/excel/FileSaver.min.js"></script>
+	
+	<script src="../assets/js/cryptoJs/sha512.js"></script>
+	<script src="../assets/js/module.js?version=0.1"></script>
+	<script src="../assets/js/blockUI.js?version=0.1"></script>
+	
+	<!-- 	Toast UI Editor -->
+	<script src="../assets/js/editor/toastui-editor-all.min.js?version=0.1"></script>
+	
 <script>
 
 var check = 'N';
@@ -142,8 +138,6 @@ function fun_changeAfterinit() {
 	$("#txt_oldPassword").val('');
 	$("#txt_newPassword1").val('');
 	$("#txt_newPassword2").val('');
-	$("#lbl_newPassword1").empty();
-	$("#lbl_newPassword2").empty();
 };	
 
 
@@ -159,6 +153,8 @@ function fun_validationSaveChk(){
 
 	if(check == 'N'){
 		alert_temp = alert_temp + "변경 할 비밀번호와 변경 후 비밀번호를 확인 해주세요\n";
+		alert(alert_temp);
+		return false;
 	}
 	else{
 		chk++;
@@ -166,6 +162,8 @@ function fun_validationSaveChk(){
 
 	if(!patternPassword.test(newPassword2)){
 		alert_temp = alert_temp + "비밀번호는 영문+숫자+특수문자의 조합으로 7자리 이상으로 작성해주세요\n";
+		alert(alert_temp);
+		return false;
 	}
 	else{
 		chk++;
@@ -215,7 +213,7 @@ function fun_clickButtonOfInserPassword() {
 					, 'newPassword2': shaNewPassword2
 			};
 
-			fun_ajaxPostSend("/management/update/password.do", inputData, true, function(msg){
+			fun_ajaxPostSend("/admin/update/passWdReset.do", inputData, true, function(msg){
 				if(msg!=null){
 					switch(msg.code){
 						case "0000":
@@ -241,118 +239,126 @@ function fun_clickButtonOfInserPassword() {
 };
 </script>
 
-
+</head>
 <body class="no-skin">
-<div class="main-container" id="main-container">
-	<div class="main-content">
-		 	<div class="main-content-inner">
-		    	<div class="page-content">
-<form id="membership" method="post" enctype="multipart/form-data" action="">
-   	<div class="row">
-	    <div class="col-lg-12">
-	        <h1 class="page-header" style="font-size:24px">사용자 정보변경</h1>
+	<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+		<div id="top_user" class="ml-auto">
+			<div class="d-flex align-items-center pr-2">
+				<div class="d-flex align-items-center">
+					<i class="fas fa-user-circle mr-2 font-size-30px"></i>
+					<a href="">${userName}</a>
+				</div>
+				<button type="button" class="btn btn-light btn-round ml-4" onclick="javascript:location.href='/admin/logout.do'">로그아웃</button>
+		</div>
+		</div>
+	</nav>
+	<div class="main-container" id="main-container">
+    
+	    <!--Top Menu-->
+	    <div id="top_menu" style="display:none;">
+	        <div id="head_div" class="sidebar h-sidebar navbar-collapse collapse">
+	            <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+						<a href="#" class="btn btn-danger">
+	                        <i class="ace-icon fa fa-tachometer"></i>
+						</a>
+					</div>
+	
+					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+						<a href="#" class="btn btn-danger"></a>
+					</div>
+				</div><!-- /.sidebar-shortcuts -->
+	
+	        </div>
 	    </div>
-	    <!-- /.col-lg-12 -->
-    </div>
-
-   
-   	<div class="row" id="div_row1">
-        <div class="col-lg-12">
-            <div id="accordion1" class="accordion-style1 panel-group accordion-style2">
-                <div class="panel panel-default">
-                    <div class="panel-heading clearfix" style="font-size:13px;font-family:'Malgun Gothic' !important;">
-                        <span class="toggle_accordion">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse1" >
-				    <i class="ace-icon fa fa-angle-down bigger-110" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-				    &nbsp;ADMIN정보
-                            
-			    </a>
-                        </span>
-                        <span class="toggle_accordionSearch">
-                            
-                        </span>
-                    </div>
-                    <div id="collapse1" class="panel-collapse collapse in">
-                        <div class="panel panel-body">
-                            <div class="row form-group form-group-sm">
-                                <div class="col-lg-2 col-md-4" style="padding-top:4px;">
-                                    	이름
-                                </div>
-                                <div class="col-lg-2 col-md-4">
-                                	<input type="text" ID="txt_webUserid" class="form-control" value="${userName}" placeholder="아이디" disabled="disabled" />
-                                </div>
-                                
-                                <div class="hidden-lg hidden-xs col-md-12">
-                                    <p></p>
-                                </div>
-                            </div>
-                            <div class="row form-group form-group-sm">
-                            	 <div class="col-lg-2 col-md-4" style="padding-top:4px;">
-                                    	변경전 비밀번호
-                                </div>
-                                <div class="col-lg-2 col-md-4">
-                                	<input type="password" ID="txt_oldPassword" class="form-control" placeholder="비밀번호" />
-                                </div>
-                            </div>
-                            <div class="row form-group form-group-sm">
-                                <div class="col-lg-2 col-md-4" style="padding-top:4px;">
-                                    	변경할 비밀번호
-                                </div>
-                                <div class="col-lg-2 col-md-4">
-                                	<input type="password" ID="txt_newPassword1" class="form-control" placeholder="비밀번호" />
-                                </div>
-                                <div class="col-lg-1 col-md-2" id="lbl_newPassword1" style="padding-top:4px;">
-                                	
-                                </div>
-                            </div>
-                            <div class="row form-group form-group-sm">
-                            	 <div class="col-lg-6 col-md-6"  style="padding-top:4px;">
-                                	영문+숫자+특수문자의 조합으로 7자리 이상
-                                </div>
-                            </div>
-                            <div class="row form-group form-group-sm">
-                                <div class="col-lg-2 col-md-4" style="padding-top:4px;">
-                                    	변경할 비밀번호(확인)
-                                </div>
-                                <div class="col-lg-2 col-md-4">
-                                	<input type="password" ID="txt_newPassword2" class="form-control" placeholder="비밀번호" />
-                                </div>
-                                <div class="col-lg-1 col-md-2" id="lbl_newPassword2" style="padding-top:4px;">
-                                	
-                                </div>
-                                
-                                <div class="hidden-lg hidden-xs col-md-12">
-                                    <p></p>
-                                </div>
-                            </div>
-	                	</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    
-    <div class="row" id="div_row4">
-        <div class="col-lg-12">
-            <div class="col-lg-5 col-md-s5">
-            	<!-- <input type="button" value="회원수체크" class="btn btn-primary btn-sm" onclick="return fun_Click_btn_totalCount();" /> -->
-               
-            </div>
-            <div class="hidden-lg hidden-md col-sm-12"><p></p></div>
-            <div class="col-lg-7 col-md-7">
-                <div class="pull-right" style="padding-right:20px">
-                    <!-- <input type="button" ID="btn_Delete" value="삭제" class="btn btn-danger btn-sm" onclick="return fun_Click_btn_DelDoc();" /> -->
-                    &nbsp;
-                    <input type="button" ID="btn_Save" value="수정" class="btn btn-primary btn-sm" onclick="return fun_clickButtonOfInserPassword();" />
-                </div> 
-            </div>
-        </div>
-    </div>
-	<input type="hidden" value="" id="hdf_check" />
-</form>
-</div>
-</div>
-</div>
-</div>
-</body>
+	    
+	   <aside class="main-sidebar sidebar-dark-primary">
+            <a href="#none" class="brand-link text-center">
+                대기몇명
+                <div class="mt-1"></div>
+            </a>
+       </aside> 
+        
+	    
+     <!-- Content -->
+	 <div class="main-content">
+	 	<div class="main-content-inner">
+	    	<div class="page-content">
+		    		
+		    		
+		    		<div class="wrapper">
+			          <div class="content-wrapper">
+			            <!-- 상단 title -->
+			            <div class="content-header">
+			               <div class="container-fluid">
+			                  <div class="row">
+			                     <div class="col">
+			                        <h1 class="title">사용자 정보변경</h1>
+			                     </div>
+			                  </div>
+			               </div>
+			            </div>
+			            <!-- Main content -->
+			            <div class="content" data-menu="notice">
+			                <div class="container-fluid">
+			                    <section id="section1_search">
+			                        <div class="inquery-area">
+			                            <table class="table table-bordered">
+			                                <colgroup>
+			                                    <col style="width: 150px">
+			                                    <col>
+			                                    <col style="width: 150px">
+			                                    <col>
+			                                </colgroup>
+			                                <tbody>
+			                                    <tr>
+			                                        <th>이름</th>
+			                                        <td colspan="3">
+			                                           <input type="text" ID="txt_webUserid" class="form-control" value="${userName}" placeholder="아이디" disabled="disabled" />
+			                                        </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <th>변경전 비밀번호</th>
+			                                        <td colspan="3">
+			                                           <input type="password" ID="txt_oldPassword" class="form-control" placeholder="비밀번호" />
+			                                        </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <th>변경할 비밀번호</th>
+			                                        <td colspan="3">
+			                                           <input type="password" ID="txt_newPassword1" class="form-control" placeholder="비밀번호" />
+			                                           <div class="col-lg-6 col-md-6"  style="color:red;padding-top:4px;">
+						                                	영문+숫자+특수문자의 조합으로 7자리 이상
+						                                </div>
+			                                        </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <th>변경할 비밀번호(확인)</th>
+			                                        <td colspan="3">
+			                                           <input type="password" ID="txt_newPassword2" class="form-control" placeholder="비밀번호" />
+			                                           <div class="col-lg-6 col-md-6"  style="color:red;padding-top:4px;">
+						                                	영문+숫자+특수문자의 조합으로 7자리 이상
+						                                </div>
+			                                        </td>
+			                                    </tr>
+			                                </tbody>
+			                            </table>
+			                            <div class="btns">
+			                                <button type="button" class="btn btn-dark min-width-90px" onclick="return fun_clickButtonOfInserPassword();">수정</button>
+			                            </div>
+			                        </div>
+			                    </section>
+			
+			                </div>
+			                
+			            </div>
+			        </div>
+			    </div>
+		    		
+		    		
+		    </div>
+		 </div>
+	</div>
+	</body>
+	
+</html>

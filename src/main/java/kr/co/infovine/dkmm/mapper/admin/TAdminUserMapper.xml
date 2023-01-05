@@ -74,7 +74,7 @@
     values (				  #{userId,jdbcType=VARCHAR}		, #{newPassword1,jdbcType=VARCHAR},
 						      #{userTypeCode,jdbcType=VARCHAR}	, #{regDate,jdbcType=VARCHAR}, #{updateDate,jdbcType=VARCHAR}, 
 						      0, '', 
-						      'Y', ''
+						      'F', ''
 						      , #{lastloginDate,jdbcType=VARCHAR}, 'N'
 						      , #{userName,jdbcType=VARCHAR},	(SELECT code_value FROM t_common_code WHERE code_group = 'mng_type' AND code_description = #{userTypeCode,jdbcType=VARCHAR} )
 			);
@@ -153,7 +153,7 @@
       password = #{password,jdbcType=INTEGER},
       password_error_count = 0,
       password_error_date = '',
-      password_lost_check = '',
+      password_lost_check = 'Y',
       password_lost_date = ''
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>

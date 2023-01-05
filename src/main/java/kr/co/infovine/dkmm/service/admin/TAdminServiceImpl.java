@@ -53,7 +53,6 @@ public class TAdminServiceImpl implements TAdminService {
 		return tbAdminUserMapper.updateByUserId(tbAdminUser);
 	}
 	
-	
 	@Override
 	public int updateByAdminUserPrimaryKey(TbAdminUserModel tbAdminUser) {
 		return tbAdminUserMapper.updateByPrimaryKey(tbAdminUser);
@@ -63,7 +62,12 @@ public class TAdminServiceImpl implements TAdminService {
 	public int updateByAdminUserBlock(TbAdminUserModel record) {
 		return tbAdminUserMapper.updateByBlock(record);
 	}
-
+	
+	@Override
+	public int updateByPassword(TbAdminUserModel record) {
+		return tbAdminUserMapper.updateByPassword(record);
+	}
+	
 	@Override
 	public List<TbAdminPermissionModel> selectByUserLeftMenu(int adminUserSeq) {
 		return tbAdminPermissionMapper.selectByUserLeftMenu(adminUserSeq);
