@@ -162,12 +162,6 @@
                         아이디, 비밀번호로 로그인 하시면 사용 가능한 메뉴를 보실 수 있습니다. <br>
                         이용에 관한 문의사항은 담당자에게 연락 주시기 바랍니다.
                     </p>
-                    <dl>
-                        <dt>담당자 : </dt>
-                        <dd>ㅇㅇㅇ</dd>
-                        <dt>문의처 : </dt>
-                        <dd>1588-0000</dd>
-                    </dl>
                 </div>
                <input type="submit" id="dummySubmitLogin" style="opacity: 0;" onclick="return false;">
                <input type="submit" id="submitLogin" style="opacity: 0;">
