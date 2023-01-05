@@ -2,6 +2,7 @@ package kr.co.infovine.dkmm.service.admin;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -172,7 +173,11 @@ public class TAdminServiceImpl implements TAdminService {
 	public int deleteByTCommonCodePrimaryKey(String codeGroup, String codeValue) {
 		return tcommonCodeMapper.deleteByPrimaryKey(codeGroup, codeValue);
 	}
-
+	
+	@Override
+	public TCommonCodeModel selectByPrimaryKeyCommonCode(String codeGroup, String codeValue) {
+		return tcommonCodeMapper.selectByPrimaryKey(codeGroup, codeValue);
+	}
 	
 	@Override
 	public int deleteDefaultPermmissionByPrimaryKey(String roleNm) {
@@ -189,5 +194,49 @@ public class TAdminServiceImpl implements TAdminService {
 		return tAdminDefaultPermissionMapper.selectAll(roleNm);
 	}
 	
-	
+	@Override
+	public int updatePromotionByFuture() {
+	   // 현재 프로모션
+	   TCommonCodeModel currStartDate = tcommonCodeMapper.selectByPrimaryKey("promotion_date", "start_date");
+	   TCommonCodeModel currCloseDate = tcommonCodeMapper.selectByPrimaryKey("promotion_date", "close_date");
+	   TCommonCodeModel currImage = tcommonCodeMapper.selectByPrimaryKey("promotion_image", "current_image");
+	   TCommonCodeModel currImageAlt = tcommonCodeMapper.selectByPrimaryKey("promotion_image_alt", "current_image_alt");
+	   TCommonCodeModel currCont = tcommonCodeMapper.selectByPrimaryKey("promotion_content", "current_content");
+	   
+	   // 미래 프로모션
+	   TCommonCodeModel futureStartDate = tcommonCodeMapper.selectByPrimaryKey("promotion_date", "future_start_date");
+	   TCommonCodeModel futureCloseDate = tcommonCodeMapper.selectByPrimaryKey("promotion_date", "future_close_date");
+	   TCommonCodeModel futureImage = tcommonCodeMapper.selectByPrimaryKey("promotion_image", "future_image");
+	   TCommonCodeModel futureImageAlt = tcommonCodeMapper.selectByPrimaryKey("promotion_image_alt", "future_image_alt");
+	   TCommonCodeModel futureCont = tcommonCodeMapper.selectByPrimaryKey("promotion_content", "future_content");
+	   
+	   // 미래 프로모션을 현재 프로모션으로 변경
+	   currStartDate.setCodeDescription(futureStartDate.getCodeDescription());
+	   currCloseDate.setCodeDescription(futureCloseDate.getCodeDescription());
+	   currImage.setCodeDescription(futureImage.getCodeDescription());
+	   currImageAlt.setCodeDescription(futureImageAlt.getCodeDescription());
+	   currCont.setCodeDescription(futureCont.getCodeDescription());
+	   
+	   // 미래 프로모션 초기화
+	   futureStartDate.setCodeDescription(null);
+	   futureCloseDate.setCodeDescription(null);
+	   futureImage.setCodeDescription(null);
+	   futureImageAlt.setCodeDescription(null);
+	   futureCont.setCodeDescription(null);
+	   
+	   int rslt = 0;
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(currStartDate);
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(currCloseDate);
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(currImage);
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(currImageAlt);
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(currCont);
+	   
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(futureStartDate);
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(futureCloseDate);
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(futureImage);
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(futureImageAlt);
+	   rslt += tcommonCodeMapper.updateByPrimaryKey(futureCont);
+	   
+	   return rslt;
+	}
 }

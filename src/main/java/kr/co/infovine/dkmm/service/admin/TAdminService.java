@@ -73,4 +73,11 @@ public interface TAdminService {
 	int insertDefaultPermmission(TbAdminDefaultPermissionModel record);
 	
 	List<TbAdminDefaultPermissionModel> selectAllDefaultPermmissionByRole(String roleNm);
+	
+	
+	
+	//프로모션 배치
+	TCommonCodeModel selectByPrimaryKeyCommonCode(String codeGroup, String codeValue);
+	
+	int updatePromotionByFuture();
 }

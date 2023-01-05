@@ -51,6 +51,11 @@ public class Batch1Controller {
         	JobDetail jobDetailStoreOrgExcelUpload = buildJobDetail(BatchStoreOrgExcelUploadService.class, "BatchStoreOrgExcelUpload", "t_batchStoreOrgExcelUpload", map);
 //        	scheduler.scheduleJob(jobDetailStoreOrgExcelUpload, buildJobTrigger("0 23 17 * * ?"));
         	
+        	//04. 인허가 상점 정보 EXCEL 업로드
+        	JobDetail jobDetailPromotionChange = buildJobDetail(BatchPromotionChangeService.class, "BatchPromotionChange", "t_BatchPromotionChange", map);
+        	scheduler.scheduleJob(jobDetailPromotionChange, buildJobTrigger("0 0 0 * * *"));
+        	
+        	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

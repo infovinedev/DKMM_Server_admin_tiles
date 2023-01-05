@@ -120,10 +120,11 @@
     update t_admin_user
     set 
       <if test='newPassword1 != null and !"".equals(newPassword1) '>
-      	  password = #{newPassword1,jdbcType=INTEGER},
-	      password_lost_check = 'F',
+      	  password = #{newPassword1,jdbcType=VARCHAR},
+      	  <if test='adminUserSeq != 1 '>
+      	  password_lost_check = 'F',
+      	  </if>
       </if>
-      
       <if test="userTypeCode != null">
       user_type_code = #{userTypeCode,jdbcType=VARCHAR},
       authority = CASE WHEN #{userTypeCode,jdbcType=VARCHAR} = '00' THEN 'ROLE_ADMIN' ELSE 'ROLE_MARKETING' END
@@ -136,7 +137,7 @@
     update t_admin_user
     set 
       <if test="blockYn != null">
-      	  block_yn = #{blockYn,jdbcType=INTEGER}
+      	  block_yn = #{blockYn,jdbcType=VARCHAR}
       </if>
     where admin_user_seq = #{adminUserSeq,jdbcType=VARCHAR}
   </update>
@@ -150,7 +151,7 @@
     -->
     update t_admin_user
     set 
-      password = #{password,jdbcType=INTEGER},
+      password = #{password,jdbcType=VARCHAR},
       password_error_count = 0,
       password_error_date = '',
       password_lost_check = 'Y',
