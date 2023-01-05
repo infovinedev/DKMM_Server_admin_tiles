@@ -62,7 +62,7 @@ public class BaseController {
 	@RequestMapping(value = "/favicon.ico", method = RequestMethod.GET)
 	public void favicon( HttpServletRequest request, HttpServletResponse reponse ) {
 		try {
-			reponse.sendRedirect("/assets/images/favicon.ico");
+			reponse.sendRedirect("/assets/images/favicon.png");
 		} catch (IOException e) {
 		}
 	}

@@ -75,7 +75,7 @@ public class SimpleCORSFilter implements Filter {
 			if(assetsUrl == -1) {
 				switch(requestURI) {
 					case "/admin/left/menu.do":
-					case "/favicon.ico":
+					case "/favicon.png":
 					case "/admin/login.do":
 					case "/session.do":
 						return false;
