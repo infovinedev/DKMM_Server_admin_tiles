@@ -43,7 +43,14 @@ public class BaseController {
 	
 	@Value("${url.server.api}")
 	String urlServerApi;
-	
+
+	@Value("${url.main}")
+	String urlMain;
+
+	@RequestMapping(value="/")
+	public void base(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.sendRedirect(urlMain + "/admin/loginView.do");
+	}
 	
 	@RequestMapping(value="/error.do")
 	public ModelAndView error(HttpServletRequest request, HttpServletResponse response) {

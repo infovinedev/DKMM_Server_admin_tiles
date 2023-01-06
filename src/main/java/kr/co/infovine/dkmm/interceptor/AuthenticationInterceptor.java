@@ -53,7 +53,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 		}
 		else {
 			if(requestURI!=null) {
-				if(requestURI.equals("/favicon.png") || requestURI.equals("/admin/logout.do")
+				if(requestURI.equals("/favicon.png") || requestURI.equals("/admin/logout.do") || requestURI.equals("/error") || requestURI.equals("/")
 						|| requestURI.equals("/admin/loginView.do") || requestURI.equals("/checkHealth.do")) {
 					
 				}

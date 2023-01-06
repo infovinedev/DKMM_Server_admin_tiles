@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import kr.co.infovine.dkmm.handler.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -108,9 +109,10 @@ public class InfovineSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		.and().csrf().disable();
 		
 		LogoutSetting logoutSetting = infovineSecurityProperties.getLogoutSetting();
-		
+		String urlMain = LoginSuccessHandler.ApplicationContextProvider.getApplicationContext().getEnvironment().getProperty("url.main");
 		String logoutUrl = logoutSetting.getLogoutUrl();
 		String logoutSuccessUrl = logoutSetting.getLogoutSuccessUrl();
+		logoutSuccessUrl = urlMain + logoutSuccessUrl;
 		boolean invalidateHttpSession = logoutSetting.isInvalidateHttpSession();
 		String deleteCookies = logoutSetting.getDeleteCookies();
 

@@ -17,7 +17,7 @@
 	<title>관리자 시스템</title>
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="format-detection" content="telephone=no">
-	<link rel="shortcut icon" href="../assets/images/favicon.ico">
+	<link rel="shortcut icon" href="../assets/images/favicon.png">
 	<link rel="icon" type="image/png" href="../assets/images/favicon.png" sizes="192x192">
 	<link rel="stylesheet" type="text/css" href="../assets/lib/fontawesome-free/css/all.css">
 	<link rel="stylesheet" href="../assets/lib/bootstrap/css/bootstrap-select.min.css">
