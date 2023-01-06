@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import kr.co.infovine.dkmm.handler.LoginSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -67,7 +68,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor{
 
 					}
 					else{
-						response.sendRedirect("/admin/loginView.do?errorCode=session");
+						String urlMain = LoginSuccessHandler.ApplicationContextProvider.getApplicationContext().getEnvironment().getProperty("url.main");
+						response.sendRedirect(urlMain + "/admin/loginView.do?errorCode=session");
 					}
 				}
 			}
