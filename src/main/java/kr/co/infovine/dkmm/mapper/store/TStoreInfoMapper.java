@@ -79,4 +79,9 @@ public interface TStoreInfoMapper {
 	
 	int selectStoreCount(TStoreInfoModel storeInfo);
 	
+	List<TStoreInfoModel> selectUserStoreWaitExcel(TStoreInfoModel storeInfo);
+	List<TStoreInfoModel> selectUserStoreLikeExcel(TStoreInfoModel storeInfo);
+	
+	List<TStoreInfoModel> selectStoreCatgryList();
+	
 }

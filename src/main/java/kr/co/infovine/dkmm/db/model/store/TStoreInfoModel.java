@@ -161,6 +161,9 @@ public class TStoreInfoModel {
 	 */
 	private String oldZip;
 	
+	private int personCnt;
+	private int userSeq;
+	
 	//조건
 	private String searchText;
 	private String searchStartDt;

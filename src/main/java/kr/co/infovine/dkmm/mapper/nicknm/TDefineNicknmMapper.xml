@@ -146,4 +146,19 @@
   	SELECT nick_comment FROM t_define_nicknm WHERE 1=1 AND DEL_YN = 'N' AND nick_seq = #{nickSeq,jdbcType=INTEGER}
   </select>
   
+  <resultMap id="joinResultMap" type="kr.co.infovine.dkmm.db.model.nicknm.TDefineNicknm">
+    <id column="nick_seq" jdbcType="INTEGER" property="nickSeq" />
+    <result column="nick_nm" jdbcType="VARCHAR" property="nickNm" />
+    <result column="nick_comment" jdbcType="VARCHAR" property="nickComment" />
+  </resultMap>
+  
+  <select id="selectNickFileInfo" parameterType="kr.co.infovine.dkmm.db.model.nicknm.TDefineNicknm" resultMap="joinResultMap">
+    SELECT 	a.nick_seq 
+    		,a.nick_nm
+    		,coalesce(a.nick_comment, '-') as nick_comment
+    FROM t_define_nicknm a
+    WHERE	a.nick_seq = #{nickSeq,jdbcType=INTEGER}	
+    AND 	a.del_yn = 'N'
+  </select>
+  
 </mapper>

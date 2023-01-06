@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.infovine.dkmm.db.model.define.TDefineWork;
 import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
 import kr.co.infovine.dkmm.mapper.store.TStoreInfoMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,19 @@ public class OperationStoreServiceImpl implements OperationStoreService{
 	public int selectStoreCount(TStoreInfoModel storeInfo) {
 		return storeInfoMapper.selectStoreCount(storeInfo);
 	}
+
+	@Override
+	public List<TStoreInfoModel> selectUserStoreWaitExcel(TStoreInfoModel storeInfo) {
+		return storeInfoMapper.selectUserStoreWaitExcel(storeInfo);
+	}
+
+	@Override
+	public List<TStoreInfoModel> selectUserStoreLikeExcel(TStoreInfoModel storeInfo) {
+		return storeInfoMapper.selectUserStoreLikeExcel(storeInfo);
+	}
 	
-	
+	@Override
+	public List<TStoreInfoModel> selectStoreCatgryList() {
+		return storeInfoMapper.selectStoreCatgryList();
+	}
 }

@@ -205,6 +205,11 @@ function fun_setUserListInfo() {
 			, {
 				"targets": [3]
 				, "class": "text-left"
+				, "render": function (data, type, row) {
+					var insertTr = ""; 
+					insertTr += '<a href="javascript:void(0);" onclick="fun_work_excel_start(\'work\', \'' + row.userSeq + '\', \'' + row.nickName + '\')"><font color="blue"><b>'+ row.nickName +'</b></font></a>'; 
+					return insertTr;
+	                }
 			}
 			, {
 				"targets": [4]
@@ -213,10 +218,28 @@ function fun_setUserListInfo() {
 			, {
 				"targets": [5]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					var insertTr = ""; 
+					if ( row.waitCnt == "0" ){
+						insertTr = row.waitCnt;
+					}else{
+						insertTr = '<a href="javascript:void(0);" onclick="fun_work_excel_start(\'wait\', \'' + row.userSeq + '\', \'' + row.nickName + '\')"><font color="blue"><b>'+ row.waitCnt +'</b></font></a>'; 
+					}
+					return insertTr;
+	        	}
 			}
 			, {
 				"targets": [6]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					var insertTr = ""; 
+					if ( row.likeCnt == "0" ){
+						insertTr = row.waitCnt;
+					}else{
+						insertTr += '<a href="javascript:void(0);" onclick="fun_work_excel_start(\'like\', \'' + row.userSeq + '\', \'' + row.nickName + '\')"><font color="blue"><b>'+ row.likeCnt +'</b></font></a>'; 
+					}
+					return insertTr;
+	            }
 			}
 			, {
 				"targets": [7]
@@ -242,9 +265,19 @@ function fun_setUserListInfo() {
 	fun_search();
 };
 
-function fun_work_excel_start(){
+function fun_work_excel_start(argFlag, userSeq, userNickName){
 	fun_startBlockUI();
-	setTimeout(() => fun_work_excel(), 500);
+	
+	if ( argFlag == "user"){
+		setTimeout(() => fun_work_excel(), 500);
+	}else if ( argFlag == "work"){
+		setTimeout(() => fun_user_work_excel(userSeq, userNickName), 500);
+	}else if ( argFlag == "wait"){
+		setTimeout(() => fun_user_wait_excel(userSeq, userNickName), 500);
+	}else if ( argFlag == "like"){
+		setTimeout(() => fun_user_like_excel(userSeq, userNickName), 500);
+	}
+	
 }
 
 function fun_work_excel(){
@@ -296,15 +329,171 @@ function fun_work_excel(){
 				arrayList.push(obj);
 			}
 			
-			console.log(arrayList);
+			excelArray[0] = arrayList;
+			jsonToExcel(excelArray, fileName, columnCodeArray, wscols);
 			
+		}
+	});
+}
+
+function fun_user_work_excel(userSeq, userNickName){
+	
+	var inputData = {"userSeq": userSeq};
+	
+	var excelArray = new Array(1); 
+	var fileName = "회원업적조회_[" + userNickName + "]";
+	var url = "/user/select/userDefineWorkList.do";
+	var columnCodeArray = [];
+	var columnNameArray = [];
+	var wscols = [];
+	
+	wscols.push({ width: 10 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 15 }); 
+	
+	fun_ajaxPostSend(url, inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					break;
+				case "0001":
+			}
+			var tempResult = JSON.parse(msg.result);
+			
+			var arrayList = [];
+			for (let i = 0; i < tempResult.length; i++) {
+				
+				var obj = {}; 
+				obj.번호 = i + 1;
+				obj.업적Seq = tempResult[i].workSeq
+				obj.업적명 = tempResult[i].workNm
+				obj.달성조건 = tempResult[i].workConditionNm;
+				obj.간략설명 = tempResult[i].workConditionDesc;
+				obj.달성횟수 = tempResult[i].workCnt;
+				obj.시작일자 = tempResult[i].startDt;
+				obj.종료일자 = tempResult[i].endDt;
+				obj.달성이후누적 = tempResult[i].zombieYn;
+				obj.기간한정여부 = tempResult[i].limitYn;
+				obj.완료여부 = tempResult[i].completeYn;
+				obj.사용자액션횟수 = tempResult[i].myCnt;
+				
+				arrayList.push(obj);
+			}
+			excelArray[0] = arrayList;
+			jsonToExcel(excelArray, fileName, columnCodeArray, wscols);
+		}
+	});
+}
+
+function fun_user_wait_excel(userSeq, userNickName){
+	
+	var inputData = {"userSeq": userSeq};
+	
+	var excelArray = new Array(1); 
+	var fileName = "회원대기목록조회_[" + userNickName + "]";
+	var url = "/user/select/userStoreWaitList.do";
+	var columnCodeArray = [];
+	var columnNameArray = [];
+	var wscols = [];
+	
+	wscols.push({ width: 10 });  
+	wscols.push({ width: 20 });  
+	wscols.push({ width: 10 });  
+	wscols.push({ width: 20 });  
+	wscols.push({ width: 20 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 30 });  
+	wscols.push({ width: 10 });  
+	
+	fun_ajaxPostSend(url, inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					break;
+				case "0001":
+			}
+			var tempResult = JSON.parse(msg.result);
+			
+			var arrayList = [];
+			for (let i = 0; i < tempResult.length; i++) {
+				
+				var obj = {}; 
+				obj.번호 = i + 1;
+				obj.대기등록일시 = tempResult[i].insDt;
+				obj.대기인원 = tempResult[i].personCnt;
+				obj.상점Seq = tempResult[i].storeSeq;
+				obj.상점명 = tempResult[i].storeNm;
+				obj.상점카테고리 = tempResult[i].ctgryNm;
+				obj.상점주소 = tempResult[i].roadAddr;
+				obj.상점폐업여부 = tempResult[i].delYn;
+
+				arrayList.push(obj);
+			}
 			
 			excelArray[0] = arrayList;
 			jsonToExcel(excelArray, fileName, columnCodeArray, wscols);
 			
 		}
 	});
+}
+
+function fun_user_like_excel(userSeq, userNickName){
 	
+	var inputData = {"userSeq": userSeq};
+	
+	var excelArray = new Array(1); 
+	var fileName = "회원대기목록조회_[" + userNickName + "]";
+	var url = "/user/select/userStoreLikeList.do";
+	var columnCodeArray = [];
+	var columnNameArray = [];
+	var wscols = [];
+	
+	wscols.push({ width: 10 });  
+	wscols.push({ width: 10 });  
+	wscols.push({ width: 20 });  
+	wscols.push({ width: 15 });  
+	wscols.push({ width: 30 });  
+	wscols.push({ width: 10 });  
+	wscols.push({ width: 20 });  
+	
+	fun_ajaxPostSend(url, inputData, true, function(msg){
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					break;
+				case "0001":
+			}
+			var tempResult = JSON.parse(msg.result);
+			
+			var arrayList = [];
+			for (let i = 0; i < tempResult.length; i++) {
+				
+				var obj = {}; 
+				obj.번호 = i + 1;
+				obj.상점Seq = tempResult[i].storeSeq;
+				obj.상점명 = tempResult[i].storeNm;
+				obj.상점카테고리 = tempResult[i].ctgryNm;
+				obj.상점주소 = tempResult[i].roadAddr;
+				obj.상점폐업여부 = tempResult[i].delYn;
+				obj.찜상점등록일시 = tempResult[i].insDt;
+				
+				arrayList.push(obj);
+			}
+			
+			excelArray[0] = arrayList;
+			jsonToExcel(excelArray, fileName, columnCodeArray, wscols);
+			
+		}
+	});
 }
 </script>
 <head>
@@ -396,7 +585,7 @@ function fun_work_excel(){
                         <div class="row justify-content-between align-items-end mb-3">
                         	<div class="col-auto"></div>
                             <div class="col-auto">
-                            	<button type="button" class="btn btn-outline-primary mr-1" onclick="fun_work_excel_start()">엑셀다운로드</button>
+                            	<button type="button" class="btn btn-outline-primary mr-1" onclick="fun_work_excel_start('user', '', '')">엑셀다운로드</button>
                                 <select id="userListLength" class="custom-select w-auto">
                                 	<option value="10">10</option>
                                 	<option value="20">20</option>

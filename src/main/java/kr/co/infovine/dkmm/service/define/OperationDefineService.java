@@ -15,4 +15,5 @@ public interface OperationDefineService {
     void insertDefineWork(TDefineWork defineWork);
     
     List<HashMap<String, Object>> selectDefineWorkStat(TDefineWork defineWork);
+    List<TDefineWork> selectUserDefineWorkList(TDefineWork defineWork);
 }

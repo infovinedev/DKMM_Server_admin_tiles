@@ -51,4 +51,9 @@ public class OperationDefineServiceImpl implements OperationDefineService{
 		return defineWorkMapper.selectDefineWorkStat(defineWork);
 	}
 	
+	@Override
+	public List<TDefineWork> selectUserDefineWorkList(TDefineWork defineWork) {
+		return defineWorkMapper.selectUserDefineWorkList(defineWork);
+	}
+	
 }

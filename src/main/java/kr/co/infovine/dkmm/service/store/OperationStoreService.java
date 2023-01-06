@@ -10,4 +10,8 @@ public interface OperationStoreService {
     void insertStoreInfo(TStoreInfoModel storeInfo);
     List<TStoreInfoModel> selectStoreExcel(TStoreInfoModel storeInfo);
     int selectStoreCount(TStoreInfoModel storeInfo);
+
+    List<TStoreInfoModel> selectUserStoreWaitExcel(TStoreInfoModel storeInfo);
+	List<TStoreInfoModel> selectUserStoreLikeExcel(TStoreInfoModel storeInfo);
+	List<TStoreInfoModel> selectStoreCatgryList();
 }

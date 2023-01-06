@@ -129,4 +129,22 @@ public class OperationStoreController {
 		return result;
 	}
 	
+	@RequestMapping(value = "/select/selectStoreCatgryList.do", method = RequestMethod.POST
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public ResponseModel selectStoreCatgryList(HttpServletRequest request, HttpServletResponse response 
+			,@RequestBody TStoreInfoModel storeInfo) {
+		ResponseModel result = new ResponseModel();
+		try {
+			List<TStoreInfoModel> model = operationStoreService.selectStoreCatgryList();
+			ObjectMapper mapper = new ObjectMapper();
+			String storeInfoList = mapper.writeValueAsString(model);
+			result.setCode("0000");
+			result.setResult(storeInfoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 }

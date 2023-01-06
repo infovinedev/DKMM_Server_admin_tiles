@@ -18,8 +18,8 @@ $(document).ready(function () {
 		}
 	});
 	
-	
-	fun_setStoreListInfo();
+	fun_search_catgry();
+// 	fun_setStoreListInfo();
 	
 	$("#storeListLength").change(function(){
 		var length = $("#storeListLength").val();
@@ -211,6 +211,40 @@ function fun_update(type) {
 	$("#section1_detail_view").css("display", "none");
 	$("#section1_detail_edit").removeAttr("style");
 }
+
+function fun_search_catgry(){
+		
+	var inputData = {};
+	fun_ajaxPostSend("/store/select/selectStoreCatgryList.do", inputData, false, function(msg){
+		
+		if(msg!=null){
+			switch(msg.code){
+				case "0000":
+					break;
+				case "0001":
+			}
+			
+			var tempResult = JSON.parse(msg.result);
+			console.log(tempResult);
+			
+			$('#search_ctgryNm').html("");
+			$('#select_upCtgryNm').html("");
+			$('#search_ctgryNm').append($('<option></option>').val("").html("선택")); //main화면 카테고리
+			$('#select_upCtgryNm').append($('<option></option>').val("").html("선택")); //등록화면 카테고리
+			
+			$.each(tempResult, function (key, value) {
+				$('#search_ctgryNm').append($('<option></option>').val(value.ctgryNm).html(value.ctgryNm));
+				$('#select_upCtgryNm').append($('<option></option>').val(value.ctgryNm).html(value.ctgryNm));
+			});
+			$('#search_ctgryNm').val("감성주점");
+
+			fun_setStoreListInfo();
+		}
+	});
+		
+	
+}
+
 
 function fun_setStoreListInfo() {
 	storeListInfo = $("#storeListInfo").DataTable({

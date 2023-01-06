@@ -76,4 +76,6 @@ public interface TDefineWorkMapper {
     /** 업적 현황 JS **/
     List<HashMap<String, Object>> selectDefineWorkStat(TDefineWork defineWork);
     
+    List<TDefineWork> selectUserDefineWorkList(TDefineWork defineWork);
+    
 }

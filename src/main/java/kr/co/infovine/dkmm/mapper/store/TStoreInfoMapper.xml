@@ -36,6 +36,7 @@
     <result column="last_wait_ins_dt" jdbcType="TIMESTAMP" property="lastWaitInsDt" />
     <result column="old_addr" jdbcType="VARCHAR" property="oldAddr" />
     <result column="old_zip" jdbcType="VARCHAR" property="oldZip" />
+    <result column="person_cnt" jdbcType="VARCHAR" property="personCnt" />
   </resultMap>
   
 	<sql id="searchCondition_store">
@@ -457,6 +458,43 @@
 		   AND use_yn = 'Y'
 		   AND del_yn = 'N'
 		   <include refid="searchCondition_store"></include>
+	</select>
+	
+  	<select id="selectUserStoreWaitExcel" parameterType="kr.co.infovine.dkmm.db.model.store.TStoreInfoModel" resultMap="BaseResultMap">
+		SELECT a.store_seq
+			, b.store_nm
+			, a.ins_dt
+			, a.person_cnt
+			, b.ctgry_nm
+			, b.road_addr
+			, b.del_yn
+		FROM t_store_wait a JOIN t_store_info b
+							ON a.store_seq = b.store_seq
+		WHERE user_seq = #{userSeq,jdbcType=BIGINT}
+		ORDER BY a.ins_dt
+	</select>
+  	
+	<select id="selectUserStoreLikeExcel" parameterType="kr.co.infovine.dkmm.db.model.store.TStoreInfoModel" resultMap="BaseResultMap">
+		SELECT a.store_seq
+				, b.store_nm
+				, b.ctgry_nm
+				, b.road_addr
+				, b.del_yn
+				, a.ins_dt
+		FROM t_store_like a JOIN t_store_info b
+							ON a.store_seq = b.store_seq
+		WHERE user_seq = #{userSeq,jdbcType=BIGINT}
+		ORDER BY a.ins_dt
+	</select>
+	
+	<select id="selectStoreCatgryList" resultMap="BaseResultMap">
+		<![CDATA[
+		SELECT ctgry_nm
+		FROM t_store_info 
+		WHERE ctgry_nm IS NOT NULL 
+		AND ctgry_nm <> ''
+		GROUP BY ctgry_nm
+		]]>
 	</select>
 	
 </mapper>

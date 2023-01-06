@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import kr.co.infovine.dkmm.db.model.nicknm.TDefineNicknm;
 import lombok.Getter;
 import lombok.Setter;
 @Getter
@@ -214,6 +215,10 @@ public class TDefineWork {
     private String workConditionCode;
     private String codeValue;
     private String workConditionNm;
+    private String actionText;
+    private TDefineNicknm tDefineNicknmModelSub;
+    private int userSeq;
+    private String nowDay;
     
     //조건
   	private String searchText;
@@ -236,4 +241,5 @@ public class TDefineWork {
     private int completeCnt;
     
     private String completeYn;
+    private String myCnt;
 }
