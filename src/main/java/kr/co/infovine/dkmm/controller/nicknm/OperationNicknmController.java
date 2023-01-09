@@ -39,7 +39,7 @@ public class OperationNicknmController {
 	@RequestMapping(value ="/nicknm.do")
 	public ModelAndView defineNicknmInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_nicknm");
+		model.setViewName("operation/nicknm");
 		model.addObject("leftPageUrl", "nicknm/nicknm");
 		return model;
 	}

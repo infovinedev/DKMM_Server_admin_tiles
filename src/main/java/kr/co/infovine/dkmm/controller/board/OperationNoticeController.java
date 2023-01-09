@@ -37,7 +37,7 @@ public class OperationNoticeController {
 	@RequestMapping(value ="/notice.do")
 	public ModelAndView boardInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_notice");
+		model.setViewName("operation/notice");
 		model.addObject("leftPageUrl", "notice/notice");
 		return model;
 	}

@@ -37,7 +37,7 @@ public class OperationDefineController {
 	@RequestMapping(value ="/define.do")
 	public ModelAndView defineWorkInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_define");
+		model.setViewName("operation/define");
 		model.addObject("leftPageUrl", "define/define");
 		return model;
 	}

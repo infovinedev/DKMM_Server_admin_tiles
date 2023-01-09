@@ -34,7 +34,7 @@ public class OperationDefineApprovalController {
 	@RequestMapping(value ="/defineApproval.do")
 	public ModelAndView defineWorkInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_defineApproval");
+		model.setViewName("operation/defineApproval");
 		model.addObject("leftPageUrl", "approval/defineApproval");
 		model.addObject("auth", CommonUtil.getUpAuth());
 		return model;

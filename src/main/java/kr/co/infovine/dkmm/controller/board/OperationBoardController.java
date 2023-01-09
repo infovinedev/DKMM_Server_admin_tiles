@@ -40,7 +40,7 @@ public class OperationBoardController {
 	@RequestMapping(value ="/board.do")
 	public ModelAndView boardInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_board");
+		model.setViewName("operation/board");
 		model.addObject("leftPageUrl", "board/board");
 		return model;
 	}

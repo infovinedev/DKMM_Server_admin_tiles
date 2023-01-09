@@ -40,7 +40,7 @@ public class OperationFaqController {
 	@RequestMapping(value ="/faq.do")
 	public ModelAndView faqInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_faq");
+		model.setViewName("operation/faq");
 		model.addObject("leftPageUrl", "faq/faq");
 		return model;
 	}

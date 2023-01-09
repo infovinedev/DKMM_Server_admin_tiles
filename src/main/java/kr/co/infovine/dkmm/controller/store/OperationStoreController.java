@@ -37,7 +37,7 @@ public class OperationStoreController {
 	@RequestMapping(value ="/store.do")
 	public ModelAndView storeInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_store");
+		model.setViewName("operation/store");
 		model.addObject("leftPageUrl", "store/store");
 		TStoreInfoModel storeInfo = new TStoreInfoModel();
 		model.addObject("storeCount", operationStoreService.selectStoreCount(storeInfo) );

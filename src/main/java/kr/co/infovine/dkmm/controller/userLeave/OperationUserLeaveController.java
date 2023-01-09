@@ -33,7 +33,7 @@ public class OperationUserLeaveController {
 	@RequestMapping(value ="/userLeave.do")
 	public ModelAndView realestateParcelInfo(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_userLeave");
+		model.setViewName("operation/userLeave");
 		model.addObject("leftPageUrl", "userLeave/userLeave");
 		model.addObject("auth", CommonUtil.getUpAuth());
 		return model;

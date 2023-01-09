@@ -41,7 +41,7 @@ public class OperationUserController {
 	@RequestMapping(value ="/user.do")
 	public ModelAndView user(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		model.setViewName("operation/operation_user");
+		model.setViewName("operation/user");
 		model.addObject("leftPageUrl", "user/user");
 		return model;
 	}
