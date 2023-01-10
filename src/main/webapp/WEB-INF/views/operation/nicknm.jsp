@@ -53,7 +53,7 @@ function searchDataTable(){
 
 function fun_search(){
 	var searchType = $("#sel_workCond").val();
-	var searchText = "";//$("#txt_searchText").val();
+	var searchText = $("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	var inputData = {"searchType": searchType, "searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};

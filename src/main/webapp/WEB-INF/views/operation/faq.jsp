@@ -50,7 +50,7 @@ function searchDataTable(){
 
 function fun_search(){
 	var faqDiv = $("#search_faqDiv").val();
-	var searchText = "";//$("#txt_searchText").val();
+	var searchText = $("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	

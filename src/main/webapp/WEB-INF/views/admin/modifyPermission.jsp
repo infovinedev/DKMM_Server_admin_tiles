@@ -88,7 +88,8 @@ function fun_SetButtonMode(type) {
 function fun_selectjdtListAdminUser(callback){
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
-	var inputData = {"searchText": "", "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
+	var searchText = $("#txt_searchText").val();
+	var inputData = {"searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};
 	
 	fun_ajaxPostSend("/admin/select/adminUser.do", inputData, true, function(msg){
 		if(msg!=null){

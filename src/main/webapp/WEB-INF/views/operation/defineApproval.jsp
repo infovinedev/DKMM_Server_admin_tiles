@@ -146,7 +146,7 @@ function fun_selectCommonCode(){
 
 function fun_search(){
 	var workCondition = $("#sel_workCond").val();
-	var searchText = "";//$("#txt_searchText").val();
+	var searchText = $("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	var inputData = {"workCondition": workCondition, "searchText": searchText, "searchStartDt": searchStartDt,"searchEndDt": searchEndDt};

@@ -228,5 +228,9 @@
     <if test='searchStartDt neq null and !"".equals(searchStartDt)'>
       AND substring(reg_date, 0, 5)||'-'||substring(reg_date, 5, 2)||'-'||substring(reg_date, 7, 2) BETWEEN #{searchStartDt} AND #{searchEndDt}
     </if>
+    <if test='searchText neq null and !"".equals(searchText)'>
+       AND ( user_id LIKE CONCAT('%', #{searchText}, '%') 
+       			OR user_name LIKE CONCAT('%', #{searchText}, '%')  )
+    </if>
   </select>
 </mapper>

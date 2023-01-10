@@ -86,7 +86,8 @@ function fun_SetButtonMode(type) {
 
 
 function fun_selectjdtListAdminDefault(callback){
-	var inputData = {"searchText": "", "codeGroup": "mng_type"};
+	var searchText = $("#txt_searchText").val();
+	var inputData = {"searchText": searchText, "codeGroup": "mng_type"};
 	
 	fun_ajaxPostSend("/common/select/serviceCodeList.do", inputData, true, function(msg){ 
 		if(msg!=null){

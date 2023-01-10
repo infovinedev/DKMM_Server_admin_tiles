@@ -114,7 +114,7 @@ function searchDataTable(){
 }
 
 function fun_selectJdtListProgram(callback){
-	var searchText = ""; //$("#txt_searchText").val();
+	var searchText = $("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	

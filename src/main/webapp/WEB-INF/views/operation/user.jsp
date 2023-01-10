@@ -55,7 +55,7 @@ function fun_search(){
 	searchDataTable();
 	
 	var osType = $("#sel_osType").val();
-	var searchText = ""; //$("#txt_searchText").val();
+	var searchText = $("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	

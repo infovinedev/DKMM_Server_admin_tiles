@@ -59,7 +59,7 @@ function searchDataTable(){
 
 function fun_search(){
 	var boardDiv = $("#search_boardDiv").val();
-	var searchText = "";//$("#txt_searchText").val();
+	var searchText = $("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	

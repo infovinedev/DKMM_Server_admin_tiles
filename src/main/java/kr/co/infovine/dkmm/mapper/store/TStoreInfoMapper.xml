@@ -290,6 +290,7 @@
     	,latitude = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.latitude ELSE NULL END)
     	,longitude = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.longitude ELSE NULL END) 
     	,vworld_response = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.vworld_response ELSE NULL END)
+    	,place_id = (CASE WHEN t_store_info.road_addr = excluded.road_addr THEN t_store_info.place_id ELSE NULL END)
   </insert>
   
   <update id="updateCloseStoreInfo">

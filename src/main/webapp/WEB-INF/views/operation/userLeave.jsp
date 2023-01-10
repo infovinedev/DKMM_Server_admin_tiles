@@ -56,8 +56,8 @@ function fun_leaveRollBack(){
 	
 	var leaveSeq         = $("#txt_leaveSeq").val();
 	var userSeq          = $("#txt_userSeq").val();
-
-	var inputData = {"leaveSeq": leaveSeq , "userSeq": userSeq };
+	
+	var inputData = {"leaveSeq": leaveSeq , "userSeq": userSeq, "searchText" : searchText };
 	
 	var result = confirm('탈퇴를 되돌리시겠습니까? 탈퇴정보는 삭제 되고 기존 회원은 로그인이 가능합니다.');
 	
@@ -91,7 +91,7 @@ function searchDataTable(){
 
 function fun_search(){
 	var delYn = $("#sel_delYn").val();
-	var searchText = "";//$("#txt_searchText").val();
+	var searchText = $("#txt_searchText").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	

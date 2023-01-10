@@ -109,15 +109,14 @@
     <if test='searchCodeGroup neq null and !"".equals(searchCodeGroup)'>
       AND code_group = #{searchCodeGroup}
     </if>
+    <if test='searchText neq null and !"".equals(searchText)'>
+       AND ( code_group LIKE CONCAT('%', #{searchText}, '%') 
+       			OR code_value LIKE CONCAT('%', #{searchText}, '%')
+       			OR code_name LIKE CONCAT('%', #{searchText}, '%')
+       			OR code_description LIKE CONCAT('%', #{searchText}, '%') )
+    </if>
     order by  code_group, disp_order, code_value
   </select>
-  <!--     <if test='searchText neq null and !"".equals(searchText)'> -->
-<!--       AND (code_group LIKE CONCAT('%', #{searchText}, '%') -->
-<!--       		OR code_value LIKE CONCAT('%', #{searchText}, '%') -->
-<!--       		OR code_name LIKE CONCAT('%', #{searchText}, '%') -->
-<!--       		OR code_description LIKE CONCAT('%', #{searchText}, '%') -->
-<!--       		) -->
-<!--     </if> -->
   
   
   <select id="selectCodeGroup" resultMap="BaseResultMap">
@@ -134,6 +133,11 @@
 	  	<![CDATA[ AND code_value <> 'ROLE_ADMIN' ]]>   
 	  </if>
   </if>
+  <if test='searchText neq null and !"".equals(searchText)'>
+       AND ( code_value LIKE CONCAT('%', #{searchText}, '%')
+       			OR code_name LIKE CONCAT('%', #{searchText}, '%')
+       			OR code_description LIKE CONCAT('%', #{searchText}, '%') )
+    </if>
   order by disp_order
   </select>
   
