@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/board")
 public class OperationBoardController {
 	
+	@Value("${url.mainUrl}")
+    private String MAIN_URL;
+	
 	@Autowired
 	OperationBoardService operationboardService;
 	
@@ -52,6 +56,7 @@ public class OperationBoardController {
 	,@RequestBody TBoard board) {
 		ResponseModel result = new ResponseModel();
 		try {
+			board.setMainUrl(MAIN_URL);
 			List<TBoard> model = operationboardService.selectboardAllList(board);
 			ObjectMapper mapper = new ObjectMapper();
 			String boardAllList = mapper.writeValueAsString(model);
@@ -70,6 +75,7 @@ public class OperationBoardController {
 	,@RequestBody TBoard board) {
 	ResponseModel result = new ResponseModel();
 		try {
+			board.setMainUrl(MAIN_URL);
 			TBoard model = operationboardService.selectboardListDetail(board);
 			ObjectMapper mapper = new ObjectMapper();
 			String boardlInfoDetail = mapper.writeValueAsString(model);

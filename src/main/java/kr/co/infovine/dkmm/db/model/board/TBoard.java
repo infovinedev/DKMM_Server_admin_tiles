@@ -110,6 +110,9 @@ public class TBoard {
      */
     private String delYn;
     
+    private String imageUrl;
+    private String mainUrl;
+    
     //조건
     private String searchText;
     private String searchStartDt;
