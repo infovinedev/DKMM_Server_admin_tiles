@@ -30,6 +30,16 @@ public class CommonCodeServiceImpl implements CommonCodeService{
 	public List<TCommonCodeModel> selectCommonCode(TCommonCodeModel tCommonCodeModel) {
 		return tCommonCodeMapper.selectCommonCode(tCommonCodeModel);
 	}
-	
-	 
+
+	@Override
+	public List<TCommonCodeModel> selectByCodeGroup(String codeGroup) {
+		return tCommonCodeMapper.selectByCodeGroup(codeGroup);
+	}
+
+	@Override
+	public int updateByDescriptionAndInsDt(TCommonCodeModel row) {
+		return tCommonCodeMapper.updateByDescriptionAndInsDt(row);
+	}
+
+
 }

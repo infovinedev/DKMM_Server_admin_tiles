@@ -1,10 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
--->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyrT6DRWnQOpoI1J4h1-3ZXKwqhEFyftc"></script>
+<style>
+.main_search_result_list .table-bordered th, .main_search_result_list .table-bordered td {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    height: 20px!important;
+
+</style>
+
 <script>
     var storeListInfo;
+    var placeListInfo;
     var beforeCtgry;
     var storeCount = ${storeCount};
-
+    var googleMap;
     $(document).ready(function () {
         var ua = navigator.userAgent;
         var checker = {
@@ -17,13 +26,20 @@
             if (checker.android == null || checker.android == "" || checker.android == "null") {
             }
         });
-
+        openGoogleMaps();
 
         fun_setStoreListInfo();
+
+        fun_setPlaceListInfo();
 
         $("#storeListLength").change(function(){
             var length = $("#storeListLength").val();
             $("#storeListInfo").DataTable().page.len(length).draw();
+        });
+
+        $("#placeListLength").change(function(){
+            var length = $("#placeListLength").val();
+            $("#placeListInfo").DataTable().page.len(length).draw();
         });
 
         $("#txt_searchText").on('keyup click', function () {
@@ -34,15 +50,76 @@
             searchDataTable();
         });
 
-        $("#search_ctgryNm").on('focus', function () {
-            beforeCtgry = $("#search_ctgryNm").val();
-        });
+        // $("#search_ctgryNm").on('focus', function () {
+        //     beforeCtgry = $("#search_ctgryNm").val();
+        // });
 
         $("#search_ctgryNm").on('change', function () {
             fun_search();
         });
 
+
+        $('#storeListInfo').delegate('tr', 'click', function() {
+            var table = $('#storeListInfo').DataTable();
+
+            if(typeof(table.row(this).data()) !== "undefined") { // 빈테이블이 아닐때
+                var chk = $(this).hasClass('selected');
+
+                if(chk) {
+                    $(this).removeClass('selected');
+                    this.children[0].lastChild.checked = false;
+                }
+                else {
+                    $("#jdtListLoad tbody tr").removeClass('selected');
+                    $("input[name='chk-load']").prop('checked', false); // 선택 줄 외 체크 해제
+                    $(this).toggleClass('selected');
+                    this.children[0].lastChild.checked = true;
+                    //fun_Click_jdtListLoad();
+                    $("#jdtListLoad tbody tr").removeClass('selected');
+                    $("input[name='chk-load']").prop('checked', false); // 선택 줄 외 체크 해제
+                }
+            }
+        });
     });
+
+
+    function openGoogleMaps(){
+        var lat = 37.5222732;
+        var lon = 126.9199522;
+        fun_initializingMaps(lat, lon);
+        if (navigator.geolocation) {            //gps 지원여부
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = parseFloat(position.coords.latitude);
+                var lon = parseFloat(position.coords.longitude);
+                googleMap.setCenter({lat: lat, lng: lon});
+            }, function (error) {
+            }, {
+                enableHighAccuracy: false,
+                maximumAge: 0,
+                timeout: Infinity
+            });
+        }
+    }
+
+    function fun_initializingMaps(lat, lon) {
+        var latlon = {lat: parseFloat(lat), lng: parseFloat(lon)};
+
+        googleMap = new google.maps.Map(document.getElementById("googleMap"), {
+            zoom: 14
+            , center: latlon
+            , gestureHandling: 'greedy'
+            , streetViewControl: false
+        });
+
+        googleMap.addListener('click', function (event) {
+        });
+
+        googleMap.addListener('drag', function (event) {
+        });
+
+        googleMap.addListener('zoom_changed', function (event) {
+        });
+    }
 
     function searchDataTable(){
         if($('#chk_searchTable').is(':checked')){
@@ -58,11 +135,11 @@
     function fun_search(){
 
         var ctgryNm = $("select[name=search_ctgryNm]").val();
-        var searchText = ""; //$("input[name=searchText]").val();
+        var searchText = $("input[name=searchText]").val();
         var searchStartDt = $("#search_startDt").val();
         var searchEndDt = $("#search_endDt").val();
 
-        if ( ctgryNm == "" ){
+        if ( ctgryNm == "" && searchText=="" ){
             alert("카테고리를 선택해 주세요.");
             $("select[name=search_ctgryNm]").val(beforeCtgry);
             return;
@@ -159,7 +236,7 @@
                 var insDt = tempResult.insDt == null ? "N/A" : tempResult.insDt;                                      //매장등록일
                 var roadAddr = tempResult.roadAddr == null ? "N/A" : tempResult.roadAddr;                             //도로명주소
                 //var                                                                                                 //지번주소 컬럼없음
-                var zip = tempResult.roadZip == null ? "N/A" : tempResult.roadZip;                                    //우편번호
+                var roadZip = tempResult.roadZip == null ? "N/A" : tempResult.roadZip;                                    //우편번호
                 var latitude = tempResult.latitude == null ? "N/A" : tempResult.latitude;                             //위도
                 var longitude = tempResult.longitude == null ? "N/A" : tempResult.longitude;                          //경도
                 var companyNo = tempResult.companyNo == null ? "N/A" : tempResult.companyNo;                          //사업자등록번호
@@ -203,6 +280,9 @@
 
             }
         });
+        setTimeout(function() {
+            google.maps.event.trigger(googleMap, "resize");
+        }, 1000);
     }
     function fun_update(type) {
         if(type == "insert"){
@@ -215,14 +295,16 @@
     function fun_setStoreListInfo() {
         storeListInfo = $("#storeListInfo").DataTable({
             "columns": [
-                {"data": "storeSeq"}
-                , {"data": "ctgryNm"}
-                , {"data": "storeNm"}
-                , {"data": "roadAddr"}
-                , {"data": "likeCnt" }
-                , {"data": "lastWaitPersonCnt" }
-                , {"data": "lastWaitInsDt" }
-                , {"data": "add" }
+                { "data" : null,
+                    "defaultContent" : "<input type='checkbox' name='chkStore'></input>",
+                    "sortable" : false }
+                , {"data": "storeSeq", "title":"번호"}
+                , {"data": "ctgryNm", "title":"카테고리"}
+                , {"data": "storeNm", "title":"매장명"}
+                , {"data": "roadAddr", "title":"주소"}
+                , {"data": "latitude", "title":"위도"}
+                , {"data": "longitude", "title":"경도"}
+                , {"data": "placeId", "title":"구글ID"}
             ]
             , "paging": true            // Table Paging
             , "info": false             // 'thisPage of allPage'
@@ -249,48 +331,68 @@
                 }
             }
             , "columnDefs": [
-                {
-                    "targets": [0]
-                    , "class": "text-center"
-                }
-                ,{
-                    "targets": [1]
-                    , "class": "text-center"
-                }
-                , {
-                    "targets": [2]
-                    , "class": "text-left"
-                }
-                , {
-                    "targets": [3]
-                    , "class": "text-left"
-                }
-                , {
-                    "targets": [4]
-                    , "class": "text-center"
-                }
-                , {
-                    "targets": [5]
-                    , "class": "text-center"
-                }
-                , {
-                    "targets": [6]
-                    , "class": "text-center"
-                }
-                , {
-                    "targets": [7]
-                    , "class": "text-center"
-                    , "render": function (data, type, row) {
-                        var msg = row.storeSeq;
-                        var insertTr = "";
-                        insertTr += '<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_viewDetail(' + msg + ')">상세보기</button>';
-                        return insertTr;
-                    }
-                }
+                { "targets": [0], "class": "dt-head-center dt-body-right dtPercent3"}
+                , {"targets": [1], "class": "dt-head-center dt-body-left dtPercent10"}
+                , {"targets": [2], "class": "dt-head-center dt-body-left dtPercent10"}
+                , {"targets": [3], "class": "dt-head-center dt-body-left dtPercent15"}
+                , {"targets": [4], "class": "dt-head-center dt-body-right dtPercent30"}
+                , {"targets": [5], "class": "dt-head-center dt-body-right dtPercent10"}
+                , {"targets": [6], "class": "dt-head-center dt-body-left dtPercent10"}
             ]
         });
 
-        fun_search();
+        //fun_search();
+    };
+
+    function fun_setPlaceListInfo() {
+        placeListInfo = $("#placeListInfo").DataTable({
+            "columns": [
+                { "data" : null,
+                    "defaultContent" : "<input type='checkbox' name='chkPlace'></input>",
+                    "sortable" : false }
+                , {"data": "placeId", "title":"ID"}
+                , {"data": "storeSeq", "title":"매장번호"}
+                , {"data": "name", "title":"매장명"}
+                , {"data": "latitude", "title":"위도"}
+                , {"data": "longitude", "title":"경도"}
+                , {"data": "formattedAddress", "title":"주소"}
+            ]
+            , "paging": true            // Table Paging
+            , "info": false             // 'thisPage of allPage'
+            , "autoWidth": true
+            /* 		, "scrollY": "350px"
+                    , "scrollCollapse": true
+                    , "scrollX": true   */
+            , "scrollXInner": "100%"
+            , "order": [[ 1, "desc" ]]
+            , "deferRender": true           // defer
+            , "lengthMenu": [10,20,50]           // Row Setting [-1], ["All"]
+            , "lengthChange": true
+            , "dom": 't<"bottom"p><"clear">'
+            , "language": {
+                "search": "검색",
+                "lengthMenu": " _MENU_ ",
+                "zeroRecords": "데이터가 없습니다.",
+                "info": "page _PAGE_ of _PAGES_",
+                "infoEmpty": "",
+                "infoFiltered": "(filtered from _MAX_ total records)",
+                "paginate": {
+                    "next": ">",
+                    "previous": "<"
+                }
+            }
+            , "columnDefs": [
+                { "targets": [0], "class": "dt-head-center dt-body-center dtPercent3"}
+                , {"targets": [1], "class": "dt-head-center dt-body-center dtPercent10"}
+                , {"targets": [2], "class": "dt-head-center dt-body-right dtPercent10"}
+                , {"targets": [3], "class": "dt-head-center dt-body-left dtPercent20"}
+                , {"targets": [4], "class": "dt-head-center dt-body-right dtPercent10"}
+                , {"targets": [5], "class": "dt-head-center dt-body-right dtPercent10"}
+                , {"targets": [6], "class": "dt-head-center dt-body-left dtPercent30"}
+            ]
+        });
+
+        fun_searchPlace();
     };
 
     function fun_save(type){
@@ -398,55 +500,38 @@
         jsonToExcel(excelArray);
     }
 
-
-    function jsonToExcel(wsData) {
-
-        console.log("jsonToExcel");
-
-        for (var i=0; i<wsData.length; i++){
-
-            console.log(i + "번째 엑셀");
-
-            // workbook 생성
-            var wb = XLSX.utils.book_new();
-
-            // 문서 속성세팅 ( 윈도우에서 엑셀 오른쪽 클릭 속성 -> 자세히에 있는 값들
-            // 필요 없으면 안써도 괜찮다.
-            wb.Props = {
-                Title: "title",
-                Subject: "subject",
-                Author: "programmer93",
-                Manager: "Manager",
-                Company: "Company",
-                Category: "Category",
-                Keywords: "Keywords",
-                Comments: "Comments",
-                LastAuthor: "programmer93",
-                CreatedDate: new Date(2021,01,13)
-            };
-
-            // sheet명 생성
-            wb.SheetNames.push("sheet " + i);
-            // 배열 데이터로 시트 데이터 생성
-//         var ws = XLSX.utils.aoa_to_sheet(wsData);
-            var ws = XLSX.utils.json_to_sheet (wsData[i]);
-            // var ws2 = XLSX.utils.aoa_to_sheet(wsData2); 	//시트가 여러개인 경우
-
-            // 시트 데이터를 시트에 넣기 ( 시트 명이 없는 시트인경우 첫번째 시트에 데이터가 들어감 )
-            wb.Sheets["sheet "+i] = ws;
-            // wb.Sheets["sheet 2"] = ws2;	//시트가 여러개인 경우+
-
-            // 엑셀 파일 쓰기
-            var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
-
-            fun_endBlockUI();
-
-            // 파일 다운로드
-            saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), '엑셀_다운로드_' + i + '.xlsx');
+    function fun_searchKeyword(){
+        var name = $("#txt_keyword").val();
+        if(name==""){
+            alert("키워드를 입력해주세요");
+            $("#txt_keyword").focus();
+            return false;
         }
+        var inputData = {"name": name};
+        fun_ajaxPostSend("/google/search/keyword.do", inputData, true, function(msg){
+            var code = msg.code;
+            if(code=="0000"){
 
-        fun_endBlockUI();
+            }
+            else{
+                alert("검색 결과가 없습니다");
+            }
+        });
+    }
 
+    function fun_searchPlace(){
+        var inputData = {};
+        fun_ajaxPostSend("/google/search/place.do", inputData, true, function(msg){
+            if(msg!=null){
+                switch(msg.code){
+                    case "0000":
+                        var tempResult = JSON.parse(msg.result);
+                        fun_dataTableAddData("#placeListInfo", tempResult);
+                        break;
+                    case "0001":
+                }
+            }
+        });
     }
 
 </script>
@@ -465,7 +550,7 @@
         <!-- Main content -->
         <div class="content" data-menu="notice">
             <div class="container-fluid">
-                <section id="section1_search">
+                <section id="section1_search" style="margin-bottom: -90px">
                     <div class="inquery-area">
                         <table class="table table-bordered">
                             <colgroup>
@@ -583,8 +668,6 @@
                         </div>
                         <div class="col-auto">
                             <!-- <a href="javascript:;" class="btn btn-primary mr-1"  onclick="fun_viewDetail()">매장등록</a> -->
-                            <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#exampleModalScrollable" onclick="fun_update('insert')">매장등록</button>
-                            <button type="button" class="btn btn-outline-primary mr-1" onclick="fun_start_Excel()">엑셀다운로드</button>
                             <select id="storeListLength" class="custom-select w-auto">
                                 <option value="10">10</option>
                                 <option value="20">20</option>
@@ -594,20 +677,35 @@
                     </div>
                     <div class="main_search_result_list">
                         <table id="storeListInfo" class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th class="text-center" width="5%">번호</th>
-                                <th class="text-center" width="10%">카테고리</th>
-                                <th class="text-center">매장명</th>
-                                <th class="text-center" width="30%">매장주소</th>
-                                <th class="text-center" width="5%">매장찜</th>
-                                <th class="text-center" width="8%">마지막<br>대기등록수</th>
-                                <th class="text-center" width="12%">마지막<br>대기등록일자</th>
-                                <th class="text-center" width="8%">관리</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="section2">
+                    <div class="row justify-content-between mb-3">
+                        <div class="col-auto">
+                            키워드
+                            <input id="txt_keyword" class="form-control"><button id="btn_keyword" class="btn btn-dark min-width-90px" onclick="fun_searchKeyword();">검색</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section3">
+                    <div class="row justify-content-between align-items-end mb-3">
+                        <input  type="hidden" id="totalCntPlace" name="totalCntPlace" />
+                        <div class="col-auto">
+                        </div>
+                        <div class="col-auto">
+                            <!-- <a href="javascript:;" class="btn btn-primary mr-1"  onclick="fun_viewDetail()">매장등록</a> -->
+                            <select id="placeListLength" class="custom-select w-auto">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="main_search_result_list">
+                        <table id="placeListInfo" class="table table-bordered">
                         </table>
                     </div>
                 </section>
@@ -697,7 +795,13 @@
                                         <th>마지막대기등록일자</th>
                                         <td><input class="form-control" type="text" id="txt_lastWaitInsDt" readOnly/></td>
                                     </tr>
-
+                                    <tr>
+                                        <th>지도</th>
+                                        <td colspan="3">
+                                            <div id="googleMap" style="width:100%;height:200px;">
+                                            </div>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -835,6 +939,8 @@
                                     </tbody>
                                 </table>
                             </div>
+
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-primary" onclick="fun_save();">저장</button>
                                 <button type="button" class="btn btn-danger">삭제</button>
@@ -845,7 +951,8 @@
                 </div>
             </div>
             <!-- 상세보기 모달창 end -->
-
+            <div id="googleMap" style="width:100%;height:200px;">
+            </div>
         </div>
     </div>
 </div>

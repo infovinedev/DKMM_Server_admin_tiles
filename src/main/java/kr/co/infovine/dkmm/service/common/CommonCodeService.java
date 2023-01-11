@@ -5,6 +5,7 @@ import java.util.List;
 import kr.co.infovine.dkmm.db.model.common.TCommonCodeModel;
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
 import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * kr.co.infovine.dkmm.service.realestate
@@ -13,4 +14,8 @@ import kr.co.infovine.dkmm.db.model.store.TStoreInfoModel;
  */
 public interface CommonCodeService {
     List<TCommonCodeModel> selectCommonCode(TCommonCodeModel tCommonCodeModel);
+
+    List<TCommonCodeModel> selectByCodeGroup(@Param("codeGroup") String codeGroup);
+
+    int updateByDescriptionAndInsDt(TCommonCodeModel row);
 }

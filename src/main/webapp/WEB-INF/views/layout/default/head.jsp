@@ -24,6 +24,7 @@
 	<!-- Additional style(개발단에서 수정 및 추가 필요한 경우 additional.css에 작성)  -->
 	<link rel="stylesheet" href="../assets/css/additional.css">
 	<link rel="stylesheet" href="../assets/css/custom_pagenate.css">
+	<link rel="stylesheet" href="../assets/css/custom.css">
 	
 	<!-- 	Toast UI Editor -->
 	<link rel="stylesheet" href="../assets/css/editor/toastui-editor.min.css">

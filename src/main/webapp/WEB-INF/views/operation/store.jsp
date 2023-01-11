@@ -58,11 +58,11 @@ function searchDataTable(){
 function fun_search(){
 	
 	var ctgryNm = $("select[name=search_ctgryNm]").val();
-	var searchText = ""; //$("input[name=searchText]").val();
+	var searchText = $("input[name=searchText]").val();
 	var searchStartDt = $("#search_startDt").val();
 	var searchEndDt = $("#search_endDt").val();
 	
-	if ( ctgryNm == "" ){
+	if ( ctgryNm == "" && searchText=="" ){
 		alert("카테고리를 선택해 주세요.");
 		$("select[name=search_ctgryNm]").val(beforeCtgry);
 		return;
@@ -159,7 +159,7 @@ function fun_viewDetail(storeSeq) {
 			var insDt = tempResult.insDt == null ? "N/A" : tempResult.insDt;                                      //매장등록일
 			var roadAddr = tempResult.roadAddr == null ? "N/A" : tempResult.roadAddr;                             //도로명주소
 			//var                                                                                                 //지번주소 컬럼없음                                                                                
-			var zip = tempResult.roadZip == null ? "N/A" : tempResult.roadZip;                                    //우편번호
+			var roadZip = tempResult.roadZip == null ? "N/A" : tempResult.roadZip;                                    //우편번호
 			var latitude = tempResult.latitude == null ? "N/A" : tempResult.latitude;                             //위도
 			var longitude = tempResult.longitude == null ? "N/A" : tempResult.longitude;                          //경도
 			var companyNo = tempResult.companyNo == null ? "N/A" : tempResult.companyNo;                          //사업자등록번호

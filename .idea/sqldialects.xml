@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/../DKMM_Server_api" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/../Dkmm_Server_view" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/../billletter_admin" dialect="TSQL" />
+    <file url="file://$PROJECT_DIR$/../billletter_collector" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/../blapiSpringBoot" dialect="TSQL" />
+    <file url="file://$PROJECT_DIR$/../dkmm_batch_google" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/../realEstate_letter" dialect="TSQL" />
+    <file url="PROJECT" dialect="PostgreSQL" />
+  </component>
+</project>

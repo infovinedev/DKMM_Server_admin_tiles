@@ -184,4 +184,6 @@ public class TStoreInfoModel {
 	private Date vworldProcDt;
 	
 	private String pageCnt;
+
+	private String placeId;
 }
