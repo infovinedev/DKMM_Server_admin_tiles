@@ -39,4 +39,9 @@ public class OperationBoardServiceImpl implements OperationBoardService{
 	public int deleteBoard(Integer boardSeq) {
 		return boardMapper.deleteByPrimaryKey(boardSeq); 
 	}
+	
+	@Override 
+	public int deleteBoardFileData(TBoard board) {
+		return boardMapper.deleteBoardFileData(board); 
+	}
 }

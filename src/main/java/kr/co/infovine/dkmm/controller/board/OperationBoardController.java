@@ -24,6 +24,7 @@ import kr.co.infovine.dkmm.api.model.base.SessionModel;
 import kr.co.infovine.dkmm.controller.map.MapController;
 import kr.co.infovine.dkmm.db.model.board.TBoard;
 import kr.co.infovine.dkmm.db.model.define.TDefineWork;
+import kr.co.infovine.dkmm.db.model.faq.TFaq;
 import kr.co.infovine.dkmm.service.board.OperationBoardService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -106,11 +107,35 @@ public class OperationBoardController {
 				int boardSeq = board.getBoardSeq();
 				operationboardService.deleteBoard(boardSeq);
 			}
+			result.setCode("0000");
 			result.setErrorMessage("success"); 
 		} catch (Exception e) {
 			result.setErrorMessage("error"); 
+			result.setCode("0001");
 			e.printStackTrace(); 
 		} 
 		return result;
 	}
+	
+	//저장 수정 삭제.
+		@RequestMapping(value = "/save/boardDeleteFile.do", method = RequestMethod.POST 
+		, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+		@ResponseBody 
+		public ResponseModel boardDeleteFile(HttpServletRequest request, HttpServletResponse response ,HttpSession session, @RequestBody TBoard board) {
+			ResponseModel result = new ResponseModel();
+			
+			try {
+				SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+				board.setUptSeq(sessionModel.getAdminUserSeq());
+				operationboardService.deleteBoardFileData(board);
+				
+				result.setCode("0000");
+				result.setErrorMessage("success"); 
+			} catch (Exception e) {
+				result.setCode("0001");
+				result.setErrorMessage("error"); 
+				e.printStackTrace(); 
+			} 
+			return result;
+		}
 }

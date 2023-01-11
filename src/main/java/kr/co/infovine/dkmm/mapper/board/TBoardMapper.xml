@@ -139,4 +139,12 @@
     WHERE 1=1
     AND a.board_seq = ${boardSeq}
   </select>
+  
+  <update id="deleteBoardFileData" parameterType="kr.co.infovine.dkmm.db.model.board.TBoard">
+    update t_board
+    set file_uuid = null
+    	,upt_seq = #{uptSeq,jdbcType=BIGINT}
+    	,upt_dt = now()
+    where board_seq = #{boardSeq,jdbcType=INTEGER}
+  </update>
 </mapper>

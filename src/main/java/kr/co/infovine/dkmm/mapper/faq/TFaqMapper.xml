@@ -13,6 +13,7 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="view_cnt" jdbcType="BIGINT" property="viewCnt" />
     <result column="file_uuid" jdbcType="VARCHAR" property="fileUuid" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
     <result column="ins_seq" jdbcType="BIGINT" property="insSeq" />
     <result column="ins_dt" jdbcType="TIMESTAMP" property="insDt" />
     <result column="upt_seq" jdbcType="BIGINT" property="uptSeq" />
@@ -67,7 +68,7 @@
       title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
       view_cnt = #{viewCnt,jdbcType=BIGINT},
-      file_uuid = #{fileUuid,jdbcType=VARCHAR},
+      file_uuid = (CASE WHEN #{fileUuid,jdbcType=VARCHAR} IS NULL OR #{fileUuid,jdbcType=VARCHAR} = '' THEN file_uuid ELSE #{fileUuid,jdbcType=VARCHAR} END),
       upt_seq = #{uptSeq,jdbcType=BIGINT},
       upt_dt = now(),
       del_yn = #{delYn,jdbcType=VARCHAR}
@@ -104,6 +105,7 @@
           ,a.content
           ,a.view_cnt
           ,a.file_uuid
+          ,CONCAT( (SELECT CONCAT(#{mainUrl,jdbcType=VARCHAR},  '/', page_type) FROM t_file WHERE file_uuid = a.file_uuid), '/', (SELECT file_save_nm FROM t_file_sub WHERE file_uuid_sub = a.file_uuid)) as image_url
           ,a.del_yn
           ,a.ins_seq
           ,a.ins_dt
@@ -125,6 +127,7 @@
           ,a.file_uuid
           ,(SELECT file_nm FROM t_file_sub WHERE file_uuid_sub = a.file_uuid) as fileNm
           ,(SELECT file_save_nm FROM t_file_sub WHERE file_uuid_sub = a.file_uuid) as fileSaveNm
+          ,CONCAT( (SELECT CONCAT(#{mainUrl,jdbcType=VARCHAR},  '/', page_type) FROM t_file WHERE file_uuid = a.file_uuid), '/', (SELECT file_save_nm FROM t_file_sub WHERE file_uuid_sub = a.file_uuid)) as image_url
           ,a.del_yn
           ,a.ins_seq
           ,ins_dt
@@ -134,5 +137,12 @@
       WHERE 1=1
       AND faq_seq = ${faqSeq}
   </select>
-    
+   
+  <update id="deleteFaqFileData" parameterType="kr.co.infovine.dkmm.db.model.faq.TFaq">
+    update t_faq
+    set file_uuid = null
+    	,upt_seq = #{uptSeq,jdbcType=BIGINT}
+    	,upt_dt = now()
+    where faq_seq = #{faqSeq,jdbcType=INTEGER}
+  </update>
 </mapper>

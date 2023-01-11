@@ -42,4 +42,10 @@ public class OperationFaqServiceImpl implements OperationFaqService{
 	public int deleteFaq(Integer faqSeq) {
 		return faqMapper.deleteByPrimaryKey(faqSeq); 
 	}
+	
+	@Override 
+	public int deleteFaqFileData(TFaq faq) {
+		return faqMapper.deleteFaqFileData(faq); 
+	}
+	
 }

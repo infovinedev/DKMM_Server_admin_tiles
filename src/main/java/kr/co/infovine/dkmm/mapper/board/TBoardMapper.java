@@ -48,4 +48,6 @@ public interface TBoardMapper {
 	List<TBoard> selectboardAllList(TBoard board);
 	//공지사항 상세보기
 	TBoard selectBoardDetail(TBoard board);
+	
+	int deleteBoardFileData(TBoard row);
 }

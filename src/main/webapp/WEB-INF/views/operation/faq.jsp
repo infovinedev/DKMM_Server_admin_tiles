@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
- -->
+<script language="javascript" src="/assets/js/huge-uploader.js"></script>
 <script>
 var faqListInfo;
 
@@ -99,7 +99,8 @@ function fun_viewDetail(faqSeq) {
 			var title = tempResult.title == null ? "N/A" : tempResult.title;                             //제목
 			var viewCnt  = tempResult.viewCnt == null ? "N/A" : tempResult.viewCnt;                      //조회수
 			var content  = tempResult.content == null ? "N/A" : tempResult.content;                      //내용
-			var delYn  = tempResult.delYn == null ? "" : tempResult.delYn;                      //내용
+			var delYn  = tempResult.delYn == null ? "" : tempResult.delYn;                      		
+			var imageUrl		   = tempResult.imageUrl == null ? "" : tempResult.imageUrl;   
 			
 			var insertTr = "";
 			if ( faqDiv == "POLICY" ){
@@ -127,6 +128,16 @@ function fun_viewDetail(faqSeq) {
 			$("#txt_content").val(content);
 			$("#txt_delYn").val(delYn);
 			
+			if (imageUrl == "/"){
+				$("#txt_fileUuid").val("");
+				$("#tr_previewDtl").hide();
+				$("#img_previewDtl").attr("src", "");
+			}else{
+				$("#txt_fileUuid").val(imageUrl);
+				$("#tr_previewDtl").show();
+				$("#img_previewDtl").attr("src", imageUrl);
+			}
+			
 			//상세보기 수정 데이터
 			$("#hidden_up_faqSeq").val(faqSeq);
 			$("#search_up_faqDiv").val(faqDiv);
@@ -135,16 +146,58 @@ function fun_viewDetail(faqSeq) {
 			$("#txt_up_viewCnt").val(viewCnt);
 			$("#txt_up_content").val(content);
 			$("#sel_up_delYn").val(delYn);
+			
+			if (imageUrl == "/"){
+				$("#tr_preview").hide();
+				$("#img_preview").attr("src", "");
+			}else{
+				$("#tr_preview").show();
+				$("#img_preview").attr("src", imageUrl);
+			}
+		}
+	});
+}
+
+function fun_deleteFile(){
+	
+	if ( !confirm('파일을 삭제하시겠습니까?') ) return;
+	
+	$("#img_preview").attr("src", "");
+	$("#fileUploader").val("");
+	
+	if ( $("#hidden_up_faqSeq").val() != "" ){
+		fun_deleteFileData();
+	}
+}
+
+function fun_deleteFileData(type, inputData){
+	var inputData = {"faqSeq": $("#hidden_up_faqSeq").val() };
+	fun_ajaxPostSend("/faq/save/faqDeleteFile.do", inputData, true, function(msg){
+		if(msg.errorMessage !=null){
+			var message = msg.errorMessage;
+			if(message == "success"){
+				alert("파일이 삭제 되었습니다.");
+				fun_search();
+			}else if(message == "error"){
+				alert("정상적으로 처리되지 않았습니다.");
+			}
 		}
 	});
 }
 
 function fun_update(type) {
+	
 	$("#btn_insert").show();
 	$("#btn_update").show();
 	$("#btn_delete").show();
 	
+	$("#fileUploader").val("");
+	
 	if(type == "insert"){
+		
+		$("#tr_preview").hide();
+		$("#img_preview").attr("src", "");
+		
 		$("#btn_update").hide();
 		$("#btn_delete").hide();
 		var sDate = c21.date_today("yyyy-MM-dd hh:mm:ss");
@@ -171,6 +224,7 @@ function fun_setfaqListInfo() {
 			, {"data": "faqDiv"}
 			, {"data": "title"}
 			, {"data": "viewCnt"}
+			, {"data": "fileUuid"}
 			, {"data": "insDt" }
 			, {"data": "delYn" }
 			, {"data": "add" }
@@ -240,6 +294,16 @@ function fun_setfaqListInfo() {
 			, {
 				"targets": [5]
 				, "class": "text-center"
+				, "render": function (data, type, row) {
+					var msg = row.fileUuid;
+					var insertTr = "";
+					if ( msg == "" || msg == null){
+						insertTr = "N";
+					}else{
+						insertTr = '<a href="'+row.imageUrl+'" target="_blank"><font color="blue">Y</font></button>'; 
+					}
+					return insertTr;
+                }
 			}
 			, {
 				"targets": [6]
@@ -247,6 +311,10 @@ function fun_setfaqListInfo() {
 			}
 			, {
 				"targets": [7]
+				, "class": "text-center"
+			}
+			, {
+				"targets": [8]
 				, "class": "text-center"
 				, "render": function (data, type, row) {
 					var msg = row.faqSeq;
@@ -303,7 +371,25 @@ function fun_save(type){
 	}
 	
 	if(result){
-		fun_ajaxPostSend("/faq/save/faqSave.do", inputData, true, function(msg){
+		if ( type == "I" || type == "U" ){
+			if ( $("#fileUploader").val() == "" ){
+				fun_saveNoFile(type, inputData);
+			}else{
+				fun_saveWithFile(type, inputData);
+			}
+		}else{ 
+			fun_saveNoFile(type, inputData);
+		}
+	}
+}
+
+function fun_saveWithFile(type, inputData){
+	
+	fun_fileUploader('img', 'board', function(headers){
+        var fileUuid         = headers.uniqueId;            //$("#txt_up_fileUuid").val();
+        inputData.fileUuid = fileUuid;
+        
+        fun_ajaxPostSend("/faq/save/faqSave.do", inputData, true, function(msg){
 			if(msg.errorMessage !=null){
 				var message = msg.errorMessage;
 				if(message == "success"){
@@ -315,7 +401,155 @@ function fun_save(type){
 				}
 			}
 		});
-	}
+        
+    });
+}
+
+function fun_saveNoFile(type, inputData){
+	fun_ajaxPostSend("/faq/save/faqSave.do", inputData, true, function(msg){
+		if(msg.errorMessage !=null){
+			var message = msg.errorMessage;
+			if(message == "success"){
+				alert("정상적으로 처리되었습니다.");
+				$("#exampleModalScrollable").modal('hide');
+				fun_search();
+			}else if(message == "error"){
+				alert("정상적으로 처리되지 않았습니다.");
+			}
+		}
+	});
+}
+
+//파일업로드
+function generateUUID() {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+};
+
+
+function fun_fileUploader(fileType, pageType, callback){
+    /* var input = event.target;
+    var fileObject = input.files[0]; */
+    var input = $("#fileUploader");
+    var fileObject = input.prop('files')[0];
+	
+    console.log(fileObject);
+    
+    
+    var name = fileObject.name;
+    if(fileObject==""){
+        alert("파일을 업로드 해주세요.");
+        return false;
+    }
+	
+    var ext = name.split('.').pop().toLowerCase();
+    
+    var fileArr = ['png','jpg','jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'hwp', 'avi', 'mp4', 'm4v', 'wmv', 'mkv', 'mov', 'bz2'];
+    if(fileType == "img"){
+        fileArr = ['png','jpg','jpeg', 'gif'];
+        if(fileArr.indexOf(ext) == -1) {
+            alert("이미지 파일을 업로드 해 주세요.");
+            return false;
+        }
+    }
+    var headers = new Object();
+    headers.pageType = pageType;
+    headers.fileType = fileType;
+    headers.uniqueId = generateUUID();
+    headers.fileObjectName = encodeURI(fileObject.name);
+    headers.fileObjectSize = fileObject.size;
+    headers.fileObjectType = fileObject.type;
+    const HugeUploader = require('huge-uploader');
+    const uploader = new HugeUploader({ endpoint: '/file/upload.do', file: fileObject, headers:headers });
+    // subscribe to events
+    uploader.on('error', (err) => {
+        console.error('Something bad happened', err.detail);
+    });
+
+    uploader.on('progress', (progress) => {
+        var data = progress.detail.responseData;
+        var code = data.code;
+        switch(code){
+            case "0000":
+            case "0004":
+                $(".progress-bar").find("span.data-percent").html(progress.detail.percent + "%");
+
+                $(".progress-bar").animate({
+                    width: progress.detail.percent + "%"
+                }, 800);
+                callback(headers);
+                break;
+            case "0001":
+                uploader.togglePause();
+                alert(data.result);
+                location.href="admin/loginView.do";
+                break;
+            case "0002":
+            case "0003":
+                uploader.togglePause();
+                alert(data.result);
+                break;
+
+        }
+    });
+
+    uploader.on('fileRetry', (msg) => {
+        console.log(msg);
+    });
+
+    uploader.on('finish', (body) => {
+        console.log('yeahhh - last response body:', body);
+    });
+}
+
+function fun_preview(obj, fileType){
+    var input = $("#fileUploader");
+    var fileObject = input.prop('files')[0];
+
+    var name = fileObject.name;
+    if(fileObject==""){
+        alert("파일을 업로드 해주세요.");
+        return false;
+    }
+
+    var ext = name.split('.').pop().toLowerCase();
+    var fileArr = ['png','jpg','jpeg', 'gif', 'pdf', 'xls', 'xlsx', 'txt', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'hwp', 'avi', 'mp4', 'm4v', 'wmv', 'mkv', 'mov', 'bz2'];
+    if(fileType == "img"){
+        fileArr = ['png','jpg','jpeg', 'gif'];
+        if(fileArr.indexOf(ext) == -1) {
+            alert("이미지 파일을 업로드 해 주세요.");
+            return false;
+        }
+
+    }
+
+    var data = "";
+    switch(ext){
+        case "gif":
+            data = "data:image/gif;base64,";
+            break;
+        case "jpg":
+        case "jpeg":
+            data = "data:image/jpeg;base64,";
+            break;
+        case "png":
+            data = "data:image/png;base64,";
+            break;
+    }
+
+    var reader = new FileReader();
+
+    reader.onloadend = function() {
+        $("#img_preview").attr("src", reader.result);
+        $("#tr_preview").show();
+    }
+    reader.readAsDataURL(fileObject);
+
 }
 </script>
     <div class="wrapper">
@@ -426,6 +660,7 @@ function fun_save(type){
 	                                        <th class="text-center">구분</th>
 	                                        <th class="text-center">제목</th>
 	                                        <th class="text-center">조회수</th>
+	                                        <th class="text-center">파일여부</th>
 	                                        <th class="text-center">등록날짜</th>
 	                                        <th class="text-center">삭제여부</th>
 	                                        <th class="text-center">관리</th>
@@ -487,7 +722,13 @@ function fun_save(type){
                                   </tr>
                                   <tr>
                                      <th>이미지첨부</th>
-                                     <td colspan="3">추후작업</td>
+                                     <td colspan="3"><input class="form-control" type="text" id="txt_fileUuid" readOnly/></td>
+                                  </tr>
+                                  <tr style="display:none" id="tr_previewDtl">
+                                      <th>미리보기</th>
+                                      <td colspan="3">
+                                          <img src="" style="" id="img_previewDtl">
+                                      </td>
                                   </tr>
                                </tbody>
                             </table>
@@ -558,8 +799,26 @@ function fun_save(type){
                                      </td>
                                   </tr>
                                   <tr>
-                                     <th>이미지첨부</th>
-                                     <td colspan="3">추후작업</td>
+                                     <th>이미지첨부 <span class="text-red">*</span></th>
+                                     <td colspan="3">
+                                     	<input class="form-control" type="hidden" id="hidden_up_fileUuid"/>
+                                        <input type="file" class="btn btn-secondary btn-sm" id="fileUploader" onchange="fun_preview(this, 'img');">
+                                        <div class='progress' style="width:600px; display:none;">
+                                          <div class='progress-bar' data-width='0'>
+                                            <div class='progress-bar-text'>
+                                              Progress: <span class='data-percent'></span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                     </td>
+                                  </tr>
+                                  <tr style="display:none" id="tr_preview">
+                                      <th>미리보기</th>
+                                      <td colspan="3">
+                                          <img src="" style="" id="img_preview">
+                                          <br/>
+                                          <button type="button" id="btn_deleteFile" class="btn btn-danger" onclick="fun_deleteFile();">삭제</button>
+                                      </td>
                                   </tr>
                                </tbody>
                                </tbody>

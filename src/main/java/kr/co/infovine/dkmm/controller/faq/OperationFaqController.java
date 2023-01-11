@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/faq")
 public class OperationFaqController {
 	
+	@Value("${url.mainUrl}")
+    private String MAIN_URL;
+	
 	@Autowired
 	OperationFaqService operationfaqService;
 	
@@ -52,6 +56,7 @@ public class OperationFaqController {
 	,@RequestBody TFaq faq) {
 		ResponseModel result = new ResponseModel();
 		try {
+			faq.setMainUrl(MAIN_URL);
 			List<TFaq> model = operationfaqService.selectFaqAllList(faq);
 			ObjectMapper mapper = new ObjectMapper();
 			String faqAllList = mapper.writeValueAsString(model);
@@ -69,6 +74,7 @@ public class OperationFaqController {
 	,@RequestBody TFaq faq) {
 	ResponseModel result = new ResponseModel();
 		try {
+			faq.setMainUrl(MAIN_URL);
 			TFaq model = operationfaqService.selectFaqListDetail(faq);
 			ObjectMapper mapper = new ObjectMapper();
 			String faqlInfoDetail = mapper.writeValueAsString(model);
@@ -100,11 +106,36 @@ public class OperationFaqController {
 				int faqSeq = faq.getFaqSeq();
 				operationfaqService.deleteFaq(faqSeq);
 			}
+			result.setCode("0000");
 			result.setErrorMessage("success"); 
 		} catch (Exception e) {
+			result.setCode("0001");
 			result.setErrorMessage("error"); 
 			e.printStackTrace(); 
 		} 
 		return result;
 	}
+	
+	//저장 수정 삭제.
+	@RequestMapping(value = "/save/faqDeleteFile.do", method = RequestMethod.POST 
+	, consumes = "application/json; charset=utf8", produces = "application/json; charset=utf8")
+	@ResponseBody 
+	public ResponseModel faqDeleteFile(HttpServletRequest request, HttpServletResponse response ,HttpSession session, @RequestBody TFaq faq) {
+		ResponseModel result = new ResponseModel();
+		
+		try {
+			SessionModel sessionModel = (SessionModel) session.getAttribute("userInfo");
+			faq.setUptSeq(sessionModel.getAdminUserSeq());
+			operationfaqService.deleteFaqFileData(faq);
+			
+			result.setCode("0000");
+			result.setErrorMessage("success"); 
+		} catch (Exception e) {
+			result.setCode("0001");
+			result.setErrorMessage("error"); 
+			e.printStackTrace(); 
+		} 
+		return result;
+	}
+
 }

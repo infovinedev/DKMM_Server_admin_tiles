@@ -18,4 +18,6 @@ public interface OperationFaqService {
     int updateFaq(TFaq faq);
     //삭제
     int deleteFaq(Integer faqSeq);
+    
+    int deleteFaqFileData(TFaq faq); 
 }

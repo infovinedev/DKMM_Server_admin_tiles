@@ -158,8 +158,6 @@ function fun_viewDetail(boardSeq) {
 				$("#tr_preview").show();
 				$("#img_preview").attr("src", imageUrl);
 			}
-			
-			
 		}
 	});
 }
@@ -347,7 +345,6 @@ function fun_save(type){
 	}
 	
 	if(result){
-		
 		if ( type == "I" || type == "U" ){
 			if ( $("#fileUploader").val() == "" ){
 				fun_saveNoFile(type, inputData);
@@ -357,7 +354,6 @@ function fun_save(type){
 		}else{ 
 			fun_saveNoFile(type, inputData);
 		}
-		
 	}
 }
 
@@ -530,6 +526,33 @@ function fun_preview(obj, fileType){
     }
     reader.readAsDataURL(fileObject);
 
+}
+
+function fun_deleteFile(){
+	
+	if ( !confirm('파일을 삭제하시겠습니까?') ) return;
+	
+	$("#img_preview").attr("src", "");
+	$("#fileUploader").val("");
+	
+	if ( $("#hidden_up_boardSeq").val() != "" ){
+		fun_deleteFileData();
+	}
+}
+
+function fun_deleteFileData(type, inputData){
+	var inputData = {"boardSeq": $("#hidden_up_boardSeq").val() };
+	fun_ajaxPostSend("/board/save/boardDeleteFile.do", inputData, true, function(msg){
+		if(msg.errorMessage !=null){
+			var message = msg.errorMessage;
+			if(message == "success"){
+				alert("파일이 삭제 되었습니다.");
+				fun_search();
+			}else if(message == "error"){
+				alert("정상적으로 처리되지 않았습니다.");
+			}
+		}
+	});
 }
 
 </script>
@@ -793,6 +816,8 @@ function fun_preview(obj, fileType){
                                       <th>미리보기</th>
                                       <td colspan="3">
                                           <img src="" style="" id="img_preview">
+                                          <br/>
+                                          <button type="button" id="btn_deleteFile" class="btn btn-danger" onclick="fun_deleteFile();">삭제</button>
                                       </td>
                                   </tr>
 <!--                                   <tr> -->

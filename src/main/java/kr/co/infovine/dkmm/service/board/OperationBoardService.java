@@ -17,4 +17,6 @@ public interface OperationBoardService {
     int updateBoard(TBoard board);
     //삭제
     int deleteBoard(Integer boardSeq);
+    
+    int deleteBoardFileData(TBoard row);
 }

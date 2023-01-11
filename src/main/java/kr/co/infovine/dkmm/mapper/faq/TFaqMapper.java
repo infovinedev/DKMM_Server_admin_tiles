@@ -51,4 +51,6 @@ public interface TFaqMapper {
     
     //FAQ 상세보기
     TFaq selectFaqDetail(TFaq faq);
+    
+    int deleteFaqFileData(TFaq faq);
 }
